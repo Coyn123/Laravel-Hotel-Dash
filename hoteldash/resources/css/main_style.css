@@ -1,0 +1,110 @@
+/* --- Floor dropdown container --- */
+details.floor {
+  border: none;
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+details.floor:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+}
+
+/* --- Dropdown Header --- */
+summary.floor-header {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-600) 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: none;
+  transition: background 0.3s ease;
+}
+summary.floor-header:hover {
+  background: linear-gradient(90deg, var(--accent-600) 0%, var(--accent) 100%);
+}
+summary.floor-header::-webkit-details-marker { display: none; }
+
+/* --- Chevron animation --- */
+.chevron {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  transform: rotate(-90deg);
+  transition: transform 0.3s ease;
+}
+details[open] .chevron {
+  transform: rotate(0deg);
+}
+
+/* --- Smooth dropdown animation --- */
+details.floor > .rooms {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+}
+details[open] > .rooms {
+  max-height: 1000px; /* enough to fit all rooms */
+}
+
+/* --- Room buttons --- */
+.room {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 10px;
+  background: var(--chip);
+  color: var(--chip-text);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.room:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+.room:active {
+  transform: translateY(0);
+}
+.room:focus {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+/* --- Mobile-first adjustments --- */
+@media (max-width: 768px) {
+  summary.floor-header {
+    font-size: 1rem;
+    padding: 16px;
+  }
+  .rooms {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 12px;
+    padding: 14px;
+  }
+  .room {
+    font-size: 0.9rem;
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  summary.floor-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .chevron {
+    align-self: flex-end;
+  }
+}
