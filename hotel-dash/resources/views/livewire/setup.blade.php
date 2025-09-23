@@ -13,24 +13,24 @@
     <form wire:submit.prevent="store">
         @csrf
 
-        @foreach($floors as $index => $floor)
+        @foreach($properties as $index => $property)
             <div style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ccc;">
                 <label for="property_name_{{ $index }}">Property Name:</label>
                 <input
                     id="property_name_{{ $index }}"
                     type="text"
-                    wire:model="floors.{{ $index }}.property_name"
+                    wire:model="properties.{{ $index }}.property_name"
                     required
                 >
                 @error("floors.$index.property_name")
                     <div class="error" style="color:red;">{{ $message }}</div>
                 @enderror
 
-                <label for="floor_name_{{ $index }}" style="margin-left:1rem;">Floor Name:</label>
+                <label for="property_address_{{ $index }}" style="margin-left:1rem;">Property Address:</label>
                 <input
-                    id="floor_name_{{ $index }}"
+                    id="property_address_{{ $index }}"
                     type="text"
-                    wire:model="floors.{{ $index }}.floor_name"
+                    wire:model="properties.{{ $index }}.property_address"
                     required
                 >
                 @error("floors.$index.floor_name")
@@ -38,7 +38,7 @@
                 @enderror
 
                 @if($index > 0)
-                    <button type="button" wire:click="removeFloor({{ $index }})" style="margin-left:1rem;">
+                    <button type="button" wire:click="removeProperty({{ $index }})" style="margin-left:1rem;">
                         Remove
                     </button>
                 @endif
@@ -46,7 +46,7 @@
         @endforeach
 
         <div style="margin-bottom: 1rem;">
-            <button type="button" wire:click="addFloor">+ Add Floor</button>
+            <button type="button" wire:click="addProperty">+ Add Property</button>
         </div>
 
         <div>

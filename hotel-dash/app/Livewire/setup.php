@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\DB;
 
 class Setup extends Component
 {
-    public $floors = [
+    public $properties = [
         ['property_name' => '', 'floor_name' => '']
     ];
 
     public function mount()
     {
         // Check if setup data already exists in DB
-        $existing = DB::table('configurations')
+        $existing = DB::table('properties_config')
             ->whereNotNull('property_name')
-            ->whereNotNull('floor_name')
+            ->whereNotNull('property_address')
             ->exists();
 
         if ($existing) {
@@ -25,34 +25,33 @@ class Setup extends Component
         }
     }
 
-    public function addFloor ()
+    public function addProperty ()
     {
-        $this->floors[] = ['property_name' => '', 'floor_name' => ''];
+        $this->properties[] = ['property_name' => '', 'property_address' => ''];
     }
-    public function removeFloor($index)
+    public function removeProperty($index)
     {
-        unset($this->floors[$index]);
-        $this->floors = array_values($this->floors);
+        unset($this->properties[$index]);
+        $this->properties = array_values($this->properties);
     }
 
     public function store()
     { 
 
         $this->validate([
-            'floors.*.property_name' => 'required|string|max:255',
-            'floors.*.floor_name'    => 'required|string|max:255',
+            'properties.*.property_name' => 'required|string|max:255',
+            'properties.*.property_address'    => 'required|string|max:255',
         ]);
 
-        // Insert each floor into DB
-        foreach ($this->floors as $floor) {
-            DB::table('configurations')->insert([
-                'property_name' => $floor['property_name'],
-                'floor_name'    => $floor['floor_name'],
-                'floor_number'  => 0,
-                'floor_count'   => 0,
-                'aux_property_count' => 0,
-                'created_at'    => now(),
-                'updated_at'    => now(),
+        // Insert each property into DB
+        foreach ($this->properties as $property) {
+            DB::table('properties_config')->insert([
+                'property_name' => $property['property_name'],
+                'property_address' => $property['property_address'],
+                'num_of_floors' => 0,
+                'num_of_rooms' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 

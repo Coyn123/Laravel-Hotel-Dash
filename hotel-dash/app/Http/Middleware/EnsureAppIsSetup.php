@@ -11,7 +11,7 @@ class EnsureAppIsSetup
 {
     public function handle(Request $request, Closure $next)
     {
-        $isSetupComplete = DB::table('configurations')->count() >= 1;
+        $isSetupComplete = DB::table('properties_config')->count() >= 1;
         // Allow Livewire assets, message endpoints, and Vite HMR to pass through
         if (
             $request->is('livewire/*') ||
