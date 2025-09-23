@@ -1,5 +1,5 @@
-
 <div>
+    @csrf
     <h1>Initial Setup</h1>
 
     {{-- Success message --}}
@@ -9,48 +9,101 @@
         </div>
     @endif
 
+    {{-- Debug info (remove in production) --}}
+    <pre>
+Step: {{ $stepIndex }}
+Properties: {{ json_encode($properties) }}
+    </pre>
+
     {{-- Livewire form --}}
-    <form wire:submit.prevent="store">
-        @csrf
+    <form wire:submit.prevent="nextStep">
 
-        @foreach($properties as $index => $property)
-            <div style="margin-bottom: 1rem; padding: 1rem; border: 1px solid #ccc;">
-                <label for="property_name_{{ $index }}">Property Name:</label>
-                <input
-                    id="property_name_{{ $index }}"
-                    type="text"
-                    wire:model="properties.{{ $index }}.property_name"
-                    required
-                >
-                @error("floors.$index.property_name")
-                    <div class="error" style="color:red;">{{ $message }}</div>
-                @enderror
+        {{-- Only show the current property being edited --}}
+        @php $pIndex = $currentPropertyIndex; @endphp
 
-                <label for="property_address_{{ $index }}" style="margin-left:1rem;">Property Address:</label>
-                <input
-                    id="property_address_{{ $index }}"
-                    type="text"
-                    wire:model="properties.{{ $index }}.property_address"
-                    required
-                >
-                @error("floors.$index.floor_name")
-                    <div class="error" style="color:red;">{{ $message }}</div>
-                @enderror
-
-                @if($index > 0)
-                    <button type="button" wire:click="removeProperty({{ $index }})" style="margin-left:1rem;">
-                        Remove
-                    </button>
-                @endif
-            </div>
-        @endforeach
-
-        <div style="margin-bottom: 1rem;">
-            <button type="button" wire:click="addProperty">+ Add Property</button>
+        <div class="property-block">
+            {{-- Step 0: Property Info --}}
+            @if($stepIndex === 0)
+                @foreach($properties as $propIndex => $prop)
+                    <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
+                        <input 
+                            wire:model="properties.{{ $propIndex }}.name" 
+                            placeholder="Property Name" 
+                            style="display: block; width: 100%; margin-bottom: 0.5rem;"
+                        >
+                        <input 
+                            wire:model="properties.{{ $propIndex }}.address" 
+                            placeholder="Address" 
+                            style="display: block; width: 100%; margin-bottom: 0.5rem;"
+                        >
+                @endforeach
         </div>
-
         <div>
-            <button type="submit">Save Configuration</button>
+        {{-- Add Property button only on step 0 --}}
+            <button type="button" wire:click="addProperty">Add Property</button>
         </div>
+            @endif
+
+            {{-- Step 1: Floors --}}
+            @if($stepIndex === 1)
+                @foreach($properties as $propIndex => $prop)
+                <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
+                    <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">
+                        Number of floors for: {{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}
+                    </label>
+                        <input 
+                            type="number" 
+                            wire:model="floors.{{ $propIndex }}" 
+                            placeholder="Total Floors" 
+                            style="display: block; width: 100%;"
+                        >
+                </div>
+                @endforeach
+            @endif
+
+            {{-- Step 1.5: Floor Deets for every property --}}
+@if($stepIndex === 2)
+    @foreach($properties as $propIndex => $prop)
+        <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
+            <h3>{{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}</h3>
+            @foreach($floorDetails[$propIndex] ?? [] as $floorNum => $details)
+                <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
+                    <strong>Floor {{ $floorNum + 1 }}</strong>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input 
+                            type="number" 
+                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.bottom" 
+                            placeholder="Start Room for Floor: {{ $floorNum + 1 }}"
+                            style="flex: 1;"
+                        >
+                        <input 
+                            type="number" 
+                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.top" 
+                            placeholder="End Room for Floor: {{ $floorNum + 1 }}"
+                            style="flex: 1;"
+                        >
+                        <select 
+                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.increment"
+                            style="flex: 1;"
+                        >
+                            <option value="1">1</option>
+                            <option value="10">10</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endforeach
+@endif
+
+
+        </div>
+
+        {{-- Navigation --}}
+        <button type="submit">
+            {{ ($stepIndex < $totalSteps - 1) ? 'Next' : 'Submit' }}
+        </button>
+
     </form>
 </div>

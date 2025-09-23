@@ -6,10 +6,39 @@ use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class Setup extends Component
-{
-    public $properties = [
-        ['property_name' => '', 'floor_name' => '']
-    ];
+{   
+    public $properties = [];
+    public $floors = [];
+    public $floorDetails = [];
+    public $stepIndex = 0; // 0 = property info, 1 = floors, 2 = floor details
+    public $currentPropertyIndex = 0;
+    public $totalSteps = 3;
+
+    public function addProperty()
+    {
+        $index = count($this->properties);
+        $this->properties[$index] = ['name' => '', 'address' => ''];
+        $this->floors[$index] = null;
+        $this->floorDetails[$index] = [];
+        $props = $index + 1;
+    }
+
+    public function generateFloorDetails($propertyIndex)
+    {
+        foreach ($this->properties as $propIndex => $prop) {
+            $count = (int) ($this->floors[$propIndex] ?? 0);
+    
+            $this->floorDetails[$propIndex] = [];
+    
+            for ($i = 0; $i < $count; $i++) {
+                $this->floorDetails[$propIndex][$i] = [
+                    'bottom' => null,
+                    'top' => null,
+                    'increment' => null,
+                ];
+            }
+        }
+    }
 
     public function mount()
     {
@@ -18,6 +47,10 @@ class Setup extends Component
             ->whereNotNull('property_name')
             ->whereNotNull('property_address')
             ->exists();
+                // At least one property to start
+        $this->floors[0] = null;
+        $this->floorDetails[0] = [];
+        $this->addProperty();
 
         if ($existing) {
             // Redirect to dashboard if already configured
@@ -25,23 +58,55 @@ class Setup extends Component
         }
     }
 
-    public function addProperty ()
-    {
-        $this->properties[] = ['property_name' => '', 'property_address' => ''];
-    }
     public function removeProperty($index)
     {
         unset($this->properties[$index]);
         $this->properties = array_values($this->properties);
     }
 
+    public function nextStep ()
+    {
+        switch ($this->stepIndex)
+        {
+            case 0:
+                $this->validate([
+                    'properties.0.name' => 'required|string|max:255',
+                    'properties.0.address' => 'required|string|max:255',
+                ]);
+                break;
+            case 1:
+                $this->validate([
+                    'floors.0' => 'required|integer|min:1',
+                ]);
+                $this->generateFloorDetails($this->currentPropertyIndex);
+                break;
+            case 2:
+                foreach($this->floorInfo[0] ?? [] as $floorNum => $details)
+                {
+                    $this->validate([
+                        "floorInfo.0.floorBot" => 'required|integer|min:1',
+                        "floorInfo.0.floorTop" => 'required|integer|min:1',
+                        "floorInfo.0.floorIncr" => 'required|integer|min:1',
+                    ]);
+                }
+                break;
+        }
+        if ($this->stepIndex < $this->totalSteps - 1) {
+            $this->stepIndex++;
+        } else {
+            $this->store();
+        }
+
+    }
+
     public function store()
     { 
-
+        /*  Validation should exist on each step
         $this->validate([
             'properties.*.property_name' => 'required|string|max:255',
             'properties.*.property_address'    => 'required|string|max:255',
         ]);
+        */
 
         // Insert each property into DB
         foreach ($this->properties as $property) {
