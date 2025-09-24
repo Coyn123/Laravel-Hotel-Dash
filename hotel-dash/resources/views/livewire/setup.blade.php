@@ -53,7 +53,7 @@ Properties: {{ json_encode($properties) }}
                     </label>
                         <input 
                             type="number" 
-                            wire:model="floors.{{ $propIndex }}" 
+                            wire:model="floors.{{ $propIndex }}"
                             placeholder="Total Floors" 
                             style="display: block; width: 100%;"
                         >
@@ -66,38 +66,44 @@ Properties: {{ json_encode($properties) }}
     @foreach($properties as $propIndex => $prop)
         <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
             <h3>{{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}</h3>
-            @foreach($floorDetails[$propIndex] ?? [] as $floorNum => $details)
-                <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
-                    <strong>Floor {{ $floorNum + 1 }}</strong>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <input 
-                            type="number" 
-                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.bottom" 
-                            placeholder="Start Room for Floor: {{ $floorNum + 1 }}"
-                            style="flex: 1;"
-                        >
-                        <input 
-                            type="number" 
-                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.top" 
-                            placeholder="End Room for Floor: {{ $floorNum + 1 }}"
-                            style="flex: 1;"
-                        >
-                        <select 
-                            wire:model="floorDetails.{{ $propIndex }}.{{ $floorNum }}.increment"
-                            style="flex: 1;"
-                        >
-                            <option value="1">1</option>
-                            <option value="10">10</option>
-                            <option value="50">50</option>
-                        </select>
+
+            {{-- Loop over all keys in this property --}}
+            @foreach($prop as $key => $details)
+                @if(\Illuminate\Support\Str::startsWith($key, 'floor_specs_floor'))
+                    <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
+                        <strong>Floor Range for Floor: {{ substr($key, -1) }}</strong>
+
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                            <input 
+                                type="number" 
+                                wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
+                                placeholder="Start Room"
+                                style="flex: 1;"
+                            >
+                            <input 
+                                type="number" 
+                                wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
+                                placeholder="End Room"
+                                style="flex: 1;"
+                            >
+                        </div>
                     </div>
-                </div>
+                @endif
             @endforeach
         </div>
     @endforeach
+                                <div>
+                                <strong>Incrementation of your rooms per floor:</strong>
+                                <select 
+                                    wire:model="properties.{{ $propIndex }}.increment"
+                                    style="flex: 1;"
+                                >
+                                    <option value="1">1</option>
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
 @endif
-
-
         </div>
 
         {{-- Navigation --}}

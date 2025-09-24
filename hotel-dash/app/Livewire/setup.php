@@ -14,33 +14,7 @@ class Setup extends Component
     public $currentPropertyIndex = 0;
     public $totalSteps = 3;
 
-    public function addProperty()
-    {
-        $index = count($this->properties);
-        $this->properties[$index] = ['name' => '', 'address' => ''];
-        $this->floors[$index] = null;
-        $this->floorDetails[$index] = [];
-        $props = $index + 1;
-    }
-
-    public function generateFloorDetails($propertyIndex)
-    {
-        foreach ($this->properties as $propIndex => $prop) {
-            $count = (int) ($this->floors[$propIndex] ?? 0);
-    
-            $this->floorDetails[$propIndex] = [];
-    
-            for ($i = 0; $i < $count; $i++) {
-                $this->floorDetails[$propIndex][$i] = [
-                    'bottom' => null,
-                    'top' => null,
-                    'increment' => null,
-                ];
-            }
-        }
-    }
-
-    public function mount()
+        public function mount()
     {
         // Check if setup data already exists in DB
         $existing = DB::table('properties_config')
@@ -57,6 +31,40 @@ class Setup extends Component
             return $this->redirectRoute('dashboard');
         }
     }
+
+    public function addProperty()
+    {
+        $index = count($this->properties);
+        $this->properties[$index] = ['name' => '', 'address' => ''];
+        $this->floors[$index] = null;
+        $this->floorDetails[$index] = [];
+        $props = $index + 1;
+    }
+
+public function generateFloorDetails()
+{
+    foreach ($this->properties as $propIndex => $prop) {
+        $count = (int) ($this->floors[$propIndex] ?? 0);
+
+        // Store the count directly on the property
+        $this->properties[$propIndex]['total_floors'] = $count;
+        $this->properties[$propIndex]['increment'] = 1;
+
+        // Initialize floor_specs as an array of floors
+        //$this->properties[$propIndex]['floor_specs_floor'] = []
+
+        for ($i = 0; $i < $count; $i++) {
+            $key = 'floor_specs_floor' . ($i + 1);
+            $this->properties[$propIndex]['floor_specs_floor' . ($i + 1)][$i] = [
+                'bottom'    => null,
+                'top'       => null,
+            ];
+        }
+    }
+}
+
+
+
 
     public function removeProperty($index)
     {
@@ -84,17 +92,27 @@ class Setup extends Component
                 foreach($this->floorInfo[0] ?? [] as $floorNum => $details)
                 {
                     $this->validate([
-                        "floorInfo.0.floorBot" => 'required|integer|min:1',
-                        "floorInfo.0.floorTop" => 'required|integer|min:1',
-                        "floorInfo.0.floorIncr" => 'required|integer|min:1',
+                        "floorInfo.0.floor.bottom" => 'required|integer|min:1',
+                        "floorInfo.0.floor.top" => 'required|integer|min:1',
+                        "floorInfo.0.floor.increment" => 'required|integer|min:1',
                     ]);
                 }
                 break;
         }
+
         if ($this->stepIndex < $this->totalSteps - 1) {
             $this->stepIndex++;
         } else {
-            $this->store();
+            /*Final validate and store
+                $this->validate([
+                "" => 'required|integer|min:1',
+                "" => 'required|integer|min:1',
+                "" => 'required|integer|min:1',
+                "" => 'required|integer|min:1',
+                ]);
+
+            $this->store();*/
+            dd($this->properties);
         }
 
     }
@@ -107,12 +125,13 @@ class Setup extends Component
             'properties.*.property_address'    => 'required|string|max:255',
         ]);
         */
+        
 
         // Insert each property into DB
-        foreach ($this->properties as $property) {
+        foreach ($this->properties as $property => $arrays) {
             DB::table('properties_config')->insert([
-                'property_name' => $property['property_name'],
-                'property_address' => $property['property_address'],
+                'property_name' => $property[$arrays['property_name']],
+                'property_address' => $property[$arrays['property_address']],
                 'num_of_floors' => 0,
                 'num_of_rooms' => 0,
                 'created_at' => now(),
