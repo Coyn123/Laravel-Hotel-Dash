@@ -48,16 +48,19 @@ public function generateFloorDetails()
 
         // Store the count directly on the property
         $this->properties[$propIndex]['total_floors'] = $count;
-        $this->properties[$propIndex]['increment'] = 1;
 
-        // Initialize floor_specs as an array of floors
-        //$this->properties[$propIndex]['floor_specs_floor'] = []
+        // Default increment if not already set
+        if (!isset($this->properties[$propIndex]['increment'])) {
+            $this->properties[$propIndex]['increment'] = 1;
+        }
 
+        // Initialize each floor spec cleanly
         for ($i = 0; $i < $count; $i++) {
             $key = 'floor_specs_floor' . ($i + 1);
-            $this->properties[$propIndex]['floor_specs_floor' . ($i + 1)][$i] = [
-                'bottom'    => null,
-                'top'       => null,
+
+            $this->properties[$propIndex][$key] = [
+                'bottom' => $this->properties[$propIndex][$key]['bottom'] ?? null,
+                'top'    => $this->properties[$propIndex][$key]['top'] ?? null,
             ];
         }
     }

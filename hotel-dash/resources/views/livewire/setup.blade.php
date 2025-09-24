@@ -67,43 +67,51 @@ Properties: {{ json_encode($properties) }}
         <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
             <h3>{{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}</h3>
 
-            {{-- Loop over all keys in this property --}}
+            {{-- Floor specs --}}
             @foreach($prop as $key => $details)
-                @if(\Illuminate\Support\Str::startsWith($key, 'floor_specs_floor'))
-                    <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
-                        <strong>Floor Range for Floor: {{ substr($key, -1) }}</strong>
+@if(\Illuminate\Support\Str::startsWith($key, 'floor_specs_floor') && is_array($details))
+    @if(array_key_exists('bottom', $details) && array_key_exists('top', $details))
+        <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
+            <strong>
+                Floor Range for Floor: {{ (int) str_replace('floor_specs_floor', '', $key) }}
+            </strong>
 
-                        <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                            <input 
-                                type="number" 
-                                wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
-                                placeholder="Start Room"
-                                style="flex: 1;"
-                            >
-                            <input 
-                                type="number" 
-                                wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
-                                placeholder="End Room"
-                                style="flex: 1;"
-                            >
-                        </div>
-                    </div>
-                @endif
+            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <input 
+                    type="number" 
+                    wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
+                    placeholder="Start Room"
+                    style="flex: 1;"
+                >
+                <input 
+                    type="number" 
+                    wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
+                    placeholder="End Room"
+                    style="flex: 1;"
+                >
+            </div>
+        </div>
+    @endif
+@endif
+
             @endforeach
+
+            {{-- Increment select belongs here, inside the property block --}}
+            <div>
+                <strong>Incrementation of your rooms per floor:</strong>
+                <select 
+                    wire:model="properties.{{ $propIndex }}.increment"
+                    style="flex: 1;"
+                >
+                    <option value="1">1</option>
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
         </div>
     @endforeach
-                                <div>
-                                <strong>Incrementation of your rooms per floor:</strong>
-                                <select 
-                                    wire:model="properties.{{ $propIndex }}.increment"
-                                    style="flex: 1;"
-                                >
-                                    <option value="1">1</option>
-                                    <option value="10">10</option>
-                                    <option value="50">50</option>
-                                </select>
-                            </div>
 @endif
+
         </div>
 
         {{-- Navigation --}}
