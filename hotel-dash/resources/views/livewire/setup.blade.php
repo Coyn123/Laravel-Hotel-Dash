@@ -98,7 +98,7 @@ Properties: {{ json_encode($properties) }}
 
             {{-- Increment select belongs here, inside the property block --}}
             <div>
-                <strong>Incrementation of your rooms per floor:</strong>
+                <strong>Incrementation Ex: 101->102 or 100->110</strong>
                 <select 
                     wire:model="properties.{{ $propIndex }}.increment"
                     style="flex: 1;"

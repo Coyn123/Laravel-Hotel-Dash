@@ -113,30 +113,46 @@ public function generateFloorDetails()
                 "" => 'required|integer|min:1',
                 "" => 'required|integer|min:1',
                 ]);
-
-            $this->store();*/
-            dd($this->properties);
+            */
+            $this->store();
         }
 
     }
 
     public function store()
     { 
-        /*  Validation should exist on each step
-        $this->validate([
-            'properties.*.property_name' => 'required|string|max:255',
-            'properties.*.property_address'    => 'required|string|max:255',
-        ]);
-        */
-        
+        //  Validation should exist on each step $this->validate
+        foreach($this->properties as $property => &$propArrays)
+        {
+            $propArrays['total_rooms'] = 0;
+            $totalRooms = 0;
+            foreach($propArrays as $key => $value)
+            {
+                if(str_starts_with($key, 'floor_specs_floor'))
+                {
+                    $bottom = $value['bottom'] ?? null;
+                    $top = $value['top'] ?? null;
+                    $increment = $this->properties[$property]['increment'] ?? 1;
+
+                    if ($bottom !== null && $top !== null) {
+                        for ($i = $bottom; $i < $top; $i += $increment) {
+                            $totalRooms++;
+                        }
+                    }
+                }
+            }
+            $propArrays['total_rooms'] = $totalRooms; 
+        }
+        unset($prop);
+        //dd($this->properties);
 
         // Insert each property into DB
         foreach ($this->properties as $property => $arrays) {
             DB::table('properties_config')->insert([
-                'property_name' => $property[$arrays['property_name']],
-                'property_address' => $property[$arrays['property_address']],
-                'num_of_floors' => 0,
-                'num_of_rooms' => 0,
+                'property_name' => $arrays['name'],
+                'property_address' => $arrays['address'],
+                'num_of_floors' => $arrays['total_floors'],
+                'num_of_rooms' => $arrays['total_rooms'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
