@@ -20,53 +20,44 @@ class DashboardConfig
 
     protected static function getFloorsWithRooms()
     {
-
+        // Floors
         $floors = DB::table('floors_config')
-            ->select('id', 'property_id', 'floor_num', 'floor_range_bot as start', 'floor_range_top as end')
+            ->select(
+                'id',
+                'property_id',
+                'floor_number as floor_num',
+                DB::raw("CONCAT('Floor ', floor_number) as name"),
+                'range_start as start',
+                'range_end as end'
+            )
             ->get()
             ->map(fn($row) => (array) $row)
             ->all();
-    
+
+        // Rooms
         $rooms = DB::table('rooms_config')
-            ->select('id', 'property_id', 'room_type', 'room', 'room_status', 'floor')
+            ->select(
+                'id',
+                'property_id',
+                'floor_id as floor',
+                'room_number as room',
+                'room_type_id as room_type',
+                'room_status_id as room_status'
+            )
             ->get()
             ->map(fn($row) => (array) $row)
             ->all();
-    
+
+        // Group rooms by floor_id
         $roomsByFloor = collect($rooms)->groupBy('floor');
-    
+
+        // Attach rooms to each floor
         foreach ($floors as $i => $floor) {
-            $floorRooms = $roomsByFloor->get($floor['floor_num'], collect());
+            $floorRooms = $roomsByFloor->get($floor['id'], collect());
             $floors[$i]['rooms'] = $floorRooms->all();
             $floors[$i]['total_rooms'] = $floorRooms->count();
         }
-    
+
         return $floors;
     }
-    
-    
-    
-    
-    /*
-
-    protected static function getNotifications()
-    {
-        // Example: notifications table
-        return DB::table('notifications')
-            ->latest()
-            ->limit(20)
-            ->get()
-            ->toArray();
-    }
-
-    protected static function getNav()
-    {
-        // Static nav config
-        return [
-            ['label' => 'Dashboard', 'route' => 'dashboard'],
-            ['label' => 'Rooms', 'route' => 'rooms.index'],
-            ['label' => 'Reports', 'route' => 'reports.index'],
-        ];
-    }
-    */
 }
