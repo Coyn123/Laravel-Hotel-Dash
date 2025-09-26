@@ -65,11 +65,7 @@ public function generateFloorDetails()
         }
     }
 }
-
-
-
-
-    public function removeProperty($index)
+public function removeProperty($index)
     {
         unset($this->properties[$index]);
         $this->properties = array_values($this->properties);
@@ -119,7 +115,7 @@ public function generateFloorDetails()
 
     }
 
-    public function store()
+public function store()
     { 
         //  Validation should exist on each step $this->validate
         foreach($this->properties as $property => &$propArrays)
@@ -145,7 +141,7 @@ public function generateFloorDetails()
         }
         unset($prop);
         //dd($this->properties);
-
+        
         // Insert each property into DB
         foreach ($this->properties as $property => $arrays) {
             DB::table('properties_config')->insert([
@@ -153,9 +149,40 @@ public function generateFloorDetails()
                 'property_address' => $arrays['address'],
                 'num_of_floors' => $arrays['total_floors'],
                 'num_of_rooms' => $arrays['total_rooms'],
+                'incrementation_value' => $arrays['increment'] ?? 1,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
+
+            //Insert room values into room config
+            foreach ($arrays as $arr => $values)
+            {
+                if(str_starts_with($arr, 'floor_specs_floor'))
+                {
+                    $floorNum = str_replace('floor_specs_floor', '', $arr);
+                    DB::table('floors_config')->insert([
+                        'property_id' => $arrays['name'],
+                        'floor_num' => $floorNum,
+                        'floor_range_bot' => $values['bottom'],
+                        'floor_range_top' => $values['top'],
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                    // Insert from floors specs, each room and its configurations 
+                    //(placeholder for now, user determined room configurations needed)
+                    for ($i = $values['bottom']; $i <= $values['top']; $i += ($arrays['increment'] ?? 1)) {
+                        DB::table('rooms_config')->insert([
+                            'property_id' => $arrays['name'],
+                            'room_type' => 'standard',
+                            'room' => $i,
+                            'room_status' => 'placeholder',
+                            'floor' => $floorNum,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]);
+                    }
+                }
+            }
         }
 
         session()->flash('message', 'Configuration saved successfully.');
@@ -164,10 +191,10 @@ public function generateFloorDetails()
         return redirect()->route('dashboard');
     }
 
-    public function render()
+public function render()
     {
         return view('livewire.setup')
-        ->layout('layouts.app');
+        ->layout('layouts.setup', ['title' => 'Initial Setup']);
 
     }
 }

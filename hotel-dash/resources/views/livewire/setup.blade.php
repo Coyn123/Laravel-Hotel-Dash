@@ -1,123 +1,112 @@
+{{-- resources/views/livewire/setup.blade.php --}}
 <div>
-    @csrf
     <h1>Initial Setup</h1>
 
     {{-- Success message --}}
     @if (session()->has('message'))
-        <div class="alert alert-success" style="margin-bottom: 1rem;">
+        <div class="alert alert-success mb-4">
             {{ session('message') }}
         </div>
     @endif
 
     {{-- Debug info (remove in production) --}}
-    <pre>
+    <pre class="mb-4">
 Step: {{ $stepIndex }}
 Properties: {{ json_encode($properties) }}
     </pre>
 
     {{-- Livewire form --}}
     <form wire:submit.prevent="nextStep">
-
-        {{-- Only show the current property being edited --}}
-        @php $pIndex = $currentPropertyIndex; @endphp
-
         <div class="property-block">
             {{-- Step 0: Property Info --}}
             @if($stepIndex === 0)
                 @foreach($properties as $propIndex => $prop)
-                    <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
+                    <div class="mb-4 p-4 border rounded bg-gray-50">
                         <input 
                             wire:model="properties.{{ $propIndex }}.name" 
                             placeholder="Property Name" 
-                            style="display: block; width: 100%; margin-bottom: 0.5rem;"
+                            class="block w-full mb-2 border rounded p-2"
                         >
                         <input 
                             wire:model="properties.{{ $propIndex }}.address" 
                             placeholder="Address" 
-                            style="display: block; width: 100%; margin-bottom: 0.5rem;"
+                            class="block w-full mb-2 border rounded p-2"
                         >
+                    </div>
                 @endforeach
-        </div>
-        <div>
-        {{-- Add Property button only on step 0 --}}
-            <button type="button" wire:click="addProperty">Add Property</button>
-        </div>
+
+                <button type="button" wire:click="addProperty" class="btn-secondary">
+                    Add Property
+                </button>
             @endif
 
             {{-- Step 1: Floors --}}
             @if($stepIndex === 1)
                 @foreach($properties as $propIndex => $prop)
-                <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">
-                        Number of floors for: {{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}
-                    </label>
+                    <div class="mb-4 p-4 border rounded bg-gray-50">
+                        <label class="block font-semibold mb-2">
+                            Number of floors for: {{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}
+                        </label>
                         <input 
                             type="number" 
                             wire:model="floors.{{ $propIndex }}"
                             placeholder="Total Floors" 
-                            style="display: block; width: 100%;"
+                            class="block w-full border rounded p-2"
                         >
-                </div>
+                    </div>
                 @endforeach
             @endif
 
-            {{-- Step 1.5: Floor Deets for every property --}}
-@if($stepIndex === 2)
-    @foreach($properties as $propIndex => $prop)
-        <div style="border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; background-color: #f9f9f9;">
-            <h3>{{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}</h3>
+            {{-- Step 2: Floor details --}}
+            @if($stepIndex === 2)
+                @foreach($properties as $propIndex => $prop)
+                    <div class="mb-4 p-4 border rounded bg-gray-50">
+                        <h3 class="font-semibold mb-2">{{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}</h3>
 
-            {{-- Floor specs --}}
-            @foreach($prop as $key => $details)
-@if(\Illuminate\Support\Str::startsWith($key, 'floor_specs_floor') && is_array($details))
-    @if(array_key_exists('bottom', $details) && array_key_exists('top', $details))
-        <div style="margin-bottom: 1rem; padding-left: 1rem; border-left: 3px solid #ddd;">
-            <strong>
-                Floor Range for Floor: {{ (int) str_replace('floor_specs_floor', '', $key) }}
-            </strong>
+                        @foreach($prop as $key => $details)
+                            @if(\Illuminate\Support\Str::startsWith($key, 'floor_specs_floor') && is_array($details))
+                                @if(array_key_exists('bottom', $details) && array_key_exists('top', $details))
+                                    <div class="mb-3 pl-3 border-l-4 border-gray-300">
+                                        <strong>
+                                            Floor Range for Floor: {{ (int) str_replace('floor_specs_floor', '', $key) }}
+                                        </strong>
+                                        <div class="flex gap-2 mt-2">
+                                            <input 
+                                                type="number" 
+                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
+                                                placeholder="Start Room"
+                                                class="flex-1 border rounded p-2"
+                                            >
+                                            <input 
+                                                type="number" 
+                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
+                                                placeholder="End Room"
+                                                class="flex-1 border rounded p-2"
+                                            >
+                                        </div>
+                                    </div>
+                                @endif
+                            @endif
+                        @endforeach
 
-            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                <input 
-                    type="number" 
-                    wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
-                    placeholder="Start Room"
-                    style="flex: 1;"
-                >
-                <input 
-                    type="number" 
-                    wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
-                    placeholder="End Room"
-                    style="flex: 1;"
-                >
-            </div>
-        </div>
-    @endif
-@endif
-
-            @endforeach
-
-            {{-- Increment select belongs here, inside the property block --}}
-            <div>
-                <strong>Incrementation Ex: 101->102 or 100->110</strong>
-                <select 
-                    wire:model="properties.{{ $propIndex }}.increment"
-                    style="flex: 1;"
-                >
-                    <option value="1">1</option>
-                    <option value="10">10</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
-        </div>
-    @endforeach
-@endif
-
+                        <div>
+                            <strong>Incrementation</strong>
+                            <select 
+                                wire:model="properties.{{ $propIndex }}.increment"
+                                class="block w-full border rounded p-2 mt-1"
+                            >
+                                <option value="1">1</option>
+                                <option value="10">10</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
         </div>
 
-        {{-- Navigation --}}
-        <button type="submit">
+        <button type="submit" class="btn-primary mt-4">
             {{ ($stepIndex < $totalSteps - 1) ? 'Next' : 'Submit' }}
         </button>
-
     </form>
 </div>

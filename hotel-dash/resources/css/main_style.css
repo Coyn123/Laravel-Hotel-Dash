@@ -1,15 +1,81 @@
+/* --- Dashboard Wrapper --- */
+.dashboard-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+  background: var(--background, #f7f9fc);
+  min-height: 100vh;
+  font-family: system-ui, sans-serif;
+}
+
+/* --- Header --- */
+header {
+  background: #fff;
+  border-radius: var(--radius, 10px);
+  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.08));
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+header .title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+header .notification-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+header .notification-btn:hover {
+  transform: scale(1.1);
+}
+
+/* --- Notification Box --- */
+.notification-box {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+.notification-title {
+  background: var(--accent, #2563eb);
+  color: #fff;
+  font-size: 0.95rem;
+}
+.notification-content {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* --- Panel Container --- */
+section.panel {
+  background: #fff;
+  border-radius: var(--radius, 10px);
+  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.08));
+  overflow: hidden;
+}
+.panel-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+.panel-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
 /* --- Floor dropdown container --- */
 details.floor {
-  border: none;
-  border-radius: var(--radius);
-  background: var(--panel);
-  box-shadow: var(--shadow);
-  overflow: hidden;
+  border-bottom: 1px solid #e5e7eb;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 details.floor:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
 /* --- Dropdown Header --- */
@@ -19,23 +85,23 @@ summary.floor-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
-  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-600) 100%);
+  padding: 1rem 1.25rem;
+  background: linear-gradient(90deg, var(--accent, #2563eb) 0%, var(--accent-600, #1e40af) 100%);
   color: #fff;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: 1rem;
   border: none;
   transition: background 0.3s ease;
 }
 summary.floor-header:hover {
-  background: linear-gradient(90deg, var(--accent-600) 0%, var(--accent) 100%);
+  background: linear-gradient(90deg, var(--accent-600, #1e40af) 0%, var(--accent, #2563eb) 100%);
 }
 summary.floor-header::-webkit-details-marker { display: none; }
 
 /* --- Chevron animation --- */
 .chevron {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   fill: currentColor;
   transform: rotate(-90deg);
   transition: transform 0.3s ease;
@@ -51,7 +117,16 @@ details.floor > .rooms {
   transition: max-height 0.35s ease;
 }
 details[open] > .rooms {
-  max-height: 1000px; /* enough to fit all rooms */
+  max-height: 1000px;
+}
+
+/* --- Rooms Grid --- */
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+  padding: 1rem;
+  background: #fafafa;
 }
 
 /* --- Room buttons --- */
@@ -60,17 +135,19 @@ details[open] > .rooms {
   align-items: center;
   justify-content: center;
   padding: 14px 10px;
-  background: var(--chip);
-  color: var(--chip-text);
+  background: var(--chip, #f3f4f6);
+  color: var(--chip-text, #111);
   border: none;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.95rem;
   box-shadow: 0 2px 4px rgba(0,0,0,0.12);
   transition: background 0.2s ease, transform 0.15s ease;
+  cursor: pointer;
 }
 .room:hover {
-  background: var(--accent);
+  background: var(--accent, #2563eb);
+  color: #fff;
   transform: translateY(-2px);
 }
 .room:active {
@@ -78,19 +155,51 @@ details[open] > .rooms {
 }
 .room:focus {
   outline: none;
-  box-shadow: var(--focus);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.4);
 }
 
-/* --- Mobile-first adjustments --- */
+/* --- Buttons (general utility) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.btn-primary {
+  background: var(--accent, #2563eb);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent-600, #1e40af);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  background: #f3f4f6;
+  color: #111;
+}
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* --- Mobile adjustments --- */
 @media (max-width: 768px) {
+  .dashboard-wrapper {
+    padding: 1rem;
+  }
   summary.floor-header {
     font-size: 1rem;
-    padding: 16px;
+    padding: 0.75rem 1rem;
   }
   .rooms {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 12px;
-    padding: 14px;
+    gap: 10px;
+    padding: 0.75rem;
   }
   .room {
     font-size: 0.9rem;

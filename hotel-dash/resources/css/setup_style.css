@@ -1,0 +1,138 @@
+/* --- Setup Page Wrapper --- */
+.setup-wrapper {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    font-family: system-ui, sans-serif;
+  }
+  
+  /* --- Headings --- */
+  .setup-wrapper h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+  }
+  .setup-wrapper h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #374151;
+  }
+  
+  /* --- Alerts --- */
+  .alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+  .alert-success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+  
+  /* --- Debug Info --- */
+  .setup-wrapper pre {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    color: #374151;
+    margin-bottom: 1.5rem;
+    overflow-x: auto;
+  }
+  
+  /* --- Property Block --- */
+  .property-block > div {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s ease;
+  }
+  .property-block > div:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  
+  /* --- Inputs & Selects --- */
+  .property-block input,
+  .property-block select {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .property-block input:focus,
+  .property-block select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.3);
+  }
+  
+  /* --- Floor Specs --- */
+  .property-block .floor-spec {
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    border-left: 3px solid #d1d5db;
+  }
+  .property-block .floor-spec strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #111827;
+  }
+  .property-block .floor-spec .inputs {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  /* --- Buttons --- */
+  button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+  button[type="submit"] {
+    background: #2563eb;
+    color: #fff;
+  }
+  button[type="submit"]:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+  }
+  button[type="button"] {
+    background: #f3f4f6;
+    color: #111827;
+    margin-top: 0.5rem;
+  }
+  button[type="button"]:hover {
+    background: #e5e7eb;
+  }
+  
+  /* --- Mobile adjustments --- */
+  @media (max-width: 640px) {
+    .setup-wrapper {
+      padding: 1rem;
+    }
+    .property-block .floor-spec .inputs {
+      flex-direction: column;
+    }
+  }
+  
