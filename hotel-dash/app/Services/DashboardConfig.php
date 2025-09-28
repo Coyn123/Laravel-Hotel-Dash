@@ -20,6 +20,13 @@ class DashboardConfig
 
     protected static function getFloorsWithRooms()
     {
+        // Properties
+        $properties = DB::table('properties_config')
+        ->select('id','property_name')
+        ->get()
+        ->map(fn($row) => (array) $row)
+        ->all();
+
         // Floors
         $floors = DB::table('floors_config')
             ->select(
@@ -47,17 +54,39 @@ class DashboardConfig
             ->get()
             ->map(fn($row) => (array) $row)
             ->all();
+        //Lookup map
+        $propertyLookup = collect($properties)->keyBy('id');
 
-        // Group rooms by floor_id
+        //Group rooms by floor
         $roomsByFloor = collect($rooms)->groupBy('floor');
 
-        // Attach rooms to each floor
         foreach ($floors as $i => $floor) {
+            $floors[$i]['property_name'] = $propertyLookup[$floor['property_id']]['property_name'] ?? null;
             $floorRooms = $roomsByFloor->get($floor['id'], collect());
             $floors[$i]['rooms'] = $floorRooms->all();
             $floors[$i]['total_rooms'] = $floorRooms->count();
         }
 
-        return $floors;
+        //Group by property
+        $grouped = collect($properties)->map(function ($property) use ($floors, $roomsByFloor) {
+        $propertyFloors = collect($floors)
+            ->where('property_id', $property['id'])
+            ->map(function ($floor) use ($roomsByFloor, $property) {
+                $floor['property_name'] = $property['property_name'];
+                $floorRooms = $roomsByFloor->get($floor['id'], collect());
+                $floor['rooms'] = $floorRooms->all();
+                $floor['total_rooms'] = $floorRooms->count();
+                return $floor;
+            })
+            ->values()
+            ->all();
+            
+            return [
+                'property_id'   => $property['id'],
+                'property_name' => $property['property_name'],
+                'floors'        => $propertyFloors, // always present, even if empty
+            ];
+        });
+        return $grouped->values()->all();
     }
 }

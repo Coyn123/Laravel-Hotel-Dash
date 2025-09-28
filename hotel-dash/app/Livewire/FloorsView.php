@@ -7,41 +7,65 @@ use App\Services\DashboardConfig;
 
 class FloorsView extends Component
 {
-    public $floors = [];
-    public $sortField = 'id';
-    public $sortDirection = 'asc';
+    public $search = '';
+    public $allFloors = [];
+    public $sortFloorsDesc = true; // default: highest → lowest
 
     public function mount()
     {
-        // Pull from your cached service
         $configs = DashboardConfig::get();
-        $this->floors = $configs['floors'] ?? [];
-
-        $this->applySort();
+        $this->allFloors = $configs['floors'] ?? [];
     }
 
-    public function sortBy($field)
+    public function toggleFloorsSort()
     {
-        if ($this->sortField === $field) {
-            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
-        } else {
-            $this->sortField = $field;
-            $this->sortDirection = 'asc';
+        $this->sortFloorsDesc = ! $this->sortFloorsDesc;
+    }
+
+    protected function filteredAndSorted()
+    {
+        $properties = $this->allFloors;
+
+        // --- Search filter (same as before) ---
+        if ($this->search !== '') {
+            $search = strtolower($this->search);
+
+            $properties = collect($properties)->map(function ($property) use ($search) {
+                $floors = collect($property['floors'])->map(function ($floor) use ($search) {
+                    $filteredRooms = collect($floor['rooms'])->filter(function ($room) use ($search) {
+                        return str_contains(strtolower($room['room'] ?? ''), $search);
+                    });
+
+                    $floor['rooms'] = $filteredRooms->values()->all();
+                    $floor['total_rooms'] = count($floor['rooms']);
+                    return $floor;
+                })->filter(fn($floor) => count($floor['rooms']) > 0)->values()->all();
+
+                if (str_contains(strtolower($property['property_name']), $search) || count($floors) > 0) {
+                    $property['floors'] = $floors;
+                    return $property;
+                }
+
+                return null;
+            })->filter()->values()->all();
         }
 
-        $this->applySort();
-    }
+        // --- Sort by floor count ---
+        $properties = collect($properties)->sortBy(
+            fn($p) => count($p['floors']),
+            SORT_REGULAR,
+            $this->sortFloorsDesc // true = descending
+        );
 
-    protected function applySort()
-    {
-        $this->floors = collect($this->floors)
-            ->sortBy($this->sortField, SORT_REGULAR, $this->sortDirection === 'desc')
-            ->values()
-            ->toArray();
+        return $properties->values()->toArray();
     }
 
     public function render()
     {
-        return view('livewire.floors-view');
+        return view('livewire.floors-view', [
+            'floors' => $this->filteredAndSorted(),
+        ]);
     }
 }
+
+
