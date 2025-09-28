@@ -1,4 +1,4 @@
-<div class="dashboard-wrapper"> {{-- ✅ single root element --}}
+<div class="dashboard-wrapper">
 
     {{-- Header --}}
     <header class="mb-6">

@@ -10,7 +10,6 @@
             @forelse($floors as $property)
                 <div class="property-block">
                     <h3 class="property-title">{{ $property['property_name'] ?? 'Unnamed Property' }}</h3>
-
                     @forelse($property['floors'] as $floor)
                         <details class="floor" id="floor-{{ $floor['id'] }}" {{ $loop->first ? 'open' : '' }}>
                             <summary class="floor-header">
@@ -23,10 +22,12 @@
                                     </span>
                                 </div>
                             </summary>
-
                             <div class="rooms">
                                 @foreach($floor['rooms'] ?? [] as $room)
-                                    <a class="room {{ $room['room_status'] ?? '' }}" href="#">
+                                    <a 
+                                    class="room {{ $room['room_status'] ?? '' }}" 
+                                    href="{{ route('room.board', ['room' => $room['room'] ?? $room['room_number']]) }}"
+                                    >
                                         Room {{ $room['room'] ?? $room['room_number'] }}
                                     </a>
                                 @endforeach

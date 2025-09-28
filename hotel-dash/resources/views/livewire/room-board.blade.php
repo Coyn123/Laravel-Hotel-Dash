@@ -1,0 +1,20 @@
+<div class="panel">
+    <div class="panel-header">
+        <h2 class="panel-title">Room {{ $room }} Board</h2>
+    </div>
+
+    <div class="panel-body space-y-4">
+        @forelse($messages as $message)
+            <div class="p-2 border rounded">
+                <strong>{{ $message['user'] }}:</strong> {{ $message['text'] }}
+            </div>
+        @empty
+            <p class="text-gray-500">No messages yet.</p>
+        @endforelse
+    </div>
+
+    <div class="panel-footer mt-4">
+        <input type="text" wire:model.defer="newMessage" placeholder="Type a message..." class="border p-2 w-full" />
+        <button wire:click="postMessage" class="btn btn-primary mt-2">Send</button>
+    </div>
+</div>

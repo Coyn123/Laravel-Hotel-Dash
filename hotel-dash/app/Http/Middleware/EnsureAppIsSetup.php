@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\DB;    
+use Illuminate\Support\Facades\DB;
+
 class EnsureAppIsSetup
 {
     public function handle($request, Closure $next)
@@ -21,18 +21,12 @@ class EnsureAppIsSetup
             return $next($request);
         }
     
-        // to setup if not complete
+        // if not setup, force to setup page
         if (! $isSetupComplete && ! $request->is('setup')) {
             return redirect()->route('setup');
         }
-    
-        // to dashboard if setup is complete and not already there
-        if ($isSetupComplete && ! $request->is('dashboard')) {
-            return redirect()->route('dashboard');
-        }
-    
-        // allow dashboard route to pass through
+
+        // if setup is complete, just allow everything
         return $next($request);
     }
-           
 }
