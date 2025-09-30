@@ -29,7 +29,7 @@ return new class extends Migration
         // --- Room Status Lookup ---
         Schema::create('room_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('status_name', 50); // e.g. Available, Occupied, Maintenance
+            $table->string('status_name', 50); 
         });
             DB::table('room_statuses')->insert([
             ['id' => 1, 'status_name' => 'Available'],
@@ -42,7 +42,7 @@ return new class extends Migration
         // --- Room Types Lookup ---
         Schema::create('room_types', function (Blueprint $table) {
             $table->id();
-            $table->string('type_name', 50); // e.g. Single, Double, Suite
+            $table->string('type_name', 50);
         });
         DB::table('room_types')->insert([
             ['id' => 1, 'type_name' => 'Standard'],
@@ -50,7 +50,7 @@ return new class extends Migration
         ]);
         Schema::create('room_flags', function (Blueprint $table) {
             $table->id();
-            $table->string('flag_name', 50); // e.g. Single, Double, Suite
+            $table->string('flag_name', 50); 
         });
         DB::table('room_flags')->insert([
             ['id' => 1, 'flag_name' => 'Out Of Order'],
@@ -74,9 +74,9 @@ return new class extends Migration
         Schema::create('aux_property_config', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_id')->constrained('properties_config')->cascadeOnDelete();
-            $table->string('aux_name', 100); // e.g. Pool, Gym
+            $table->string('aux_name', 100);
             $table->string('aux_type', 50);  // could also be normalized if needed
-            $table->string('aux_status', 50); // Active, Inactive
+            $table->string('aux_status', 50);
             $table->timestamps();
         });
             Schema::create('message_board', function (Blueprint $table) {
@@ -95,7 +95,7 @@ return new class extends Migration
             
             Schema::create('message_flags', function (Blueprint $table) {
             $table->id();
-            $table->string('flag_name', 50); // e.g. Single, Double, Suite
+            $table->string('flag_name', 50);
         });
             DB::table('message_flags')->insert([
             ['id' => 1, 'flag_name' => 'Message'],

@@ -2,28 +2,53 @@
 
 namespace App\Livewire;
 use Livewire\Component;
+use App\Models\MessageBoard;
 
 class RoomBoard extends Component
 {
     public $room;
+    public $messages;
+    public $newMessage = '';
 
-    // Capture the dynamic URL param
     public function mount($room)
     {
         $this->room = $room;
+        $this->loadMessages();
     }
+
+    public function loadMessages()
+    {
+        $this->messages = MessageBoard::with('flag')
+            ->where('room_id', $this->room)
+            ->orderBy('created_at', 'asc')
+            ->get();
+    }
+
+
+    public function postMessage()
+    {
+        if (trim($this->newMessage) === '') {
+            return;
+        }
+
+        MessageBoard::create([
+            'property_id' => 1, // replace with actual property context
+            'floor_id'    => 1, // replace with actual floor context
+            'room_id'     => $this->room,
+            'flag_id'     => 1, // default to "Message"
+            'message_text'=> $this->newMessage,
+        ]);
+
+        $this->newMessage = '';
+        $this->loadMessages();
+    }
+
 
     public function render()
     {
-        // Later you can fetch messages/work orders from DB
-        $messages = [
-            ['user' => 'Admin', 'text' => 'Welcome to room ' . $this->room],
-            ['user' => 'Tech', 'text' => 'Work order #123 scheduled.'],
-        ];
-
         return view('livewire.room-board', [
-            'messages' => $messages,
-        ])
-        ->layout('layouts.app');
+            'messages' => $this->messages,
+        ])->layout('layouts.app');
     }
 }
+
