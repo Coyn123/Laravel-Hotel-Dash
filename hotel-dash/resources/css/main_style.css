@@ -1,219 +1,88 @@
-/* --- Dashboard Wrapper --- */
-.dashboard-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
-  background: var(--background, #f7f9fc);
-  min-height: 100vh;
-  font-family: system-ui, sans-serif;
+/* 🌑 Global Dark Theme */
+body {
+  background-color: #0d0d0d; /* near-black */
+  color: #e0e0e0;
+  font-family: 'Inter', sans-serif;
 }
 
-/* --- Header --- */
+/* Wrapper */
+.dashboard-wrapper {
+  background: linear-gradient(160deg, #0d0d0d 60%, #0f2f1f 100%);
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+/* Header */
 header {
-  background: #fff;
-  border-radius: var(--radius, 10px);
-  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.08));
+  background: #0f2f1f; /* dark green */
+  border-radius: 8px;
   padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
-header .title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #333;
+
+.header-inner .logo {
+  color: #4ade80; /* soft green accent */
 }
-header .notification-btn {
-  background: none;
+
+.header-inner .title {
+  color: #e0e0e0;
+  font-weight: 500;
+}
+
+/* Notifications */
+.notification-btn {
+  background: transparent;
   border: none;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   cursor: pointer;
+  color: #4ade80;
   transition: transform 0.2s ease;
 }
-header .notification-btn:hover {
-  transform: scale(1.1);
+.notification-btn:hover {
+  transform: scale(1.2);
+  color: #86efac;
 }
 
-/* --- Notification Box --- */
 .notification-box {
-  border-radius: 8px;
+  background: #1a1a1a;
+  border: 1px solid #2f4f3f;
+  color: #e0e0e0;
+  border-radius: 6px;
   overflow: hidden;
-  border: 1px solid #e5e7eb;
 }
 .notification-title {
-  background: var(--accent, #2563eb);
-  color: #fff;
-  font-size: 0.95rem;
+  background: #0f2f1f;
+  color: #4ade80;
 }
-.notification-content {
-  font-size: 0.9rem;
-  color: #444;
+.notification-content p {
+  color: #cfcfcf;
 }
 
-/* --- Panel Container --- */
-section.panel {
-  background: #fff;
-  border-radius: var(--radius, 10px);
-  box-shadow: var(--shadow, 0 2px 6px rgba(0,0,0,0.08));
-  overflow: hidden;
-}
-.panel-header {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-.panel-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #222;
-}
-
-/* --- Floor dropdown container --- */
-details.floor {
-  border-bottom: 1px solid #e5e7eb;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-details.floor:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* --- Dropdown Header --- */
-summary.floor-header {
-  list-style: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  background: linear-gradient(90deg, var(--accent, #2563eb) 0%, var(--accent-600, #1e40af) 100%);
-  color: #fff;
-  font-weight: 600;
-  font-size: 1rem;
-  border: none;
-  transition: background 0.3s ease;
-}
-summary.floor-header:hover {
-  background: linear-gradient(90deg, var(--accent-600, #1e40af) 0%, var(--accent, #2563eb) 100%);
-}
-summary.floor-header::-webkit-details-marker { display: none; }
-
-/* --- Chevron animation --- */
-.chevron {
-  width: 20px;
-  height: 20px;
-  fill: currentColor;
-  transform: rotate(-90deg);
-  transition: transform 0.3s ease;
-}
-details[open] .chevron {
-  transform: rotate(0deg);
-}
-
-/* --- Smooth dropdown animation --- */
-details.floor > .rooms {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s ease;
-}
-details[open] > .rooms {
-  max-height: 1000px;
-}
-
-/* --- Rooms Grid --- */
-.rooms {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 14px;
-  padding: 1rem;
-  background: #fafafa;
-}
-
-/* --- Room buttons --- */
-.room {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 10px;
-  background: var(--chip, #f3f4f6);
-  color: var(--chip-text, #111);
-  border: none;
+/* Floors View Section */
+section {
+  background: #111;
   border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
-  transition: background 0.2s ease, transform 0.15s ease;
-  cursor: pointer;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
 }
-.room:hover {
-  background: var(--accent, #2563eb);
-  color: #fff;
-  transform: translateY(-2px);
+
+/* Dropdown Menus (make them small + elegant) */
+select, .dropdown-menu {
+  background: #0f2f1f;
+  color: #e0e0e0;
+  border: 1px solid #2f4f3f;
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem; /* compact */
+  font-size: 0.9rem;
+  min-width: 140px; /* smaller than default */
 }
-.room:active {
-  transform: translateY(0);
-}
-.room:focus {
+select:focus, .dropdown-menu:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.4);
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
 }
 
-/* --- Buttons (general utility) --- */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  border: none;
-  transition: background 0.2s ease, transform 0.15s ease;
-}
-.btn-primary {
-  background: var(--accent, #2563eb);
-  color: #fff;
-}
-.btn-primary:hover {
-  background: var(--accent-600, #1e40af);
-  transform: translateY(-1px);
-}
-.btn-secondary {
-  background: #f3f4f6;
-  color: #111;
-}
-.btn-secondary:hover {
-  background: #e5e7eb;
-}
-
-/* --- Mobile adjustments --- */
-@media (max-width: 768px) {
-  .dashboard-wrapper {
-    padding: 1rem;
-  }
-  summary.floor-header {
-    font-size: 1rem;
-    padding: 0.75rem 1rem;
-  }
-  .rooms {
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-    gap: 10px;
-    padding: 0.75rem;
-  }
-  .room {
-    font-size: 0.9rem;
-    padding: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  summary.floor-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .chevron {
-    align-self: flex-end;
-  }
+/* Hover states */
+.dropdown-menu option:hover {
+  background: #1a3a2a;
 }

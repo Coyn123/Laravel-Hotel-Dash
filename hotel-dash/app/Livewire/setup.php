@@ -60,11 +60,17 @@ class Setup extends Component
         }
     }
 
-    public function removeProperty($index)
+    public function deleteProperty()
     {
-        unset($this->properties[$index]);
-        $this->properties = array_values($this->properties);
+        // Only allow deletion if more than one property exists
+        if (count($this->properties) > 1) {
+            array_pop($this->properties);
+            session()->flash('message', 'Last property removed successfully.');
+        } else {
+            session()->flash('message', 'You must have at least one property.');
+        }
     }
+    
 
     public function nextStep ()
     {
@@ -72,13 +78,13 @@ class Setup extends Component
         {
             case 0:
                 $this->validate([
-                    'properties.0.name' => 'required|string|max:255',
-                    'properties.0.address' => 'required|string|max:255',
+                    'properties.*.name' => 'required|string|max:255',
+                    'properties.*.address' => 'required|string|max:255',
                 ]);
                 break;
             case 1:
                 $this->validate([
-                    'floors.0' => 'required|integer|min:1',
+                    'floors.*' => 'required|integer|min:1',
                 ]);
                 $this->generateFloorDetails($this->currentPropertyIndex);
                 break;
@@ -86,9 +92,9 @@ class Setup extends Component
                 foreach($this->floorInfo[0] ?? [] as $floorNum => $details)
                 {
                     $this->validate([
-                        "floorInfo.0.floor.bottom" => 'required|integer|min:1',
-                        "floorInfo.0.floor.top" => 'required|integer|min:1',
-                        "floorInfo.0.floor.increment" => 'required|integer|min:1',
+                        "floorInfo.*.floor.bottom" => 'required|integer|min:1',
+                        "floorInfo.*.floor.top" => 'required|integer|min:1',
+                        "floorInfo.*.floor.increment" => 'required|integer|min:1',
                     ]);
                 }
                 break;

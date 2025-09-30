@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 @import '../css/main_style.css';
 @import '../css/setup_style.css';
+@import '../css/board_style.css';
+@import '../css/floorview_style.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';

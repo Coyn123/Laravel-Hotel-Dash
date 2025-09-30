@@ -9,12 +9,6 @@
         </div>
     @endif
 
-    {{-- Debug info (remove in production) --}}
-    <pre class="mb-4">
-Step: {{ $stepIndex }}
-Properties: {{ json_encode($properties) }}
-    </pre>
-
     {{-- Livewire form --}}
     <form wire:submit.prevent="nextStep">
         <div class="property-block">
@@ -34,10 +28,14 @@ Properties: {{ json_encode($properties) }}
                         >
                     </div>
                 @endforeach
-
                 <button type="button" wire:click="addProperty" class="btn-secondary">
                     Add Property
                 </button>
+                @if(count($properties) > 1)
+                    <button type="button" wire:click="deleteProperty" class="btn-danger ml-2">
+                        Delete Property
+                    </button>
+                @endif
             @endif
 
             {{-- Step 1: Floors --}}
