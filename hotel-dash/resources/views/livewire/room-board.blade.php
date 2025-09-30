@@ -1,3 +1,7 @@
+@push('styles')
+    @vite(['resources/css/board_style.css'])
+@endpush
+
 <div class="panel">
     <div class="panel-header flex justify-between items-center">
         <h2 class="panel-title">Room {{ $room_num }} Board</h2>
@@ -19,27 +23,26 @@
 
     <div class="panel-body space-y-4 mt-4">
         @forelse($messages as $message)
-            <div class="p-2 border rounded">
-                <div class="flex justify-between items-center">
-                    <strong>{{ $message->flag?->flag_name ?? 'Message' }}</strong>
-                    <span class="text-xs text-gray-500">
-                        {{ $message->created_at->format('Y-m-d H:i') }}
-                    </span>
-                </div>
+            <div class="message {{ $message->flag?->slug ?? '' }}">
                 <p>{{ $message->message_text }}</p>
+                <div class="message-meta">
+                    <span class="flag">{{ $message->flag?->flag_name ?? 'Message' }}</span>
+                    <time>{{ $message->created_at->format('Y-m-d H:i') }}</time>
+                </div>
             </div>
         @empty
             <p class="text-gray-500">No messages yet.</p>
         @endforelse
     </div>
 
-    <div class="panel-footer mt-4 space-y-2">
+    {{-- Wrap footer in a form --}}
+    <form wire:submit.prevent="postMessage" class="panel-footer mt-4 space-y-2">
         {{-- Flag Selector --}}
         <div>
             <label for="flag" class="text-sm font-semibold">Flag:</label>
             <select id="flag"
                     wire:model.defer="selectedFlag"
-                    class="border rounded p-1 bg-gray-800 text-gray-100 w-full">
+                    class="border rounded p-1 bg-gray-800 text-gray-100">
                 <option value="">-- None --</option>
                 @foreach($flags as $flag)
                     <option value="{{ $flag->id }}">{{ $flag->flag_name }}</option>
@@ -53,8 +56,8 @@
                placeholder="Type a message..."
                class="border p-2 w-full bg-gray-900 text-gray-100" />
 
-        <button wire:click="postMessage" class="btn btn-primary mt-2">
+        <button type="submit" class="btn btn-primary mt-2">
             Send
         </button>
-    </div>
+    </form>
 </div>

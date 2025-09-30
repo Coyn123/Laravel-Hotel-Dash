@@ -1,5 +1,13 @@
-<div class="dashboard-wrapper">
+@extends('layouts.app')
 
+@section('title', 'Dashboard')
+
+@push('styles')
+    @vite(['resources/css/main_style.css'])
+@endpush
+
+@section('content')
+<div class="dashboard-wrapper">
     {{-- Header --}}
     <header class="mb-6">
         <div class="header-inner flex items-center justify-between">
@@ -27,9 +35,9 @@
             </div>
         </div>
     </header>
-
     {{-- Floors view --}}
     <section class="mb-8">
         @livewire('floors-view')
     </section>
 </div>
+@endsection

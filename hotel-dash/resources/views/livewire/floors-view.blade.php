@@ -1,3 +1,7 @@
+@push('styles')
+    @vite(['resources/css/floorview_style.css'])
+@endpush
+
 <div>
     <section class="panel" aria-labelledby="rooms-title">
         <div class="panel-header flex justify-between">

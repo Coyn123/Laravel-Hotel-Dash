@@ -7,7 +7,9 @@ use App\Livewire\Setup;
 use App\Livewire\RoomBoard;
 
 // Dashboard page
-Route::get('/dashboard', Dashboard::class)->name('dashboard');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 // Handle setup form submission on first run
 Route::get('/setup', Setup::class)->name('setup');
 

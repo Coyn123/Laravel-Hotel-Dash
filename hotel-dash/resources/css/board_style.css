@@ -1,10 +1,13 @@
 /* 🌑 Panel Base */
 .panel {
   background: #141724;
+  border: 1px solid #264d3b;
   border-radius: 8px;
   padding: 1rem;
   color: #e0e0e0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  max-width: 700px;       /* keeps it from taking full screen */
+  margin: 2rem auto;      /* center horizontally */
 }
 
 /* Header */
@@ -12,29 +15,64 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #264d3b;   /* darker muted green border */
+  border-bottom: 1px solid #264d3b;
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
 }
 .panel-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #2e7d4f;                     /* muted green accent */
+  color: #2e7d4f;
 }
 
-/* Room Status Dropdown */
-#roomStatus {
-  background: #0d2417;                /* deeper green background */
+/* Room Status Dropdown + Flag Selector */
+#roomStatus,
+#flag {
+  appearance: none;               /* remove default OS styling */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  width: auto;                    /* shrink to fit content */
+  min-width: 140px;
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+
+  background: #1a1d2b;
   border: 1px solid #264d3b;
   border-radius: 6px;
   color: #e0e0e0;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4),
+              0 2px 4px rgba(0,0,0,0.3);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  margin-bottom: 0.75rem;         /* add spacing below dropdowns */
 }
-#roomStatus:focus {
+
+#roomStatus:hover,
+#flag:hover {
+  background: #202433;
+}
+
+#roomStatus:focus,
+#flag:focus {
   outline: none;
-  border-color: #3fa76b;              /* softer green focus */
+  border-color: #3fa76b;
   box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
+}
+
+/* Custom arrow indicator */
+#roomStatus::after,
+#flag::after {
+  content: "▾";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #5fbf8a;
+  font-size: 0.8rem;
 }
 
 /* Messages */
@@ -46,14 +84,24 @@
   transition: background 0.2s ease;
 }
 .panel-body .message:hover {
-  background: #1a2f24;                /* muted green hover */
+  background: #1a2f24;
 }
-.message strong {
-  color: #5fbf8a;                     /* softer green highlight */
+.message p {
+  margin-bottom: 0.5rem;
 }
-.message time {
-  font-size: 0.75rem;
+
+/* Meta info (flag + time) */
+.message-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
   color: #9ca3af;
+}
+.message-meta .flag {
+  color: #5fbf8a;
+}
+.message-meta time {
+  font-style: italic;
 }
 
 /* Flagged Message Variants */
@@ -74,7 +122,11 @@
 .panel-footer {
   border-top: 1px solid #264d3b;
   padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;   /* consistent spacing between flag, input, and button */
 }
+
 .panel-footer input[type="text"] {
   background: #0d2417;
   border: 1px solid #264d3b;
@@ -92,32 +144,17 @@
   box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
 }
 
-/* Flag Selector */
-#flag {
-  background: #0d2417;
-  border: 1px solid #264d3b;
-  border-radius: 6px;
-  color: #e0e0e0;
-  padding: 0.35rem 0.5rem;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-}
-#flag:focus {
-  outline: none;
-  border-color: #3fa76b;
-  box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
-}
-
 /* Buttons */
 .btn-primary {
-  background: #0f3a24;                /* darker green button */
+  background: #0f3a24;
   color: #fff;
   border-radius: 6px;
   padding: 0.65rem 1.25rem;
   font-weight: 600;
   transition: background 0.2s ease, transform 0.15s ease;
+  align-self: flex-start;   /* keep button aligned left instead of stretching */
 }
 .btn-primary:hover {
-  background: #163528;                /* muted hover */
+  background: #163528;
   transform: translateY(-1px);
 }
