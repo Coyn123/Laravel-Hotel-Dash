@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>@yield('title', 'Hospitality Dashboard')</title>
+    <title>{{ $title ?? 'Initial Setup' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Vite compiled CSS & JS --}}
@@ -12,16 +12,12 @@
     {{-- Livewire styles --}}
     @livewireStyles
 </head>
-<body>
-    {{-- If a Livewire slot exists, render it. Otherwise, fall back to Blade section --}}
-    @isset($slot)
+<body class="bg-gray-100 font-sans">
+    <div class="setup-wrapper max-w-3xl mx-auto my-8 p-6 bg-white rounded-lg shadow">
         {{ $slot }}
-    @else
-        @yield('content')
-    @endisset
+    </div>
 
     {{-- Livewire scripts --}}
     @livewireScripts
 </body>
 </html>
-

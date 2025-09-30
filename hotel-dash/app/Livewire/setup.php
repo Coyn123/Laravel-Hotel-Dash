@@ -7,65 +7,179 @@ use Illuminate\Support\Facades\DB;
 
 class Setup extends Component
 {
-    public $floors = [
-        ['property_name' => '', 'floor_name' => '']
-    ];
+    public $properties = [];
+    public $floors = [];
+    public $floorDetails = [];
+    public $stepIndex = 0; // 0 = property info, 1 = floors, 2 = floor details
+    public $currentPropertyIndex = 0;
+    public $totalSteps = 3;
 
     public function mount()
     {
-        // Check if setup data already exists in DB
-        $existing = DB::table('configurations')
+        $existing = DB::table('properties_config')
             ->whereNotNull('property_name')
-            ->whereNotNull('floor_name')
+            ->whereNotNull('property_address')
             ->exists();
 
+        $this->floors[0] = null;
+        $this->floorDetails[0] = [];
+        $this->addProperty();
+
         if ($existing) {
-            // Redirect to dashboard if already configured
             return $this->redirectRoute('dashboard');
         }
     }
 
-    public function addFloor ()
+    public function addProperty()
     {
-        $this->floors[] = ['property_name' => '', 'floor_name' => ''];
+        $index = count($this->properties);
+        $this->properties[$index] = ['name' => '', 'address' => ''];
+        $this->floors[$index] = null;
+        $this->floorDetails[$index] = [];
     }
-    public function removeFloor($index)
+
+    public function generateFloorDetails()
     {
-        unset($this->floors[$index]);
-        $this->floors = array_values($this->floors);
+        foreach ($this->properties as $propIndex => $prop) {
+            $count = (int) ($this->floors[$propIndex] ?? 0);
+
+            $this->properties[$propIndex]['total_floors'] = $count;
+
+            if (! isset($this->properties[$propIndex]['increment'])) {
+                $this->properties[$propIndex]['increment'] = 1;
+            }
+
+            for ($i = 0; $i < $count; $i++) {
+                $key = 'floor_specs_floor' . ($i + 1);
+
+                $this->properties[$propIndex][$key] = [
+                    'bottom' => $this->properties[$propIndex][$key]['bottom'] ?? null,
+                    'top'    => $this->properties[$propIndex][$key]['top'] ?? null,
+                ];
+            }
+        }
+    }
+
+    public function deleteProperty()
+    {
+        // Only allow deletion if more than one property exists
+        if (count($this->properties) > 1) {
+            array_pop($this->properties);
+            session()->flash('message', 'Last property removed successfully.');
+        } else {
+            session()->flash('message', 'You must have at least one property.');
+        }
+    }
+    
+
+    public function nextStep ()
+    {
+        switch ($this->stepIndex)
+        {
+            case 0:
+                $this->validate([
+                    'properties.*.name' => 'required|string|max:255',
+                    'properties.*.address' => 'required|string|max:255',
+                ]);
+                break;
+            case 1:
+                $this->validate([
+                    'floors.*' => 'required|integer|min:1',
+                ]);
+                $this->generateFloorDetails($this->currentPropertyIndex);
+                break;
+            case 2:
+                foreach($this->floorInfo[0] ?? [] as $floorNum => $details)
+                {
+                    $this->validate([
+                        "floorInfo.*.floor.bottom" => 'required|integer|min:1',
+                        "floorInfo.*.floor.top" => 'required|integer|min:1',
+                        "floorInfo.*.floor.increment" => 'required|integer|min:1',
+                    ]);
+                }
+                break;
+        }
+
+        if ($this->stepIndex < $this->totalSteps - 1) {
+            $this->stepIndex++;
+        } else {
+            $this->store();
+        }
     }
 
     public function store()
-    { 
+    {
+        // Compute total rooms for each property config array
+        foreach ($this->properties as $propertyIndex => &$propArrays) {
+            $propArrays['total_rooms'] = 0;
+            $totalRooms = 0;
 
-        $this->validate([
-            'floors.*.property_name' => 'required|string|max:255',
-            'floors.*.floor_name'    => 'required|string|max:255',
-        ]);
+            foreach ($propArrays as $key => $value) {
+                if (str_starts_with($key, 'floor_specs_floor')) {
+                    $bottom = $value['bottom'] ?? null;
+                    $top = $value['top'] ?? null;
+                    $increment = $propArrays['increment'] ?? 1;
 
-        // Insert each floor into DB
-        foreach ($this->floors as $floor) {
-            DB::table('configurations')->insert([
-                'property_name' => $floor['property_name'],
-                'floor_name'    => $floor['floor_name'],
-                'floor_number'  => 0,
-                'floor_count'   => 0,
-                'aux_property_count' => 0,
-                'created_at'    => now(),
-                'updated_at'    => now(),
+                    if ($bottom !== null && $top !== null) {
+                        for ($i = $bottom; $i <= $top; $i += $increment) {
+                            $totalRooms++;
+                        }
+                    }
+                }
+            }
+
+            $propArrays['total_rooms'] = $totalRooms;
+        }
+        unset($propArrays);
+
+
+        // Insert properties, floors, rooms
+        foreach ($this->properties as $propertyIndex => $arrays) {
+            $propertyId = DB::table('properties_config')->insertGetId([
+                'property_name'   => $arrays['name'],
+                'property_address'=> $arrays['address'],
+                'created_at'      => now(),
+                'updated_at'      => now(),
             ]);
+
+            foreach ($arrays as $arrKey => $values) {
+                if (str_starts_with($arrKey, 'floor_specs_floor')) {
+                    $floorNum = (int) str_replace('floor_specs_floor', '', $arrKey);
+
+                    $floorId = DB::table('floors_config')->insertGetId([
+                        'property_id'     => $propertyId,
+                        'floor_number'    => $floorNum,
+                        'range_start'     => $values['bottom'],
+                        'range_end'       => $values['top'],
+                        'created_at'      => now(),
+                        'updated_at'      => now(),
+                    ]);
+
+                    // Insert rooms for this floor
+                    for ($i = $values['bottom']; $i <= $values['top']; $i += ($arrays['increment'] ?? 1)) {
+                        $roomId = DB::table('rooms_config')->insertGetId([
+                            'property_id'    => $propertyId,
+                            'floor_id'       => $floorId,
+                            'room_number'    => $i,
+                            'room_type_id'   => 1,
+                            'room_status_id' => 1,
+                            'created_at'     => now(),
+                            'updated_at'     => now(),
+                        ]);
+
+
+                    }
+                }
+            }
         }
 
         session()->flash('message', 'Configuration saved successfully.');
-
-        // Redirect to dashboard after saving
         return redirect()->route('dashboard');
     }
 
     public function render()
     {
         return view('livewire.setup')
-        ->layout('layouts.app');
-
+            ->layout('layouts.setup', ['title' => 'Initial Setup']);
     }
 }

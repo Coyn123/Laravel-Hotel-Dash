@@ -1,21 +1,25 @@
-<div>
-    <header>
-        <div class="header-inner">
-            <div class="brand">
-                <div class="logo" aria-hidden="true">Coyner</div>
-                <div class="title">Hospitality Dashboard</div>
+<div class="dashboard-wrapper">
+
+    {{-- Header --}}
+    <header class="mb-6">
+        <div class="header-inner flex items-center justify-between">
+            <div class="brand flex items-center space-x-2">
+                <div class="logo font-bold text-lg" aria-hidden="true">Coyner</div>
+                <div class="title text-xl">Hospitality Dashboard</div>
             </div>
-            <div class="controls" style="margin-left:auto">
-                <div class="notification-wrapper">
+            <div class="controls ml-auto">
+                <div class="notification-wrapper relative">
                     <button class="notification-btn"
                             id="notificationBtn"
                             aria-label="View notifications"
                             aria-expanded="false"
                             aria-controls="notificationBox">
+                        🔔
                     </button>
-                    <div class="notification-box" id="notificationBox">
-                        <h4 class="notification-title">Notifications</h4>
-                        <div class="notification-content" id="notificationContent">
+                    <div class="notification-box absolute right-0 mt-2 w-64 bg-white shadow-lg rounded hidden"
+                         id="notificationBox">
+                        <h4 class="notification-title font-semibold p-2 border-b">Notifications</h4>
+                        <div class="notification-content p-2" id="notificationContent">
                             <p>Loading…</p>
                         </div>
                     </div>
@@ -24,32 +28,8 @@
         </div>
     </header>
 
-    <main>
-        <section class="panel" aria-labelledby="rooms-title">
-            <div class="panel-header">
-                <h2 id="rooms-title" class="panel-title">Rooms</h2>
-            </div>
-            <div class="panel-body">
-                @foreach($floors as $floor)
-                    <details class="floor" id="floor-{{ $floor['id'] }}" {{ $loop->first ? 'open' : '' }}>
-                        <summary class="floor-header">
-                            <div class="floor-meta">
-                                <span class="floor-name">{{ $floor['name'] }}</span>
-                                <span class="floor-sub">{{ ($floor['end'] - $floor['start']) }} rooms</span>
-                            </div>
-                            <svg class="chevron" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"/>
-                            </svg>
-                        </summary>
-                        <div class="rooms">
-                            @for($room = $floor['start']; $room < $floor['end']; $room++)
-                                <a class="room" href="#">{{ $room }}</a>
-                            @endfor
-                        </div>
-                    </details>
-                @endforeach
-            </div>
-        </section>
-    </main>
+    {{-- Floors view --}}
+    <section class="mb-8">
+        @livewire('floors-view')
+    </section>
 </div>
-
