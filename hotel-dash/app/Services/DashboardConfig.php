@@ -2,21 +2,21 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 class DashboardConfig
 {
     public static function get()
     {
-        return Cache::remember('dashboard_config', 3600, function () {
-            return [
+        if (! Session::has('dashboard_config')) {
+            Session::put('dashboard_config', [
                 'floors' => self::getFloorsWithRooms(),
-                //'notifications' => self::getNotifications(),
-                //'nav' => self::getNav(),
-            ];
-        });
+            ]);
     }
+
+    return Session::get('dashboard_config');
+}
 
     protected static function getFloorsWithRooms()
     {
