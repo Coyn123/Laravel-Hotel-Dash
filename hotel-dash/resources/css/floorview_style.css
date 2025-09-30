@@ -1,112 +1,117 @@
-/* 🌑 Panel Base */
 .panel {
-    background: #0d0d0d;
-    border-radius: 8px;
-    padding: 1rem;
-    color: #e0e0e0;
-  }
-  
-  /* Property Title Styling */
-  .property-title {
-    font-weight: 700;              /* bold */
-    font-size: 1.25rem;            /* larger than rooms/floors */
-    color: #4ade80;                /* green accent */
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Distinction Between Properties */
-  .property-block {
-    padding: 1rem;
-    margin-bottom: 2rem;           /* space between properties */
-    border: 1px solid #2f4f3f;     /* subtle green border */
-    border-radius: 8px;
-    background: #111;              /* dark background card */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  }
-  
-  /* Optional: add a subtle divider line under property title */
-  .property-title::after {
-    content: "";
-    display: block;
-    height: 2px;
-    background: #2f4f3f;
-    margin-top: 0.25rem;
-    border-radius: 1px;
-  }
-  
-  
-  /* Floor Header as Clickable Cell */
-  .floor-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #0f2f1f;
-    color: #e0e0e0;
-    padding: 0.75rem 1rem;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-    list-style: none; /* remove default disclosure arrow */
-  }
-  .floor-header:hover {
-    background: #1a3a2a;
-  }
-  .floor[open] .floor-header {
-    background: #14532d;
-  }
-  
-  /* Add custom arrow indicator */
-  .floor-header::after {
-    content: "▸";
-    font-size: 0.9rem;
-    color: #4ade80;
-    margin-left: auto;
-    transition: transform 0.2s ease;
-  }
-  .floor[open] .floor-header::after {
-    transform: rotate(90deg);
-  }
-  
-  /* Rooms Grid */
-  .rooms {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 0.75rem;
-    margin-top: 0.75rem;
-    padding: 0.5rem;
-  }
-  
-  /* Room Cell */
-  .room {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #1a1a1a;
-    border: 1px solid #2f4f3f;
-    border-radius: 6px;
-    padding: 1rem;
-    text-align: center;
-    font-size: 0.95rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    transition: background 0.2s ease, transform 0.15s ease;
-  }
-  .room:hover {
-    background: #1f3f2f;
-    transform: translateY(-2px);
-    color: #86efac;
-  }
-  
-  /* Status Variants */
-  .room.occupied {
-    border-color: #dc2626;
-    background: #2a0f0f;
-  }
-  .room.vacant {
-    border-color: #16a34a;
-    background: #0f2f1f;
-  }
-  .room.cleaning {
-    border-color: #eab308;
-    background: #2a250f;
-  }
+  background: #151826;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #e0e0e0;
+}
+
+/* Panel Body Background */
+.panel-body {
+  background: #151826;           /* slightly lighter than panel, not pure black */
+  border-radius: 6px;
+  padding: 1rem;
+}
+
+/* Property Title Styling */
+.property-title {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #2e7d4f;                /* muted green accent */
+  margin-bottom: 0.5rem;
+}
+
+/* Distinction Between Properties */
+.property-block {
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border: 1px solid #264d3b;
+  border-radius: 8px;
+  background: #101422;           /* dark card, distinct from panel-body */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* Divider under property title */
+.property-title::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: #264d3b;
+  margin-top: 0.25rem;
+  border-radius: 1px;
+}
+
+/* Floor Header */
+.floor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0f3a24;
+  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  list-style: none;
+}
+.floor-header:hover {
+  background: #163528;
+}
+.floor[open] .floor-header {
+  background: #0f3a24;
+}
+
+/* Arrow indicator */
+.floor-header::after {
+  content: "▸";
+  font-size: 0.9rem;
+  color: #3fa76b;
+  margin-left: auto;
+  transition: transform 0.2s ease;
+}
+.floor[open] .floor-header::after {
+  transform: rotate(90deg);
+}
+
+/* Rooms Grid */
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+}
+
+/* Room Cell */
+.room {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #131a37;
+  border: 1px solid #264d3b;
+  border-radius: 6px;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.room:hover {
+  background: #1a2f24;
+  transform: translateY(-2px);
+  color: #5fbf8a;
+}
+
+/* Status Variants */
+.room.occupied {
+  border-color: #dc2626;
+  background: #2a0f0f;
+}
+.room.vacant {
+  border-color: #1f6d3a;
+  background: #0d2417;
+}
+.room.cleaning {
+  border-color: #eab308;
+  background: #2a250f;
+}

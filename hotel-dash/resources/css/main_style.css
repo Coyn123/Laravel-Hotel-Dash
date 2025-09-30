@@ -1,6 +1,6 @@
 /* 🌑 Global Dark Theme */
 body {
-  background-color: #0d0d0d; /* near-black */
+  background-color: #141724;
   color: #e0e0e0;
   font-family: 'Inter', sans-serif;
 }
@@ -44,14 +44,14 @@ header {
 }
 
 .notification-box {
-  background: #1a1a1a;
+  background: #141725;
   border: 1px solid #2f4f3f;
   color: #e0e0e0;
   border-radius: 6px;
   overflow: hidden;
 }
 .notification-title {
-  background: #0f2f1f;
+  background: #141725;
   color: #4ade80;
 }
 .notification-content p {
