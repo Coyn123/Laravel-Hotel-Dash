@@ -66,7 +66,7 @@ return new class extends Migration
             $table->foreignId('floor_id')->constrained('floors_config')->cascadeOnDelete();
             $table->unsignedInteger('room_number');
             $table->foreignId('room_type_id')->constrained('room_types');
-            $table->foreignId('room_status_id')->constrained('room_statuses');
+            $table->foreignId('room_status_id')->constrained('room_flags');
             $table->timestamps();
         });
 
@@ -115,7 +115,7 @@ return new class extends Migration
         Schema::dropIfExists('aux_property_config');
         Schema::dropIfExists('rooms_config');
         Schema::dropIfExists('room_types');
-        Schema::dropIfExists('room_statuses');
+        Schema::dropIfExists('room_flags');
         Schema::dropIfExists('floors_config');
         Schema::dropIfExists('properties_config');
     }
