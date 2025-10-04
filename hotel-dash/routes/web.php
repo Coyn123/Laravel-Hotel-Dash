@@ -12,5 +12,3 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 // Handle setup form submission on first run
 Route::get('/setup', Setup::class)->name('setup');
-
-Route::get('/panel/{property}/{floor}/{room}', RoomBoard::class)->name('room.board');

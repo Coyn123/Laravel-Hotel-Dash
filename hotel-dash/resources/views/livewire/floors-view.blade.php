@@ -29,11 +29,8 @@
                             <div class="rooms">
                                 @foreach($floor['rooms'] ?? [] as $room)
                                     <a class="room {{ $room['room_status'] ?? '' }}"
-                                       href="{{ route('room.board', [
-                                           'property' => $property['property_id'],
-                                           'floor'    => $floor['id'],
-                                           'room'     => $room['id'],
-                                       ]) }}">
+                                        wire:click.prevent="selectRoom({{ $room['property_id'] }}, {{ $room['floor'] }}, {{ $room['id'] }})"
+                                        href="#">
                                         Room {{ $room['room'] }}
                                     </a>
                                 @endforeach

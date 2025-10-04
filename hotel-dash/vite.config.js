@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import livewire from '@defstudio/vite-livewire-plugin';
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
     plugins: [
@@ -14,6 +15,7 @@ export default defineConfig({
         livewire({
             refresh: ['resources/css/app.css'], // also refresh Tailwind/CSS
         }),
+        tailwindcss(),
     ],
     server: {
         host: 'localhost', // force IPv4 instead of [::1]

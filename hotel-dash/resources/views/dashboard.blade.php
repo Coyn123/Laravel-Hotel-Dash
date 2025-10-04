@@ -35,9 +35,13 @@
             </div>
         </div>
     </header>
-    {{-- Floors view --}}
-    <section class="mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
         @livewire('floors-view')
-    </section>
+    </div>
+    <div>
+        @livewire('room-board')
+    </div>
+    </div>
 </div>
 @endsection

@@ -4,6 +4,43 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+/*
+
+EXAMPLE OUTPUT FOR CONFIG:
+[
+    'properties' => [
+        [
+            'property_id'   => 1,
+            'property_name' => 'Property A',
+            'floors' => [
+                [
+                    'id'            => 10,
+                    'property_id'   => 1,
+                    'floor_num'     => 1,
+                    'name'          => 'Floor 1',
+                    'start'         => 101,
+                    'end'           => 120,
+                    'property_name' => 'Property A',
+                    'rooms'         => [
+                        [
+                            'id'          => 1001,
+                            'property_id' => 1,
+                            'floor'       => 10,
+                            'room'        => 101,
+                            'room_type'   => 2,
+                            'room_status' => 1,
+                        ],
+                        // ...
+                    ],
+                    'total_rooms'   => 20,
+                ],
+                // more floors...
+            ],
+        ],
+        // more properties...
+    ]
+];
+*/
 
 class DashboardConfig
 {
@@ -11,7 +48,7 @@ class DashboardConfig
     {
         if (! Session::has('dashboard_config')) {
             Session::put('dashboard_config', [
-                'floors' => self::getFloorsWithRooms(),
+                'properties' => self::getFloorsWithRooms(),
             ]);
     }
 

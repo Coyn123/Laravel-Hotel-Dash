@@ -6,12 +6,13 @@ use Livewire\Component;
 use App\Models\MessageBoard;
 use App\Models\MessageFlag;
 use App\Services\DashboardConfig;
+use Livewire\Attributes\On;
 
 class RoomBoard extends Component
 {
-    public $property;     // property_id from URL
-    public $floor;        // floor id from URL
-    public $room;         // room id from URL
+    public $property;     // property_id for configuration
+    public $floor;        // floor id for configuration
+    public $room;         // room id for configuration
     public $room_num;     // display number (rooms_config.room_number)
 
     public $messages;
@@ -22,22 +23,42 @@ class RoomBoard extends Component
     public $roomStatus;   // current status of the room
     public $FullConfig = [];
 
-    public function mount($property, $floor, $room)
+    #[On('roomSelected')]
+    public function loadRoom($propertyId, $floorId, $roomId)
     {
-        $this->property = (int) $property;
-        $this->floor    = (int) $floor;
-        $this->room     = (int) $room;
-
+        $this->property = $propertyId;
+        $this->floor    = $floorId;
+        $this->room     = $roomId;
         $this->resolveRoomNumber();
         $this->loadMessages();
+    
+        $roomModel = MessageBoard::find($roomId);
+        $this->roomStatus = $roomModel?->status ?? 'vacant';
+    }
 
-        // load available flags
+    public function mount()
+    {
+        $configs = DashboardConfig::get();
+    
+        $firstProperty = collect($configs['floors'])->sortBy('property_id')->first();
+        $this->property = $firstProperty['property_id'] ?? null;
+    
+        $firstFloor = collect($firstProperty['floors'])->sortBy('id')->first();
+        $this->floor = $firstFloor['id'] ?? null;
+    
+        $firstRoom = collect($firstFloor['rooms'])->sortBy('id')->first();
+        $this->room = $firstRoom['id'] ?? null;
+    
+        $this->resolveRoomNumber();
+        $this->loadMessages();
+    
         $this->flags = MessageFlag::all();
-
-        // load current room status from DB
+    
         $roomModel = MessageBoard::find($this->room);
         $this->roomStatus = $roomModel?->status ?? 'vacant';
     }
+    
+    
 
     protected function resolveRoomNumber(): void
     {

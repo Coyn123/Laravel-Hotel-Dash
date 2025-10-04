@@ -4,6 +4,16 @@ body {
   color: #e0e0e0;
   font-family: 'Inter', sans-serif;
 }
+/* SIDE BY SIDE PANEL */
+.dashboard {
+  display: flex;
+  gap: 1rem; /* space between panels */
+}
+/*SIDE BY SIDE PANEL */
+.floor-panel,
+.message-panel {
+  flex: 1; /* each takes equal width */
+}
 
 /* Wrapper */
 .dashboard-wrapper {

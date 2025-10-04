@@ -11,6 +11,12 @@ class FloorsView extends Component
     public $allFloors = [];
     public $sortFloorsDesc = true; // default: highest → lowest
 
+    public function selectRoom($propertyId, $floorId, $roomId)
+    {
+    // Emit event to MessageBoard
+    $this->dispatch('roomSelected', $propertyId, $floorId, $roomId);
+    }
+
     public function mount()
     {
         $configs = DashboardConfig::get();
