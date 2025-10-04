@@ -1,7 +1,3 @@
-@push('styles')
-    @vite(['resources/css/board_style.css'])
-@endpush
-
 <div class="panel">
     <div class="panel-header flex justify-between items-center">
         <h2 class="panel-title">Room {{ $room_num }} Board</h2>
@@ -23,11 +19,24 @@
 
     <div class="panel-body space-y-4 mt-4">
         @forelse($messages as $message)
-            <div class="message {{ $message->flag?->slug ?? '' }}">
+            <div @class([
+                'message', // always apply base structure
+                'message-urgent' => $message->flag_id == 3,
+                'message-work' => $message->flag_id == 2,
+                'message-resolved' => $message->flag_id == 4,
+            ])>
                 <p>{{ $message->message_text }}</p>
+
                 <div class="message-meta">
                     <span class="flag">{{ $message->flag?->flag_name ?? 'Message' }}</span>
                     <time>{{ $message->created_at->format('Y-m-d H:i') }}</time>
+
+                    @if(in_array($message->flag_id, [2,3]))
+                        <label class="flex items-center gap-2 mt-2">
+                            <input type="checkbox" wire:click="markResolved({{ $message->id }})">
+                            <span>Mark as Resolved</span>
+                        </label>
+                    @endif
                 </div>
             </div>
         @empty
@@ -43,9 +52,10 @@
             <select id="flag"
                     wire:model.defer="selectedFlag"
                     class="border rounded p-1 bg-gray-800 text-gray-100">
-                <option value="">-- None --</option>
                 @foreach($flags as $flag)
-                    <option value="{{ $flag->id }}">{{ $flag->flag_name }}</option>
+                    @if($flag->id != 4) {{-- Remove Resolved Tag, only needed for checkbox --}}
+                        <option value="{{ $flag->id }}">{{ $flag->flag_name }}</option>
+                    @endif
                 @endforeach
             </select>
         </div>

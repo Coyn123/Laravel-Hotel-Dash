@@ -1,7 +1,3 @@
-@push('styles')
-    @vite(['resources/css/floorview_style.css'])
-@endpush
-
 <div>
     <section class="panel" aria-labelledby="rooms-title">
         <div class="panel-header flex justify-between">
@@ -11,7 +7,7 @@
             </div>
         </div>
         <div class="panel-body">
-            @forelse($floors as $property)
+            @forelse($properties as $property)
                 <div class="property-block">
                     <h3 class="property-title">{{ $property['property_name'] ?? 'Unnamed Property' }}</h3>
                     @forelse($property['floors'] as $floor)

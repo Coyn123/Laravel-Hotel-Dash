@@ -8,7 +8,7 @@ use App\Services\DashboardConfig;
 class FloorsView extends Component
 {
     public $search = '';
-    public $allFloors = [];
+    public $allProperties = [];
     public $sortFloorsDesc = true; // default: highest → lowest
 
     public function selectRoom($propertyId, $floorId, $roomId)
@@ -20,7 +20,7 @@ class FloorsView extends Component
     public function mount()
     {
         $configs = DashboardConfig::get();
-        $this->allFloors = $configs['floors'] ?? [];
+        $this->allProperties = $configs['properties'] ?? [];
     }
 
     public function toggleFloorsSort()
@@ -30,7 +30,7 @@ class FloorsView extends Component
 
     protected function filteredAndSorted()
     {
-        $properties = $this->allFloors;
+        $properties = $this->allProperties;
 
         // --- Search filter (same as before) ---
         if ($this->search !== '') {
@@ -69,7 +69,7 @@ class FloorsView extends Component
     public function render()
     {
         return view('livewire.floors-view', [
-            'floors' => $this->filteredAndSorted(),
+            'properties' => $this->filteredAndSorted(),
         ]);
     }
 }

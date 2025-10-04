@@ -40,7 +40,7 @@ class RoomBoard extends Component
     {
         $configs = DashboardConfig::get();
     
-        $firstProperty = collect($configs['floors'])->sortBy('property_id')->first();
+        $firstProperty = collect($configs['properties'])->sortBy('property_id')->first();
         $this->property = $firstProperty['property_id'] ?? null;
     
         $firstFloor = collect($firstProperty['floors'])->sortBy('id')->first();
@@ -63,7 +63,7 @@ class RoomBoard extends Component
     protected function resolveRoomNumber(): void
     {
         $config = DashboardConfig::get() ?? [];
-        $properties = $config['floors'] ?? [];
+        $properties = $config['properties'] ?? [];
 
         $propertyData = collect($properties)
             ->firstWhere('property_id', $this->property);
@@ -95,7 +95,7 @@ class RoomBoard extends Component
             'property_id'  => $this->property,
             'floor_id'     => $this->floor,
             'room_id'      => $this->room,
-            'flag_id'      => $this->selectedFlag ?: null,
+            'flag_id'      => $this->selectedFlag ?: 1,
             'message_text' => $this->newMessage,
         ]);
 
@@ -116,7 +116,7 @@ class RoomBoard extends Component
     public function render()
     {
         $config = DashboardConfig::get() ?? [];
-        $this->FullConfig = $config['floors'] ?? [];
+        $this->FullConfig = $config['properties'] ?? [];
 
         $this->resolveRoomNumber();
 

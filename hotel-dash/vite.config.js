@@ -1,28 +1,19 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import livewire from '@defstudio/vite-livewire-plugin';
-import tailwindcss from '@tailwindcss/vite'
+// vite.config.js
+import { defineConfig } from 'vite'
+import laravel from 'laravel-vite-plugin'
 
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
-            ],
-            refresh: false, // disable Laravel's default Blade refresh
-        }),
-        livewire({
-            refresh: ['resources/css/app.css'], // also refresh Tailwind/CSS
-        }),
-        tailwindcss(),
-    ],
-    server: {
-        host: 'localhost', // force IPv4 instead of [::1]
-        port: 5173,
-        hmr: {
-            host: 'localhost',
-            protocol: 'ws',
-        },
-    },
-});
+  plugins: [
+    laravel({
+      input: [
+        'resources/css/app.css',
+        'resources/js/app.js',
+      ],
+      refresh: true,
+    }),
+  ],
+  server: {
+    host: '10.0.0.32',
+    port: 5173,
+  },
+})

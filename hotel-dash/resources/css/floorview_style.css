@@ -1,117 +1,88 @@
-.panel {
-  background: #151826;
-  border-radius: 8px;
-  padding: 1rem;
-  color: #e0e0e0;
-}
+/* resources/css/floorview_style.css */
+@layer components {
+  /* 🌑 Panel Base */
+  .panel {
+    @apply rounded-lg p-4 text-gray-200;
+    background: #151826;
+  }
 
-/* Panel Body Background */
-.panel-body {
-  background: #151826;           /* slightly lighter than panel, not pure black */
-  border-radius: 6px;
-  padding: 1rem;
-}
+  /* Panel Body Background */
+  .panel-body {
+    @apply rounded-md p-4;
+    background: #151826;
+  }
 
-/* Property Title Styling */
-.property-title {
-  font-weight: 700;
-  font-size: 1.25rem;
-  color: #2e7d4f;                /* muted green accent */
-  margin-bottom: 0.5rem;
-}
+  /* Property Title Styling */
+  .property-title {
+    @apply font-bold text-xl mb-2;
+    color: #2e7d4f;
+  }
+  .property-title::after {
+    content: "";
+    @apply block mt-1 rounded-sm;
+    height: 2px;
+    background: #264d3b;
+  }
 
-/* Distinction Between Properties */
-.property-block {
-  padding: 1rem;
-  margin-bottom: 2rem;
-  border: 1px solid #264d3b;
-  border-radius: 8px;
-  background: #101422;           /* dark card, distinct from panel-body */
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-}
+  /* Distinction Between Properties */
+  .property-block {
+    @apply p-4 mb-8 rounded-lg;
+    border: 1px solid #264d3b;
+    background: #101422;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
 
-/* Divider under property title */
-.property-title::after {
-  content: "";
-  display: block;
-  height: 2px;
-  background: #264d3b;
-  margin-top: 0.25rem;
-  border-radius: 1px;
-}
+  /* Floor Header */
+  .floor-header {
+    @apply flex justify-between items-center text-gray-200 rounded-md cursor-pointer list-none px-4 py-3 transition-colors;
+    background: #0f3a24;
+  }
+  .floor-header:hover {
+    background: #163528;
+  }
+  .floor[open] .floor-header {
+    background: #0f3a24;
+  }
 
-/* Floor Header */
-.floor-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0f3a24;
-  color: #e0e0e0;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  list-style: none;
-}
-.floor-header:hover {
-  background: #163528;
-}
-.floor[open] .floor-header {
-  background: #0f3a24;
-}
+  /* Arrow indicator */
+  .floor-header::after {
+    content: "▸";
+    @apply ml-auto text-sm transition-transform;
+    color: #3fa76b;
+  }
+  .floor[open] .floor-header::after {
+    transform: rotate(90deg);
+  }
 
-/* Arrow indicator */
-.floor-header::after {
-  content: "▸";
-  font-size: 0.9rem;
-  color: #3fa76b;
-  margin-left: auto;
-  transition: transform 0.2s ease;
-}
-.floor[open] .floor-header::after {
-  transform: rotate(90deg);
-}
+  /* Rooms Grid */
+  .rooms {
+    @apply grid gap-3 mt-3 p-2;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 
-/* Rooms Grid */
-.rooms {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-  padding: 0.5rem;
-}
+  /* Room Cell */
+  .room {
+    @apply flex items-center justify-center rounded-md p-4 text-center text-[0.95rem] text-gray-200 no-underline transition;
+    background: #131a37;
+    border: 1px solid #264d3b;
+  }
+  .room:hover {
+    background: #1a2f24;
+    transform: translateY(-2px);
+    color: #5fbf8a;
+  }
 
-/* Room Cell */
-.room {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #131a37;
-  border: 1px solid #264d3b;
-  border-radius: 6px;
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.95rem;
-  color: #e0e0e0;
-  text-decoration: none;
-  transition: background 0.2s ease, transform 0.15s ease;
-}
-.room:hover {
-  background: #1a2f24;
-  transform: translateY(-2px);
-  color: #5fbf8a;
-}
-
-/* Status Variants */
-.room.occupied {
-  border-color: #dc2626;
-  background: #2a0f0f;
-}
-.room.vacant {
-  border-color: #1f6d3a;
-  background: #0d2417;
-}
-.room.cleaning {
-  border-color: #eab308;
-  background: #2a250f;
+  /* Status Variants */
+  .room.occupied {
+    border-color: #dc2626;
+    background: #2a0f0f;
+  }
+  .room.vacant {
+    border-color: #1f6d3a;
+    background: #0d2417;
+  }
+  .room.cleaning {
+    border-color: #eab308;
+    background: #2a250f;
+  }
 }

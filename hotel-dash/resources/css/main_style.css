@@ -1,98 +1,88 @@
-/* 🌑 Global Dark Theme */
-body {
-  background-color: #141724;
-  color: #e0e0e0;
-  font-family: 'Inter', sans-serif;
-}
-/* SIDE BY SIDE PANEL */
-.dashboard {
-  display: flex;
-  gap: 1rem; /* space between panels */
-}
-/*SIDE BY SIDE PANEL */
-.floor-panel,
-.message-panel {
-  flex: 1; /* each takes equal width */
+/* resources/css/main_style.css */
+@layer base {
+  /* 🌑 Global Dark Theme */
+  body {
+    @apply font-sans text-gray-200;
+    background-color: #141724;
+    font-family: 'Inter', sans-serif;
+  }
 }
 
-/* Wrapper */
-.dashboard-wrapper {
-  background: linear-gradient(160deg, #0d0d0d 60%, #0f2f1f 100%);
-  min-height: 100vh;
-  padding: 1.5rem;
-}
+@layer components {
+  /* SIDE BY SIDE PANEL */
+  .dashboard {
+    @apply flex gap-4 mx-auto;
+    max-width: 3500px;
+  }
+  .floor-panel,
+  .message-panel {
+    @apply flex-1;
+  }
 
-/* Header */
-header {
-  background: #0f2f1f; /* dark green */
-  border-radius: 8px;
-  padding: 1rem 1.5rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-}
+  /* Wrapper */
+  .dashboard-wrapper {
+    @apply min-h-screen p-6;
+    background: linear-gradient(160deg, #0d0d0d 60%, #0f2f1f 100%);
+  }
 
-.header-inner .logo {
-  color: #4ade80; /* soft green accent */
-}
+  /* Header */
+  header {
+    @apply rounded-lg px-6 py-4 shadow-md;
+    background: #0f2f1f;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+  .header-inner .logo {
+    color: #4ade80;
+  }
+  .header-inner .title {
+    @apply font-medium text-gray-200;
+  }
 
-.header-inner .title {
-  color: #e0e0e0;
-  font-weight: 500;
-}
+  /* Notifications */
+  .notification-btn {
+    @apply bg-transparent border-none text-xl cursor-pointer transition-transform;
+    color: #4ade80;
+  }
+  .notification-btn:hover {
+    @apply scale-110;
+    color: #86efac;
+  }
+  .notification-box {
+    @apply rounded-md overflow-hidden text-gray-200;
+    background: #141725;
+    border: 1px solid #2f4f3f;
+  }
+  .notification-title {
+    background: #141725;
+    color: #4ade80;
+  }
+  .notification-content p {
+    color: #cfcfcf;
+  }
 
-/* Notifications */
-.notification-btn {
-  background: transparent;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  color: #4ade80;
-  transition: transform 0.2s ease;
-}
-.notification-btn:hover {
-  transform: scale(1.2);
-  color: #86efac;
-}
+  /* Floors View Section */
+  section {
+    @apply rounded-lg p-4;
+    background: #111;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  }
 
-.notification-box {
-  background: #141725;
-  border: 1px solid #2f4f3f;
-  color: #e0e0e0;
-  border-radius: 6px;
-  overflow: hidden;
-}
-.notification-title {
-  background: #141725;
-  color: #4ade80;
-}
-.notification-content p {
-  color: #cfcfcf;
-}
-
-/* Floors View Section */
-section {
-  background: #111;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.7);
-}
-
-/* Dropdown Menus (make them small + elegant) */
-select, .dropdown-menu {
-  background: #0f2f1f;
-  color: #e0e0e0;
-  border: 1px solid #2f4f3f;
-  border-radius: 4px;
-  padding: 0.25rem 0.5rem; /* compact */
-  font-size: 0.9rem;
-  min-width: 140px; /* smaller than default */
-}
-select:focus, .dropdown-menu:focus {
-  outline: none;
-  border-color: #4ade80;
-  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
-}
-
-/* Hover states */
-.dropdown-menu option:hover {
-  background: #1a3a2a;
+  /* Dropdown Menus */
+  select,
+  .dropdown-menu {
+    @apply rounded px-2 py-1 text-sm;
+    background: #0f2f1f;
+    color: #e0e0e0;
+    border: 1px solid #2f4f3f;
+    min-width: 140px;
+  }
+  select:focus,
+  .dropdown-menu:focus {
+    @apply outline-none;
+    border-color: #4ade80;
+    box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.4);
+  }
+  .dropdown-menu option:hover {
+    background: #1a3a2a;
+  }
 }

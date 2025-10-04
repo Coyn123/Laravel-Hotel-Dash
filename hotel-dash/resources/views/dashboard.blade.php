@@ -2,10 +2,6 @@
 
 @section('title', 'Dashboard')
 
-@push('styles')
-    @vite(['resources/css/main_style.css'])
-@endpush
-
 @section('content')
 <div class="dashboard-wrapper">
     {{-- Header --}}

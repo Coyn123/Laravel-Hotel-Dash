@@ -1,160 +1,116 @@
-/* 🌑 Panel Base */
-.panel {
-  background: #141724;
-  border: 1px solid #264d3b;
-  border-radius: 8px;
-  padding: 1rem;
-  color: #e0e0e0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  max-width: 700px;       /* keeps it from taking full screen */
-  margin: 2rem auto;      /* center horizontally */
-}
+/* resources/css/board_style.css */
+@layer components {
+  /* 🌑 Panel Base */
+  .panel {
+    @apply rounded-lg p-4 text-gray-200 shadow-lg max-w-[700px] mx-auto my-8;
+    background-color: #141724;
+    border: 1px solid #264d3b;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  }
 
-/* Header */
-.panel-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #264d3b;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-}
-.panel-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2e7d4f;
-}
+  /* Header */
+  .panel-header {
+    @apply flex justify-between items-center border-b pb-2 mb-4;
+    border-color: #264d3b;
+  }
+  .panel-title {
+    @apply text-xl font-bold;
+    color: #2e7d4f;
+  }
 
-/* Room Status Dropdown + Flag Selector */
-#roomStatus,
-#flag {
-  appearance: none;               /* remove default OS styling */
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  /* Room Status Dropdown + Flag Selector */
+  #roomStatus,
+  #flag {
+    @apply inline-block text-sm px-3 py-2 rounded-md cursor-pointer mb-3;
+    background-color: #1a1d2b;
+    border: 1px solid #264d3b;
+    color: #e0e0e0;
+    min-width: 140px;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4),
+                0 2px 4px rgba(0,0,0,0.3);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  #roomStatus:hover,
+  #flag:hover {
+    background-color: #202433;
+  }
+  #roomStatus:focus,
+  #flag:focus {
+    @apply outline-none;
+    border-color: #3fa76b;
+    box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
+  }
+  #roomStatus::after,
+  #flag::after {
+    content: "▾";
+    @apply absolute right-3 text-xs;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #5fbf8a;
+  }
 
-  width: auto;                    /* shrink to fit content */
-  min-width: 140px;
-  display: inline-block;
-  font-size: 0.9rem;
-  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  /* Messages - Base */
+  .message {
+    @apply rounded-md p-3 mb-2 transition-colors;
+    background-color: #1a1a1a;
+    border: 1px solid #264d3b;
+  }
+  .message:hover {
+    background-color: #1a2f24;
+  }
 
-  background: #1a1d2b;
-  border: 1px solid #264d3b;
-  border-radius: 6px;
-  color: #e0e0e0;
-  cursor: pointer;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.4),
-              0 2px 4px rgba(0,0,0,0.3);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  margin-bottom: 0.75rem;         /* add spacing below dropdowns */
-}
+  /* Meta info (flag + time) */
+  .message-meta {
+    @apply flex justify-between text-xs text-gray-400;
+  }
+  .message-meta .flag {
+    color: #5fbf8a;
+  }
+  .message-meta time {
+    @apply italic;
+  }
 
-#roomStatus:hover,
-#flag:hover {
-  background: #202433;
-}
+  /* Variants */
+  .message-urgent {
+    background-color: #571616;
+    color: #fff;
+  }
+  .message-work {
+    background-color: #595e1a;
+    color: #fff;
+  }
+  .message-resolved {
+    @apply opacity-50;
+  }
 
-#roomStatus:focus,
-#flag:focus {
-  outline: none;
-  border-color: #3fa76b;
-  box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
-}
+  /* Footer */
+  .panel-footer {
+    @apply flex flex-col gap-3 pt-4 border-t;
+    border-color: #264d3b;
+  }
+  .panel-footer input[type="text"] {
+    @apply w-full rounded-md px-3 py-2 text-gray-200;
+    background-color: #0d2417;
+    border: 1px solid #264d3b;
+  }
+  .panel-footer input[type="text"]::placeholder {
+    @apply text-gray-400;
+  }
+  .panel-footer input[type="text"]:focus {
+    @apply outline-none;
+    border-color: #3fa76b;
+    box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
+  }
 
-/* Custom arrow indicator */
-#roomStatus::after,
-#flag::after {
-  content: "▾";
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #5fbf8a;
-  font-size: 0.8rem;
-}
-
-/* Messages */
-.panel-body .message {
-  background: #1a1a1a;
-  border: 1px solid #264d3b;
-  border-radius: 6px;
-  padding: 0.75rem;
-  transition: background 0.2s ease;
-}
-.panel-body .message:hover {
-  background: #1a2f24;
-}
-.message p {
-  margin-bottom: 0.5rem;
-}
-
-/* Meta info (flag + time) */
-.message-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8rem;
-  color: #9ca3af;
-}
-.message-meta .flag {
-  color: #5fbf8a;
-}
-.message-meta time {
-  font-style: italic;
-}
-
-/* Flagged Message Variants */
-.message.flag-urgent {
-  border-color: #dc2626;
-  background: #2a0f0f;
-}
-.message.flag-info {
-  border-color: #2563eb;
-  background: #0f1f2f;
-}
-.message.flag-cleaning {
-  border-color: #eab308;
-  background: #2a250f;
-}
-
-/* Footer */
-.panel-footer {
-  border-top: 1px solid #264d3b;
-  padding-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;   /* consistent spacing between flag, input, and button */
-}
-
-.panel-footer input[type="text"] {
-  background: #0d2417;
-  border: 1px solid #264d3b;
-  border-radius: 6px;
-  color: #e0e0e0;
-  padding: 0.6rem 0.75rem;
-  width: 100%;
-}
-.panel-footer input[type="text"]::placeholder {
-  color: #9ca3af;
-}
-.panel-footer input[type="text"]:focus {
-  outline: none;
-  border-color: #3fa76b;
-  box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
-}
-
-/* Buttons */
-.btn-primary {
-  background: #0f3a24;
-  color: #fff;
-  border-radius: 6px;
-  padding: 0.65rem 1.25rem;
-  font-weight: 600;
-  transition: background 0.2s ease, transform 0.15s ease;
-  align-self: flex-start;   /* keep button aligned left instead of stretching */
-}
-.btn-primary:hover {
-  background: #163528;
-  transform: translateY(-1px);
+  /* Buttons */
+  .btn-primary {
+    @apply rounded-md px-5 py-2 font-semibold text-white transition
+           self-start;
+    background-color: #0f3a24;
+  }
+  .btn-primary:hover {
+    background-color: #163528;
+    transform: translateY(-1px);
+  }
 }
