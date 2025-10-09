@@ -3,7 +3,7 @@
   /* --- Setup Page Wrapper --- */
   .setup-wrapper {
     @apply max-w-[800px] mx-auto my-8 p-8 rounded-xl shadow-lg font-sans text-gray-200;
-    background: #141725;
+    background: #141724;
     box-shadow: 0 4px 14px rgba(0,0,0,0.6);
     font-family: 'Inter', system-ui, sans-serif;
   }
@@ -44,7 +44,7 @@
   /* --- Property Block --- */
   .property-block > div {
     @apply rounded-lg p-4 mb-4 transition;
-    background: #141725;
+    background: #141724;
     border: 1px solid #2f4f3f;
   }
   .property-block > div:hover {

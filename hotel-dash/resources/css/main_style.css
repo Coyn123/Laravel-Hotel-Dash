@@ -27,7 +27,7 @@
 
   /* Header */
   header {
-    @apply rounded-lg px-6 py-4 shadow-md;
+    @apply rounded-lg px-6 py-4 shadow-md flex items-center justify-between;
     background: #0f2f1f;
     box-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
@@ -40,24 +40,51 @@
 
   /* Notifications */
   .notification-btn {
-    @apply bg-transparent border-none text-xl cursor-pointer transition-transform;
+    @apply bg-transparent border-none text-xl cursor-pointer transition-transform relative;
     color: #4ade80;
   }
   .notification-btn:hover {
     @apply scale-110;
     color: #86efac;
   }
+  .notification-btn .badge {
+    @apply absolute -top-1 -right-1 rounded-full text-xs px-1.5 py-0.5;
+    background: #4ade80;
+    color: #0f2f1f;
+    font-weight: 600;
+  }
+
   .notification-box {
-    @apply rounded-md overflow-hidden text-gray-200;
+    @apply rounded-md overflow-hidden text-gray-200 mt-2 shadow-lg;
     background: #141725;
     border: 1px solid #2f4f3f;
+    width: 16rem; /* 256px */
   }
   .notification-title {
+    @apply font-semibold p-2 border-b;
     background: #141725;
     color: #4ade80;
+    border-color: #2f4f3f;
   }
-  .notification-content p {
+  .notification-content {
+    @apply divide-y divide-gray-700;
+  }
+
+  .notification-item {
+    @apply block w-full px-3 py-2 text-sm text-left transition-colors cursor-pointer;
+    background: #141725;
     color: #cfcfcf;
+  }
+  .notification-item:hover {
+    background: #1a1d2f;
+    color: #ffffff;
+  }
+  .notification-item.unread {
+    @apply font-semibold;
+    background: #0f2f1f;
+  }
+  .notification-item .timestamp {
+    @apply text-xs text-gray-400 mt-1 block;
   }
 
   /* Floors View Section */
