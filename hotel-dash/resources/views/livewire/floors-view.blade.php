@@ -27,7 +27,7 @@
                                     <a class="room {{ $room['room_status'] ?? '' }}"
                                         wire:click.prevent="selectRoom({{ $room['property_id'] }}, {{ $room['floor'] }}, {{ $room['id'] }})"
                                         href="#">
-                                        Room {{ $room['room'] }}
+                                        {{ $room['room'] }}
                                     </a>
                                 @endforeach
                             </div>
