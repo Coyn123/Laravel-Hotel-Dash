@@ -14,7 +14,7 @@
                         tabindex="0"
                         {{-- wire:click="openNotification({{ $note['id'] ?? 'null' }})" --}}
                     >
-                        <p class="text-sm text-gray-800">{{ $note['message'] }}</p>
+                        <p class="text-sm text-black-800">{{ $note['message'] }}</p>
                     </div>
                 @empty
                     <div class="p-3 text-sm text-gray-500">No notifications</div>

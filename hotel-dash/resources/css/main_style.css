@@ -44,8 +44,7 @@
     color: #4ade80;
   }
   .notification-btn:hover {
-    @apply scale-110;
-    color: #86efac;
+    @apply scale-110 text-green-600;
   }
   .notification-btn .badge {
     @apply absolute -top-1 -right-1 rounded-full text-xs px-1.5 py-0.5;
@@ -76,8 +75,8 @@
     color: #cfcfcf;
   }
   .notification-item:hover {
+    @apply text-green-600;
     background: #1a1d2f;
-    color: #ffffff;
   }
   .notification-item.unread {
     @apply font-semibold;
