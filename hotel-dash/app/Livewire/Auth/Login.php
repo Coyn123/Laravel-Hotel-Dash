@@ -64,6 +64,8 @@ class Login extends Component
         Auth::login($user);
         session()->regenerate();
 
+        //For displaying later
+        session(['name' => $this->register_name]);
         $this->dispatch('user-registered');
     }
 

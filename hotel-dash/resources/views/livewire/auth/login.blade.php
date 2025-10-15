@@ -35,7 +35,7 @@
         <h2 class="mb-4 text-xl font-bold text-white">Register</h2>
         <form wire:submit.prevent="register" class="space-y-4">
             <div>
-                <label class="block text-sm text-gray-300">Name</label>
+                <label class="block text-sm text-gray-300">Username</label>
                 <input type="text" wire:model.defer="register_name"
                        class="w-full px-3 py-2 rounded text-gray-900" required>
                 @error('register_name') <span class="text-red-400 text-sm">{{ $message }}</span> @enderror

@@ -25,6 +25,7 @@
                 'message-work' => $message->flag_id == 2,
                 'message-resolved' => $message->flag_id == 4,
             ])>
+                <p>{{ $message->user->name ?? 'Unknown User' }}:</p>
                 <p>{{ $message->message_text }}</p>
 
                 <div class="message-meta">

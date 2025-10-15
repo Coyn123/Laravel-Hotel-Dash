@@ -14,6 +14,7 @@ class RoomBoard extends Component
     public $floor;        // floor id for configuration
     public $room;         // room id for configuration
     public $room_num;     // display number (rooms_config.room_number)
+    public $user;
 
     public $messages;
     public $newMessage = '';
@@ -39,6 +40,7 @@ class RoomBoard extends Component
     public function mount()
     {
         $configs = DashboardConfig::get();
+        $this->user = auth()->user();
     
         $firstProperty = collect($configs['properties'])->sortBy('property_id')->first();
         $this->property = $firstProperty['property_id'] ?? null;
@@ -79,7 +81,7 @@ class RoomBoard extends Component
 
     public function loadMessages(): void
     {
-        $this->messages = MessageBoard::with('flag')
+        $this->messages = MessageBoard::with('flag', 'user')
             ->where('room_id', $this->room)
             ->orderBy('created_at', 'asc')
             ->get();
@@ -92,10 +94,11 @@ class RoomBoard extends Component
         }
 
         MessageBoard::create([
-            'property_id'  => $this->property,
-            'floor_id'     => $this->floor,
-            'room_id'      => $this->room,
-            'flag_id'      => $this->selectedFlag ?: 1,
+            'user_id' => auth()->id(),
+            'property_id' => $this->property,
+            'floor_id' => $this->floor,
+            'room_id' => $this->room,
+            'flag_id' => $this->selectedFlag ?: 1,
             'message_text' => $this->newMessage,
         ]);
 

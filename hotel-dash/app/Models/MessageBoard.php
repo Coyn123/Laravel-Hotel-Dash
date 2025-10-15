@@ -11,6 +11,7 @@ class MessageBoard extends Model
 
     // Allow mass assignment for these fields
     protected $fillable = [
+        'user_id',
         'property_id',
         'floor_id',
         'room_id',
@@ -18,6 +19,10 @@ class MessageBoard extends Model
         'message_text',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     // Relationships
     public function flag()
     {
