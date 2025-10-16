@@ -11,16 +11,15 @@
                 <div class="logo font-bold text-lg" aria-hidden="true">Coyner</div>
                 <div class="title text-xl">Hospitality Dashboard</div>
             </div>
-            {{-- Lame auth check, is the name in the session cookies? low security--}}
-            @if (session('name'))
+            @if (auth()->check())
             <div class="controls ml-auto flex items-center">
                 @livewire('header.notification-box')
             </div>
-            <div class="name-display">{{ session('name') }}'s Dashboard </div>
+            <div class="name-display">{{ auth()->user()->name }}'s Dashboard </div>
             @endif
         </div> 
     </header>
- @auth
+    @if (auth()->check())   
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 @livewire('floors-view')
@@ -31,6 +30,6 @@
         </div>
     @else
         @livewire('auth.login')
-    @endauth
+    @endif
 </div>
 @endsection

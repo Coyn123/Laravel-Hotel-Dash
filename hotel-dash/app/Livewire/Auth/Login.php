@@ -5,6 +5,7 @@ namespace App\Livewire\Auth;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 
 class Login extends Component
@@ -35,21 +36,27 @@ class Login extends Component
                 'register_password' => 'required|min:6|same:register_password_confirmation',
             ];
     }
-
+    
     public function login()
     {
-        $this->validate();
-
+        $credentials = $this->validate([
+            'login_email'    => ['required', 'email'],
+            'login_password' => ['required', 'string'],
+        ]);
+    
         if (Auth::attempt(
-            ['email' => $this->login_email, 'password' => $this->login_password],
+            ['email' => $credentials['login_email'], 'password' => $credentials['login_password']],
             $this->remember
         )) {
-            session()->regenerate();
+            request()->session()->regenerate();
             $this->dispatch('user-logged-in');
-        } else {
-            $this->addError('login_email', 'Invalid credentials.');
+            return redirect()->route('dashboard');
         }
+        throw ValidationException::withMessages([
+            'login_email' => __('auth.failed'),
+        ]);
     }
+    
 
     public function register()
     {
@@ -64,8 +71,6 @@ class Login extends Component
         Auth::login($user);
         session()->regenerate();
 
-        //For displaying later
-        session(['name' => $this->register_name]);
         $this->dispatch('user-registered');
     }
 
