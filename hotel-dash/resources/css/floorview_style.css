@@ -31,7 +31,11 @@
     background: #101422;
     box-shadow: 0 2px 6px rgba(0,0,0,0.6);
   }
-
+  .floor {
+    @apply rounded-md;
+    background-color: #101422; /* dark base instead of white */
+    color: #e5e7eb;            /* Tailwind gray-200 text */
+  }
   /* Floor Header */
   .floor-header {
     @apply flex justify-between items-center text-gray-200 rounded-md cursor-pointer list-none px-4 py-3 transition-colors;
@@ -40,17 +44,26 @@
   .floor-header:hover {
     background: #163528;
   }
-  .floor[open] .floor-header {
+  /* Explicitly override focus/active so it doesn’t flash white */
+  .floor-header:focus,
+  .floor-header:active {
+    outline: none;
     background: #0f3a24;
+    color: #3fa76b; /* optional highlight */
   }
 
-  /* Arrow indicator */
+  /* Arrow indicator (default closed) */
   .floor-header::after {
     content: "▸";
     @apply ml-auto text-sm transition-transform;
     color: #3fa76b;
   }
-  .floor[open] .floor-header::after {
+
+  /* When floor is open (Livewire adds .is-open) */
+  .floor.is-open .floor-header {
+    background: #0f3a24;
+  }
+  .floor.is-open .floor-header::after {
     transform: rotate(90deg);
   }
 

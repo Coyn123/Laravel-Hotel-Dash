@@ -16,7 +16,7 @@
 
                 <div class="message-meta">
                     <span class="flag">{{ $message->flag?->flag_name ?? 'Message' }}</span>
-                    <time>{{ $message->created_at->format('m-d-Y H:i') }}</time>
+                    <time>{{ $message->created_at->format('m-d-y H:i') }}</time>
                 </div>
             </div>
         @empty

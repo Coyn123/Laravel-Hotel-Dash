@@ -10,12 +10,23 @@ class FloorsView extends Component
     public $search = '';
     public $allProperties = [];
     public $sortFloorsDesc = true; // default: highest → lowest
-
+    public array $openFloors = [];
+    
     public function selectRoom($propertyId, $floorId, $roomId)
     {
     // Emit event to MessageBoard
     $this->dispatch('roomSelected', $propertyId, $floorId, $roomId);
     }
+
+    public function toggleFloor($key)
+    {
+        if (in_array($key, $this->openFloors)) {
+            $this->openFloors = array_diff($this->openFloors, [$key]);
+        } else {
+            $this->openFloors[] = $key;
+        }
+    }
+    
 
     public function mount()
     {

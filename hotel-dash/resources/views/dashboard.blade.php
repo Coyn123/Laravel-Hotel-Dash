@@ -11,10 +11,13 @@
                 <div class="logo font-bold text-lg" aria-hidden="true">Coyner</div>
                 <div class="title text-xl">Hospitality Dashboard</div>
             </div>
+            {{-- Lame auth check, is the name in the session cookies? low security--}}
+            @if (session('name'))
             <div class="controls ml-auto flex items-center">
                 @livewire('header.notification-box')
             </div>
             <div class="name-display">{{ session('name') }}'s Dashboard </div>
+            @endif
         </div> 
     </header>
  @auth
