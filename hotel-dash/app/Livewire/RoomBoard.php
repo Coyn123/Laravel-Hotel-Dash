@@ -83,7 +83,7 @@ class RoomBoard extends Component
     {
         $this->messages = MessageBoard::with('flag', 'user')
             ->where('room_id', $this->room)
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
     }
 
@@ -124,7 +124,10 @@ class RoomBoard extends Component
         $this->resolveRoomNumber();
 
         return view('livewire.room-board', [
-            'messages'   => $this->messages,
+            'messages' => $this->messages = MessageBoard::with('flag', 'user')
+            ->where('room_id', $this->room)
+            ->orderBy('created_at', 'desc')
+            ->get(),
             'floors'     => $this->FullConfig,
             'room_num'   => $this->room_num,
             'flags'      => $this->flags,

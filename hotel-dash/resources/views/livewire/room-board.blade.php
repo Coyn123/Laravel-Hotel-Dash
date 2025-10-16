@@ -1,23 +1,9 @@
 <div class="panel">
     <div class="panel-header flex justify-between items-center">
         <h2 class="panel-title">Room {{ $room_num }} Board</h2>
-
-        {{-- Room Status Dropdown --}}
-        <div>
-            <label for="roomStatus" class="text-sm font-semibold mr-2">Status:</label>
-            <select id="roomStatus"
-                    wire:model="roomStatus"
-                    wire:change="updateRoomStatus"
-                    class="border rounded p-1 bg-gray-800 text-gray-100">
-                <option value="vacant">Vacant</option>
-                <option value="occupied">Occupied</option>
-                <option value="cleaning">Cleaning</option>
-                <option value="maintenance">Maintenance</option>
-            </select>
-        </div>
     </div>
 
-    <div class="panel-body space-y-4 mt-4">
+    <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>
         @forelse($messages as $message)
             <div @class([
                 'message', // always apply base structure
@@ -25,19 +11,12 @@
                 'message-work' => $message->flag_id == 2,
                 'message-resolved' => $message->flag_id == 4,
             ])>
-                <p>{{ $message->user->name ?? 'Unknown User' }}:</p>
-                <p>{{ $message->message_text }}</p>
+                <div class="user-in-message">{{ $message->user->name ?? 'Unknown User' }}:</div>
+                <div class="message-text">{{ $message->message_text }}</div>
 
                 <div class="message-meta">
                     <span class="flag">{{ $message->flag?->flag_name ?? 'Message' }}</span>
-                    <time>{{ $message->created_at->format('Y-m-d H:i') }}</time>
-
-                    @if(in_array($message->flag_id, [2,3]))
-                        <label class="flex items-center gap-2 mt-2">
-                            <input type="checkbox" wire:click="markResolved({{ $message->id }})">
-                            <span>Mark as Resolved</span>
-                        </label>
-                    @endif
+                    <time>{{ $message->created_at->format('m-d-Y H:i') }}</time>
                 </div>
             </div>
         @empty
@@ -72,3 +51,11 @@
         </button>
     </form>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        let box = document.getElementById('message-text');
+        if (box) {
+            box.scrollTop = box.scrollHeight;
+        }
+    });
+</script>

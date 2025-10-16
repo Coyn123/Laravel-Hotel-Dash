@@ -54,7 +54,16 @@
   .message {
     @apply rounded-md p-3 mb-2 transition-colors;
     background-color: #1a1a1a;
-    border: 1px solid #264d3b;
+    border: 1px solid #ffffff;
+  }
+  .message-text {
+    @apply mb-2;
+    font-size: 20px;
+  }
+  .user-in-message {
+    @apply font-bold;
+    color: #88f1a1;
+    font-size: 18px;
   }
   .message:hover {
     background-color: #1a2f24;
@@ -65,10 +74,12 @@
     @apply flex justify-between text-xs text-gray-400;
   }
   .message-meta .flag {
-    color: #5fbf8a;
+    color: #88f1a1;
   }
   .message-meta time {
-    @apply italic;
+    @apply italic text-gray-400;
+    color: #bee9c8;
+    font-size: 15px;
   }
 
   /* Variants */

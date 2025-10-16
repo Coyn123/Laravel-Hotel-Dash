@@ -18,6 +18,10 @@
   .message-panel {
     @apply flex-1;
   }
+  .name-display {
+    @apply text-2xl font-semibold;
+    color: #c1e2cd;
+  }
 
   /* Wrapper */
   .dashboard-wrapper {

@@ -14,6 +14,7 @@
             <div class="controls ml-auto flex items-center">
                 @livewire('header.notification-box')
             </div>
+            <div class="name-display">{{ session('name') }}'s Dashboard </div>
         </div> 
     </header>
  @auth
