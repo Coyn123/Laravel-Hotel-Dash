@@ -4,21 +4,31 @@
 
 @section('content')
 <div class="dashboard-wrapper">
-    {{-- Header --}}
     <header class="mb-6">
-        <div class="header-inner flex items-center">
-            <div class="brand flex items-center space-x-2">
-                <div class="logo font-bold text-lg" aria-hidden="true">Coyner</div>
-                <div class="title text-xl">Hospitality Dashboard</div>
+        @if (auth()->check())
+        <div class="header-inner grid grid-cols-3 items-center">
+
+            <div class="title justify-self-start font-bold text-lg">
+                Coyner Hospitality Dashboard
             </div>
-            @if (auth()->check())
-            <div class="controls ml-auto flex items-center">
-                @livewire('header.notification-box')
+
+            <div class="name-display text-center font-medium">
+                {{ auth()->user()->name }}'s Dashboard
             </div>
-            <div class="name-display">{{ auth()->user()->name }}'s Dashboard </div>
-            @endif
-        </div> 
+
+            <div class="logout_area justify-self-end">
+                @livewire('header.login-logout')
+            </div>
+        </div>
+        @else
+        <div class="header-inner grid grid-cols-3 items-center">
+            <div class="title justify-self-start font-bold text-lg">
+                Coyner Hospitality Dashboard
+            </div>
+        </div>
+        @endif
     </header>
+
     @if (auth()->check())   
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>

@@ -14,6 +14,8 @@
     @apply flex gap-4 mx-auto;
     max-width: 3500px;
   }
+  
+
   .floor-panel,
   .message-panel {
     @apply flex-1;
@@ -23,25 +25,66 @@
     color: #c1e2cd;
   }
 
+
   /* Wrapper */
   .dashboard-wrapper {
     @apply min-h-screen p-6;
     background: linear-gradient(160deg, #0d0d0d 60%, #0f2f1f 100%);
   }
 
-  /* Header */
-  header {
-    @apply rounded-lg px-6 py-4 shadow-md flex items-center justify-between;
-    background: #0f2f1f;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  }
-  .header-inner .logo {
-    color: #4ade80;
-  }
-  .header-inner .title {
-    @apply font-medium text-gray-200;
-  }
+/* Header */
+header {
+  @apply rounded-lg px-6 py-4 shadow-md flex items-center justify-between;
+  background: linear-gradient(135deg, #0f2f1f 0%, #122d22 100%);
+  border: 1px solid #1e3a2f;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+}
 
+/* Brand / Logo */
+.header-inner .logo {
+  color: #1ae966; /* bright green accent */
+  text-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
+}
+
+.header-inner .title {
+  @apply text-lg font-medium;
+  color: #c9e418;
+  opacity: 0.9;
+}
+
+/* Layout */
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+}
+
+.header-inner .name-display {
+  justify-self: center;
+  text-align: center;
+  @apply text-2xl font-semibold;
+  color: #c1e2cd;
+  text-shadow: 0 0 4px rgba(193, 226, 205, 0.3);
+}
+
+.header-inner .logout_area {
+  justify-self: end;
+}
+
+/* Logout button styling */
+.logout_area button {
+  @apply px-3 py-1 rounded-md font-medium transition-colors;
+  background: #1a3a2a;
+  color: #c1e2cd;
+  border: 1px solid #2f4f3f;
+}
+.logout_area button:hover {
+  background: #4ade80;
+  color: #0f2f1f;
+  border-color: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.5);
+}
   /* Notifications */
   .notification-btn {
     @apply bg-transparent border-none text-xl cursor-pointer transition-transform relative;

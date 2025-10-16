@@ -5,6 +5,12 @@
     @apply rounded-lg p-4 text-gray-200;
     background: #151826;
   }
+  .search input[type="search"],
+  .search input {
+    background-color: #151826;
+    color: white;
+    border: none;
+  }
 
   /* Panel Body Background */
   .panel-body {
