@@ -3,18 +3,19 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\MessageBoard;
+use App\Models\RoomBoardModel;
 use App\Models\MessageFlag;
 use App\Services\DashboardConfig;
 use Livewire\Attributes\On;
 
-class RoomBoard extends Component
+class RoomBoardView extends Component
 {
     public $property;     // property_id for configuration
     public $floor;        // floor id for configuration
     public $room;         // room id for configuration
     public $room_num;     // display number (rooms_config.room_number)
     public $user;
+    public $config;
 
     public $messages;
     public $newMessage = '';
@@ -33,16 +34,16 @@ class RoomBoard extends Component
         $this->resolveRoomNumber();
         $this->loadMessages();
     
-        $roomModel = MessageBoard::find($roomId);
+        $roomModel = RoomBoardModel::find($roomId);
         $this->roomStatus = $roomModel?->status ?? 'vacant';
     }
 
     public function mount()
     {
-        $configs = DashboardConfig::get();
+        $config = DashboardConfig::get();
         $this->user = auth()->user();
     
-        $firstProperty = collect($configs['properties'])->sortBy('property_id')->first();
+        $firstProperty = collect($config['properties'])->sortBy('property_id')->first();
         $this->property = $firstProperty['property_id'] ?? null;
     
         $firstFloor = collect($firstProperty['floors'])->sortBy('id')->first();
@@ -56,7 +57,7 @@ class RoomBoard extends Component
     
         $this->flags = MessageFlag::all();
     
-        $roomModel = MessageBoard::find($this->room);
+        $roomModel = RoomBoardModel::find($this->room);
         $this->roomStatus = $roomModel?->status ?? 'vacant';
     }
     
@@ -64,7 +65,7 @@ class RoomBoard extends Component
 
     protected function resolveRoomNumber(): void
     {
-        $config = DashboardConfig::get() ?? [];
+        $config = DashboardConfig::get();
         $properties = $config['properties'] ?? [];
 
         $propertyData = collect($properties)
@@ -81,7 +82,7 @@ class RoomBoard extends Component
 
     public function loadMessages(): void
     {
-        $this->messages = MessageBoard::with('flag', 'user')
+        $this->messages = RoomBoardModel::with('flag', 'user')
             ->where('room_id', $this->room)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -93,7 +94,7 @@ class RoomBoard extends Component
             return;
         }
 
-        MessageBoard::create([
+        RoomBoardModel::create([
             'user_id' => auth()->id(),
             'property_id' => $this->property,
             'floor_id' => $this->floor,
@@ -109,7 +110,7 @@ class RoomBoard extends Component
 
     public function updateRoomStatus(): void
     {
-        $roomModel = MessageBoard::find($this->room);
+        $roomModel = RoomBoardView::find($this->room);
         if ($roomModel) {
             $roomModel->status = $this->roomStatus;
             $roomModel->save();
@@ -118,13 +119,11 @@ class RoomBoard extends Component
 
     public function render()
     {
-        $config = DashboardConfig::get() ?? [];
-        $this->FullConfig = $config['properties'] ?? [];
 
         $this->resolveRoomNumber();
 
-        return view('livewire.room-board', [
-            'messages' => $this->messages = MessageBoard::with('flag', 'user')
+        return view('livewire.room-board-view', [
+            'messages' => $this->messages = RoomBoardModel::with('flag', 'user')
             ->where('room_id', $this->room)
             ->orderBy('created_at', 'desc')
             ->get(),

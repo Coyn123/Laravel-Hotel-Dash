@@ -98,8 +98,7 @@ return new class extends Migration
             ['id' => 4, 'flag_name' => 'Resolved'],
         ]);
 
-        // --- Message Board ---
-        Schema::create('message_board', function (Blueprint $table) {
+        Schema::create('room_board', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id');
             $table->unsignedBigInteger('floor_id');
@@ -115,11 +114,25 @@ return new class extends Migration
 
             $table->index(['property_id', 'floor_id', 'room_id']);
         });
+
+        Schema::create('property_board', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('property_id');
+            $table->text('message_text');
+            $table->timestamps();
+            
+            $table->foreignId('flag_id')->nullable()->constrained('message_flags')->nullOnDelete();
+            $table->foreignId('user_id')->constrained();
+            $table->foreign('property_id')->references('id')->on('properties_config')->cascadeOnDelete();
+
+            $table->index(['property_id']);
+        });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('message_board');
+        Schema::dropIfExists('property_board');
+        Schema::dropIfExists('room_board');
         Schema::dropIfExists('message_flags');
         Schema::dropIfExists('aux_property_config');
         Schema::dropIfExists('rooms_config');

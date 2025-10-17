@@ -35,7 +35,10 @@
                 @livewire('floors-view')
             </div>
             <div>
-                @livewire('room-board')
+                @livewire('room-board-view')
+            </div>
+            <div>
+                @livewire('property-board-view')
             </div>
         </div>
     @else

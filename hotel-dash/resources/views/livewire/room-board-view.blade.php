@@ -51,11 +51,3 @@
         </button>
     </form>
 </div>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        let box = document.getElementById('message-text');
-        if (box) {
-            box.scrollTop = box.scrollHeight;
-        }
-    });
-</script>

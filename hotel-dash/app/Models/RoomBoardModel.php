@@ -4,12 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MessageBoard extends Model
+class RoomBoardModel extends Model
 {
-    // Explicitly set the table since it's not pluralized
-    protected $table = 'message_board';
-
-    // Allow mass assignment for these fields
+    protected $table = 'room_board';
     protected $fillable = [
         'user_id',
         'property_id',
@@ -28,7 +25,7 @@ class MessageBoard extends Model
     {
         return $this->belongsTo(MessageFlag::class, 'flag_id');
     }
-
+    /*
     public function property()
     {
         return $this->belongsTo(PropertiesConfig::class, 'property_id');
@@ -43,4 +40,5 @@ class MessageBoard extends Model
     {
         return $this->belongsTo(RoomsConfig::class, 'room_id');
     }
+        */
 }
