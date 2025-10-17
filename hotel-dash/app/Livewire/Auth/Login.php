@@ -72,6 +72,7 @@ class Login extends Component
         session()->regenerate();
 
         $this->dispatch('user-registered');
+        return redirect()->route('dashboard');
     }
 
     public function switchMode($mode)

@@ -20,25 +20,8 @@ class RoomBoardModel extends Model
     {
         return $this->belongsTo(User::class);
     }
-    // Relationships
     public function flag()
     {
         return $this->belongsTo(MessageFlag::class, 'flag_id');
     }
-    /*
-    public function property()
-    {
-        return $this->belongsTo(PropertiesConfig::class, 'property_id');
-    }
-
-    public function floor()
-    {
-        return $this->belongsTo(FloorsConfig::class, 'floor_id');
-    }
-
-    public function room()
-    {
-        return $this->belongsTo(RoomsConfig::class, 'room_id');
-    }
-        */
 }
