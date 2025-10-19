@@ -30,10 +30,12 @@
     </header>
 
     @if (auth()->check())   
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                @livewire('floors-view')
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            @livewire('floors-view')
+        </div>
+
+        <div class="flex flex-col gap-4">
             <div>
                 @livewire('room-board-view')
             </div>
@@ -41,6 +43,8 @@
                 @livewire('property-board-view')
             </div>
         </div>
+    </div>
+    
     @else
         @livewire('auth.login')
     @endif
