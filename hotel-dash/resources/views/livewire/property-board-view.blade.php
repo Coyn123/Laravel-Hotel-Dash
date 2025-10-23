@@ -2,8 +2,8 @@
     <div class="panel-header flex justify-between items-center">
         <h2 class="panel-title">{{ $propertyName }}'s General Property Board</h2>
         <button wire:click="toggleCurrentPropertyBoard('{{ $property }}')"
-            class="btn btn-secondary">
-            Toggle Board
+            class="btn btn-secondary text-xl">
+            🔄
     </div>
     <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>
         @forelse($messages as $message)

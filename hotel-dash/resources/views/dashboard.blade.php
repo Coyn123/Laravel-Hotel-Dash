@@ -12,8 +12,10 @@
                 Coyner Hospitality Dashboard
             </div>
 
+
             <div class="name-display text-center font-medium">
                 {{ auth()->user()->name }}'s Dashboard
+                @livewire('header.notification-box') 
             </div>
 
             <div class="logout_area justify-self-end">

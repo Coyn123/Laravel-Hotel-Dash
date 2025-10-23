@@ -8,10 +8,10 @@
     --font-family: 'Inter', system-ui, sans-serif;
   
     /* Light Mode Defaults */
-    --color-bg: #f9fafb;
-    --color-bg-alt: #ffffff;
-    --color-panel: #f3f4f6;
-    --color-border: #d1d5db;
+    --color-bg: rgb(228, 228, 228);
+    --color-bg-alt: #e6e6e6;
+    --color-panel: #e4e4e4;
+    --color-border: #c0c2c5;
     --color-text: #111827;
     --color-text-muted: #4b5563;
   
@@ -30,19 +30,19 @@
   
   /* Dark Mode Overrides */
   :root[data-theme="dark"] {
-    --color-bg: #141724;
+    --color-bg: #161824;
     --color-bg-alt: #101422;
     --color-panel: #151826;
     --color-border: #2f4f3f;
-    --color-text: #e5e7eb;
+    --color-text: #e0e0e0;
     --color-text-muted: #9ca3af;
   
     --color-accent: #4ade80;
     --color-accent-light: #86efac;
     --color-accent-dark: #14532d;
   
-    --color-danger: #ef4444;
-    --color-warning: #facc15;
+    --color-danger: #792828;
+    --color-warning: #8a7319;
     --color-info: #3b82f6;
   
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);

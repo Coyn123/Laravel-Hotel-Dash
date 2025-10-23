@@ -16,12 +16,12 @@
     {{-- Livewire styles --}}
     @livewireStyles
 </head>
-<body class="bg-gray-900 text-gray-100">
+<body class="">
 
     {{-- Global header/nav could go here if you want it on every page --}}
     @includeWhen(View::exists('partials.nav'), 'partials.nav')
 
-    <main class="container mx-auto p-6">
+    <main class="w-full">
         @isset($slot)
             {{ $slot }}
         @else
