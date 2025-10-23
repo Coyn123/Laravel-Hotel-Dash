@@ -30,6 +30,46 @@ class PropertyBoardView extends Component
         $this->loadMessages();
     }
 
+    #[On('togglePropertyBoardView')]
+    public function togglePropertyBoard($propertyId): void
+    {
+        $config = DashboardConfig::get();
+        $property = collect($config['properties'])->firstWhere('property_id', $propertyId);
+
+        if ($property) {
+            $this->property = $propertyId;
+            $this->propertyName = $property['property_name'] ?? 'Property Board';
+            $this->loadMessages();
+        }
+    }
+
+    public function toggleCurrentPropertyBoard($property): void
+    {
+        $config = DashboardConfig::get();
+        $propertyIds = collect($config['properties'])->pluck('property_id')->sort()->values();
+
+        if (is_int($property) && $property >= 0 && $property < $propertyIds->count() && ! $propertyIds->contains($property)) {
+            $currentIndex = $property;
+        } else {
+            $currentIndex = $propertyIds->search($property);
+        }
+
+        // If not found, default to first property
+        if ($currentIndex === false) {
+            $nextPropertyId = $propertyIds->first();
+        } else {
+            $nextIndex = $currentIndex + 1;
+            if ($nextIndex >= $propertyIds->count()) {
+                $nextIndex = 0; // wrap to first
+            }
+            $nextPropertyId = $propertyIds->get($nextIndex);
+        }
+
+        if ($nextPropertyId !== null) {
+            $this->togglePropertyBoard($nextPropertyId);
+        }
+    }
+
     public function loadMessages(): void
     {
         $this->messages = PropertyBoardModel::with('flag', 'user')

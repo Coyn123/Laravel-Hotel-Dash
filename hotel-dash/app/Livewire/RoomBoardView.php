@@ -11,6 +11,7 @@ use Livewire\Attributes\On;
 class RoomBoardView extends Component
 {
     public $property;     // property_id for configuration
+    public $propertyName;
     public $floor;        // floor id for configuration
     public $room;         // room id for configuration
     public $room_num;     // display number (rooms_config.room_number)
@@ -70,6 +71,8 @@ class RoomBoardView extends Component
 
         $propertyData = collect($properties)
             ->firstWhere('property_id', $this->property);
+        
+        $this->propertyName = $propertyData['property_name'] ?? 'Unknown Property';
 
         $floorData = collect($propertyData['floors'] ?? [])
             ->firstWhere('id', $this->floor);

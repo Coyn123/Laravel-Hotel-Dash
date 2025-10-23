@@ -3,6 +3,54 @@
 @import './board_style.css';
 @import './floorview_style.css';
 
+/* Base Theme Variables */
+:root {
+    --font-family: 'Inter', system-ui, sans-serif;
+  
+    /* Light Mode Defaults */
+    --color-bg: #f9fafb;
+    --color-bg-alt: #ffffff;
+    --color-panel: #f3f4f6;
+    --color-border: #d1d5db;
+    --color-text: #111827;
+    --color-text-muted: #4b5563;
+  
+    --color-accent: #16a34a;   /* green-600 */
+    --color-accent-light: #4ade80;
+    --color-accent-dark: #166534;
+  
+    --color-danger: #dc2626;
+    --color-warning: #ca8a04;
+    --color-info: #2563eb;
+  
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.15);
+  }
+  
+  /* Dark Mode Overrides */
+  :root[data-theme="dark"] {
+    --color-bg: #141724;
+    --color-bg-alt: #101422;
+    --color-panel: #151826;
+    --color-border: #2f4f3f;
+    --color-text: #e5e7eb;
+    --color-text-muted: #9ca3af;
+  
+    --color-accent: #4ade80;
+    --color-accent-light: #86efac;
+    --color-accent-dark: #14532d;
+  
+    --color-danger: #ef4444;
+    --color-warning: #facc15;
+    --color-info: #3b82f6;
+  
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.5);
+    --shadow-lg: 0 8px 16px rgba(0,0,0,0.6);
+  }
+  
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -1,107 +1,65 @@
-/* resources/css/floorview_style.css */
-@layer components {
-  /* 🌑 Panel Base */
-  .panel {
-    @apply rounded-lg p-4 text-gray-200;
-    background: #151826;
-  }
-  .search input[type="search"],
-  .search input {
-    background-color: #151826;
-    color: white;
-    border: none;
-  }
+.panel {
+  @apply rounded-lg p-4;
+  background: var(--color-panel);
+  color: var(--color-text);
+}
 
-  /* Panel Body Background */
-  .panel-body {
-    @apply rounded-md p-4;
-    background: #151826;
-  }
+.panel-body {
+  @apply rounded-md p-4;
+  background: var(--color-bg-alt);
+}
 
-  /* Property Title Styling */
-  .property-title {
-    @apply font-bold text-xl mb-2;
-    color: #2e7d4f;
-  }
-  .property-title::after {
-    content: "";
-    @apply block mt-1 rounded-sm;
-    height: 2px;
-    background: #264d3b;
-  }
+.property-block {
+  @apply p-4 mb-8 rounded-lg;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-alt);
+  box-shadow: var(--shadow-md);
+}
 
-  /* Distinction Between Properties */
-  .property-block {
-    @apply p-4 mb-8 rounded-lg;
-    border: 1px solid #264d3b;
-    background: #101422;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  }
-  .floor {
-    @apply rounded-md;
-    background-color: #101422; /* dark base instead of white */
-    color: #e5e7eb;            /* Tailwind gray-200 text */
-  }
-  /* Floor Header */
-  .floor-header {
-    @apply flex justify-between items-center text-gray-200 rounded-md cursor-pointer list-none px-4 py-3 transition-colors;
-    background: #0f3a24;
-  }
-  .floor-header:hover {
-    background: #163528;
-  }
-  /* Explicitly override focus/active so it doesn’t flash white */
-  .floor-header:focus,
-  .floor-header:active {
-    outline: none;
-    background: #0f3a24;
-    color: #3fa76b; /* optional highlight */
-  }
+.floor {
+  @apply rounded-md;
+  background: var(--color-bg-alt);
+  color: var(--color-text);
+}
 
-  /* Arrow indicator (default closed) */
-  .floor-header::after {
-    content: "▸";
-    @apply ml-auto text-sm transition-transform;
-    color: #3fa76b;
-  }
+.floor-header {
+  @apply flex justify-between items-center rounded-md cursor-pointer list-none px-4 py-3 transition-colors;
+  background: var(--color-accent-dark);
+  color: var(--color-text);
+}
+.floor-header:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+}
 
-  /* When floor is open (Livewire adds .is-open) */
-  .floor.is-open .floor-header {
-    background: #0f3a24;
-  }
-  .floor.is-open .floor-header::after {
-    transform: rotate(90deg);
-  }
+.rooms {
+  @apply grid gap-3 mt-3 p-2;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  width: 100%;
+}
 
-  /* Rooms Grid */
+.room {
+  @apply flex items-center justify-center rounded-md p-4 text-center text-[0.95rem] no-underline transition;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+.room:hover {
+  background: var(--color-accent-dark);
+  color: var(--color-accent-light);
+  transform: translateY(-2px);
+}
+@media (max-width: 640px) {
   .rooms {
-    @apply grid gap-3 mt-3 p-2;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
   }
-
-  /* Room Cell */
   .room {
-    @apply flex items-center justify-center rounded-md p-4 text-center text-[0.95rem] text-gray-200 no-underline transition;
-    background: #131a37;
-    border: 1px solid #264d3b;
+    padding: 0.75rem;
+    font-size: 0.85rem;
   }
-  .room:hover {
-    background: #1a2f24;
-    transform: translateY(-2px);
-    color: #5fbf8a;
-  }
-
-  /* Status Variants */
-  .room.occupied {
-    border-color: #dc2626;
-    background: #2a0f0f;
-  }
-  .room.vacant {
-    border-color: #1f6d3a;
-    background: #0d2417;
-  }
-  .room.cleaning {
-    border-color: #eab308;
-    background: #2a250f;
+  .floor-header {
+    padding: 0.75rem;
+    font-size: 0.95rem;
   }
 }

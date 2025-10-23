@@ -10,7 +10,13 @@
         <div class="panel-body">
             @forelse($properties as $property)
                 <div class="property-block">
-                    <h3 class="property-title">{{ $property['property_name'] ?? 'Unnamed Property' }}</h3>
+                    <button 
+                        class="property-title rounded px-2 py-1 text-left focus:outline-none mb-2 font-bold hover:bg-gray-700" 
+                        style="width: fit-content;" 
+                        wire:click="togglePropertyBoard('{{ $property['property_id'] }}')"
+                    >
+                        {{ $property['property_name'] ?? 'Unnamed Property' }}
+                    </button>
 
                     @forelse($property['floors'] as $floor)
                         @php

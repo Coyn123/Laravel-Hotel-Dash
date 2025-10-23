@@ -2,43 +2,44 @@
 @layer components {
   /* 🌑 Panel Base */
   .panel {
-    @apply rounded-lg p-4 text-gray-200 shadow-lg max-w-[700px] mx-auto my-8;
-    background-color: #141724;
-    border: 1px solid #264d3b;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    @apply rounded-lg p-4 shadow-lg max-w-[700px] mx-auto my-8;
+    background-color: var(--color-panel);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    color: var(--color-text);
   }
 
   /* Header */
   .panel-header {
     @apply flex justify-between items-center border-b pb-2 mb-4;
-    border-color: #264d3b;
+    border-color: var(--color-border);
   }
   .panel-title {
     @apply text-xl font-bold;
-    color: #2e7d4f;
+    color: var(--color-accent-dark);
   }
 
   /* Room Status Dropdown + Flag Selector */
   #roomStatus,
   #flag {
     @apply inline-block text-sm px-3 py-2 rounded-md cursor-pointer mb-3;
-    background-color: #1a1d2b;
-    border: 1px solid #264d3b;
-    color: #e0e0e0;
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
     min-width: 140px;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4),
-                0 2px 4px rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.2),
+                0 2px 4px rgba(0,0,0,0.2);
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
   #roomStatus:hover,
   #flag:hover {
-    background-color: #202433;
+    background-color: var(--color-panel);
   }
   #roomStatus:focus,
   #flag:focus {
     @apply outline-none;
-    border-color: #3fa76b;
-    box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
   }
   #roomStatus::after,
   #flag::after {
@@ -47,48 +48,51 @@
     top: 50%;
     transform: translateY(-50%);
     pointer-events: none;
-    color: #5fbf8a;
+    color: var(--color-accent-light);
   }
 
   /* Messages - Base */
   .message {
     @apply rounded-md p-3 mb-2 transition-colors;
-    background-color: #1a1a1a;
-    border: 1px solid #ffffff;
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
   }
   .message-text {
     @apply mb-2;
-    font-size: 20px;
+    font-size: 1.1rem;
   }
   .user-in-message {
     @apply font-bold;
-    color: #88f1a1;
-    font-size: 18px;
+    color: var(--color-accent-light);
+    font-size: 1rem;
   }
   .message:hover {
-    background-color: #1a2f24;
+    background-color: var(--color-accent-dark);
+    color: var(--color-bg);
   }
 
   /* Meta info (flag + time) */
   .message-meta {
-    @apply flex justify-between text-xs text-gray-400;
+    @apply flex justify-between text-xs;
+    color: var(--color-text-muted);
   }
   .message-meta .flag {
-    color: #88f1a1;
+    color: var(--color-accent-light);
   }
   .message-meta time {
-    @apply italic text-gray-400;
-    color: #bee9c8;
-    font-size: 15px;
+    @apply italic;
+    color: var(--color-accent-light);
+    font-size: 0.9rem;
   }
 
   /* Variants */
   .message-urgent {
-    background-color: #571616;
+    background-color: var(--color-danger);
     color: #fff;
   }
   .message-work {
-    background-color: #595e1a;
+    background-color: var(--color-warning);
     color: #fff;
   }
   .message-resolved {
@@ -98,30 +102,90 @@
   /* Footer */
   .panel-footer {
     @apply flex flex-col gap-3 pt-4 border-t;
-    border-color: #264d3b;
+    border-color: var(--color-border);
   }
   .panel-footer input[type="text"] {
-    @apply w-full rounded-md px-3 py-2 text-gray-200;
-    background-color: #0d2417;
-    border: 1px solid #264d3b;
+    @apply w-full rounded-md px-3 py-2;
+    background-color: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
   }
   .panel-footer input[type="text"]::placeholder {
-    @apply text-gray-400;
+    color: var(--color-text-muted);
   }
   .panel-footer input[type="text"]:focus {
     @apply outline-none;
-    border-color: #3fa76b;
-    box-shadow: 0 0 0 2px rgba(63,167,107,0.3);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
   }
 
   /* Buttons */
   .btn-primary {
-    @apply rounded-md px-5 py-2 font-semibold text-white transition
-           self-start;
-    background-color: #0f3a24;
+    @apply rounded-md px-5 py-2 font-semibold transition self-start;
+    background-color: var(--color-accent-dark);
+    color: #fff;
   }
   .btn-primary:hover {
-    background-color: #163528;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
     transform: translateY(-1px);
+  }
+}
+
+/* ================================
+   Mobile Overrides
+   ================================ */
+@media (max-width: 640px) {
+  .panel {
+    margin: 1rem 0;
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .panel-title {
+    font-size: 1.2rem;
+  }
+
+  #roomStatus,
+  #flag {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .message {
+    font-size: 0.9rem;
+    padding: 0.75rem;
+  }
+  .message-text {
+    font-size: 1rem;
+  }
+  .user-in-message {
+    font-size: 0.95rem;
+  }
+  .message-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .panel-footer {
+    gap: 0.75rem;
+  }
+  .panel-footer input[type="text"] {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem;
   }
 }

@@ -17,6 +17,7 @@
             </div>
 
             <div class="logout_area justify-self-end">
+                @livewire('header.toggle-lights')
                 @livewire('header.login-logout')
             </div>
         </div>

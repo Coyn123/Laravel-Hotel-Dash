@@ -1,6 +1,6 @@
 <div class="panel">
     <div class="panel-header flex justify-between items-center">
-        <h2 class="panel-title">Room {{ $room_num }} Board</h2>
+        <h2 class="panel-title">{{ $propertyName }}'s Room {{ $room_num }} Board </h2>
     </div>
 
     <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>

@@ -38,6 +38,10 @@ class FloorsView extends Component
     {
         $this->sortFloorsDesc = ! $this->sortFloorsDesc;
     }
+    public function togglePropertyBoard($propertyId)
+    {
+        $this->dispatch('togglePropertyBoardView', $propertyId);
+    }
 
     protected function filteredAndSorted()
     {
