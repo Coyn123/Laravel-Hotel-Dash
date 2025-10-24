@@ -3,11 +3,11 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\PropertyBoardModel;
-use App\Models\MessageFlag;
+use App\Models\MessagesOnBoard;
+use App\Models\MessageNotification;
+use App\Models\User;
 use App\Services\DashboardConfig;
 use Livewire\Attributes\On;
-
 
 class PropertyBoardView extends Component
 {
@@ -54,13 +54,12 @@ class PropertyBoardView extends Component
             $currentIndex = $propertyIds->search($property);
         }
 
-        // If not found, default to first property
         if ($currentIndex === false) {
             $nextPropertyId = $propertyIds->first();
         } else {
             $nextIndex = $currentIndex + 1;
             if ($nextIndex >= $propertyIds->count()) {
-                $nextIndex = 0; // wrap to first
+                $nextIndex = 0;
             }
             $nextPropertyId = $propertyIds->get($nextIndex);
         }
@@ -72,10 +71,26 @@ class PropertyBoardView extends Component
 
     public function loadMessages(): void
     {
-        $this->messages = PropertyBoardModel::with('flag', 'user')
+        $this->messages = MessagesOnBoard::propertyBoard()
+            ->with('flag', 'user')
             ->where('property_id', $this->property)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        // Mark these messages as read by the current user
+        if ($this->user) {
+            $rows = $this->messages->map(fn($msg) => [
+                'message_id' => $msg->id,
+                'user_id'    => $this->user->id,
+                'read_at'    => now(),
+            ]);
+
+            MessageNotification::upsert(
+                $rows->toArray(),
+                ['message_id', 'user_id'],
+                ['read_at']
+            );
+        }
     }
 
     public function postMessage(): void
@@ -84,24 +99,38 @@ class PropertyBoardView extends Component
             return;
         }
 
-        PropertyBoardModel::create([
-            'user_id' => auth()->id(),
+        $newMessage = MessagesOnBoard::createPropertyBoard([
+            'user_id'     => auth()->id(),
             'property_id' => $this->property,
-            'message_text' => $this->newMessage,
+            'message_text'=> $this->newMessage,
         ]);
 
-        $this->newMessage   = '';
+        $allUsers = User::pluck('id');
+        $alreadyNotified = MessageNotification::where('message_id', $newMessage->id)
+            ->pluck('user_id');
+
+        $usersToInsert = $allUsers->diff($alreadyNotified);
+        $rows = $usersToInsert->map(fn($id) => [
+            'message_id' => $newMessage->id,
+            'user_id'    => $id,
+            'read_at'    => $id === auth()->id() ? now() : null,
+        ]);
+
+        MessageNotification::insert($rows->toArray());
+
+        $this->reset('newMessage');
         $this->loadMessages();
     }
 
     public function render()
     {
         return view('livewire.property-board-view', [
-            'messages' => $this->messages = PropertyBoardModel::with('flag', 'user')
-            ->where('property_id', $this->property)
-            ->orderBy('created_at', 'desc')
-            ->get(),
-            'property'   => $this->property,
+            'messages' => MessagesOnBoard::propertyBoard()
+                ->with('flag', 'user')
+                ->where('property_id', $this->property)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10),
+            'property' => $this->property,
         ])->layout('layouts.app');
     }
 }

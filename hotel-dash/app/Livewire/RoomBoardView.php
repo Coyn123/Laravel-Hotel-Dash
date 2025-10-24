@@ -3,8 +3,10 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\RoomBoardModel;
+use App\Models\MessagesOnBoard;
 use App\Models\MessageFlag;
+use App\Models\MessageNotification;
+use App\Models\User;
 use App\Services\DashboardConfig;
 use Livewire\Attributes\On;
 
@@ -34,35 +36,31 @@ class RoomBoardView extends Component
         $this->room     = $roomId;
         $this->resolveRoomNumber();
         $this->loadMessages();
-    
-        $roomModel = RoomBoardModel::find($roomId);
-        $this->roomStatus = $roomModel?->status ?? 'vacant';
+
+        // If you have a separate Room model for status, use that instead.
+        $this->roomStatus = 'vacant';
     }
 
     public function mount()
     {
         $config = DashboardConfig::get();
         $this->user = auth()->user();
-    
+
         $firstProperty = collect($config['properties'])->sortBy('property_id')->first();
         $this->property = $firstProperty['property_id'] ?? null;
-    
+
         $firstFloor = collect($firstProperty['floors'])->sortBy('id')->first();
         $this->floor = $firstFloor['id'] ?? null;
-    
+
         $firstRoom = collect($firstFloor['rooms'])->sortBy('id')->first();
         $this->room = $firstRoom['id'] ?? null;
-    
+
         $this->resolveRoomNumber();
         $this->loadMessages();
-    
+
         $this->flags = MessageFlag::all();
-    
-        $roomModel = RoomBoardModel::find($this->room);
-        $this->roomStatus = $roomModel?->status ?? 'vacant';
+        $this->roomStatus = 'vacant';
     }
-    
-    
 
     protected function resolveRoomNumber(): void
     {
@@ -71,7 +69,7 @@ class RoomBoardView extends Component
 
         $propertyData = collect($properties)
             ->firstWhere('property_id', $this->property);
-        
+
         $this->propertyName = $propertyData['property_name'] ?? 'Unknown Property';
 
         $floorData = collect($propertyData['floors'] ?? [])
@@ -85,10 +83,26 @@ class RoomBoardView extends Component
 
     public function loadMessages(): void
     {
-        $this->messages = RoomBoardModel::with('flag', 'user')
+        $this->messages = MessagesOnBoard::roomBoard()
+            ->with('flag', 'user')
             ->where('room_id', $this->room)
             ->orderBy('created_at', 'desc')
             ->get();
+
+        // Mark these messages as read by the current user
+        if ($this->user) {
+            $rows = $this->messages->map(fn($msg) => [
+                'message_id' => $msg->id,
+                'user_id'    => $this->user->id,
+                'read_at'    => now(),
+            ]);
+
+            MessageNotification::upsert(
+                $rows->toArray(),
+                ['message_id', 'user_id'],
+                ['read_at']
+            );
+        }
     }
 
     public function postMessage(): void
@@ -97,39 +111,42 @@ class RoomBoardView extends Component
             return;
         }
 
-        RoomBoardModel::create([
+        $newMessage = MessagesOnBoard::createRoomBoard([
             'user_id' => auth()->id(),
             'property_id' => $this->property,
             'floor_id' => $this->floor,
             'room_id' => $this->room,
             'flag_id' => $this->selectedFlag ?: 1,
-            'message_text' => $this->newMessage,
+            'message_text'=> $this->newMessage,
         ]);
 
-        $this->newMessage   = '';
-        $this->selectedFlag = '';
-        $this->loadMessages();
-    }
+        $allUsers = User::pluck('id');
+        $alreadyNotified = MessageNotification::where('message_id', $newMessage->id)
+            ->pluck('user_id');
+        $usersToInsert = $allUsers->diff($alreadyNotified);
 
-    public function updateRoomStatus(): void
-    {
-        $roomModel = RoomBoardView::find($this->room);
-        if ($roomModel) {
-            $roomModel->status = $this->roomStatus;
-            $roomModel->save();
-        }
+        $rows = $usersToInsert->map(fn($id) => [
+            'message_id' => $newMessage->id,
+            'user_id'    => $id,
+            'read_at'    => $id === auth()->id() ? now() : null,
+        ]);
+
+        MessageNotification::insert($rows->toArray());
+
+        $this->reset('newMessage');
+        $this->loadMessages();
     }
 
     public function render()
     {
-
         $this->resolveRoomNumber();
 
         return view('livewire.room-board-view', [
-            'messages' => $this->messages = RoomBoardModel::with('flag', 'user')
-            ->where('room_id', $this->room)
-            ->orderBy('created_at', 'desc')
-            ->get(),
+            'messages'   => MessagesOnBoard::roomBoard()
+                ->with('flag', 'user')
+                ->where('room_id', $this->room)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10),
             'floors'     => $this->FullConfig,
             'room_num'   => $this->room_num,
             'flags'      => $this->flags,

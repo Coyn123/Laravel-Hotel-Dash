@@ -126,4 +126,16 @@ class DashboardConfig
         });
         return $grouped->values()->all();
     }
+    public static function resolveRoomNumberByID($roomId): ?int
+    {
+        if(!$roomId) {
+            return null;
+        }
+        $config = self::get();
+    
+        // room_id in messages_on_board should match rooms_config.id
+        $room = collect($config['rooms'] ?? [])->firstWhere('id', $roomId);
+        return $room['room'] ?? null;
+    }
+     
 }
