@@ -1,6 +1,6 @@
 <div class="notification-wrapper relative">
     <button class="notification-btn" wire:click="toggleOpen">
-        🔔
+        <span class="icon">🔔</span>
     </button>
 
     @if($open)

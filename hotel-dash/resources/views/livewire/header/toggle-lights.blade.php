@@ -1,12 +1,12 @@
-<button 
-    wire:click="toggle"
-    type="button"
-    class="p-2 rounded-md transition-colors"
-    aria-label="Toggle light/dark mode"
->
-    @if($theme === 'light')
-        ☀️
-    @else
-        🌙
-    @endif
-</button>
+<div class="lights-wrapper relative">
+    <button 
+        wire:click="toggle"
+        class="lights_toggle"
+    >
+        @if($theme === 'light')
+            <span class="icon">☀️</span>
+        @else
+            <span class="icon">🌙</span>
+        @endif
+    </button>
+</div>

@@ -84,26 +84,26 @@
   }
 
   /* --- Buttons --- */
-  button {
+  .setup-wrapper button {
     @apply inline-flex items-center justify-center rounded-md font-semibold cursor-pointer transition;
     padding: 0.65rem 1.25rem;
     font-size: 0.95rem;
   }
-  button[type="submit"] {
+  .setup-wrapper button[type="submit"] {
     background: #14532d;
     color: #fff;
   }
-  button[type="submit"]:hover {
+  .setup-wrapper button[type="submit"]:hover {
     background: #166534;
     transform: translateY(-1px);
   }
-  button[type="button"] {
+  .setup-wrapper button[type="button"] {
     background: #1a1a1a;
     color: #e0e0e0;
     margin-top: 0.5rem;
     border: 1px solid #2f4f3f;
   }
-  button[type="button"]:hover {
+  .setup-wrapper button[type="button"]:hover {
     background: #2a2a2a;
   }
 

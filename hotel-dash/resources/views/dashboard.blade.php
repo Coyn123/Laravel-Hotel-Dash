@@ -15,10 +15,10 @@
 
             <div class="name-display text-center font-medium">
                 {{ auth()->user()->name }}'s Dashboard
-                @livewire('header.notification-box') 
             </div>
 
-            <div class="logout_area justify-self-end">
+            <div class="controls_area">
+                @livewire('header.notification-box')
                 @livewire('header.toggle-lights')
                 @livewire('header.login-logout')
             </div>
@@ -33,7 +33,7 @@
     </header>
 
     @if (auth()->check())   
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
         <div>
             @livewire('floors-view')
         </div>
@@ -42,9 +42,13 @@
             <div>
                 @livewire('room-board-view')
             </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
             <div>
                 @livewire('property-board-view')
             </div>
+
         </div>
     </div>
     

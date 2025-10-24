@@ -1,8 +1,10 @@
-<div>
-    <button
-        wire:click="logout"
-        class="px-4 py-2 text-white rounded transition"
-    >
-        Logout
-    </button>
+<div class="logout-wrapper relative">
+    <div>
+        <button
+            wire:click="logout"
+            class="logout_button"
+        >
+            <span class="icon">🙋‍♂️</span>
+        </button>
+    </div>
 </div>

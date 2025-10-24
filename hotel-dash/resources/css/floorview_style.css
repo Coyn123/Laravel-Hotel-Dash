@@ -19,7 +19,7 @@
   font-family: var(--font-family);
 }
 
-.floor {
+.floorview .floor {
   @apply rounded-md;
   background: var(--color-bg-alt);
   color: var(--color-text);

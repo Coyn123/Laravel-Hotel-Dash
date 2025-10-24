@@ -120,12 +120,12 @@
   }
 
   /* Buttons */
-  .btn-primary {
+  .panel .btn-primary {
     @apply rounded-md px-5 py-2 font-semibold transition self-start;
     background-color: var(--color-accent-dark);
     color: #fff;
   }
-  .btn-primary:hover {
+  .panel .btn-primary:hover {
     background-color: var(--color-accent);
     color: var(--color-bg);
     transform: translateY(-1px);
