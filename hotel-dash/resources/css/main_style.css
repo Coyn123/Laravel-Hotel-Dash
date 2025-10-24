@@ -25,9 +25,11 @@
     max-width: 3500px;
   }
 
+  /* ✅ Panels side-by-side by default */
   .floor-panel,
   .message-panel {
-    @apply flex-1;
+    flex: 1;
+    min-width: 0;
   }
 
   .name-display {
@@ -61,7 +63,6 @@
     opacity: 0.9;
   }
 
-  /* Layout: flex for consistent vertical centering */
   .header-inner {
     display: flex;
     align-items: center;
@@ -81,15 +82,13 @@
     text-shadow: 0 0 4px rgba(193, 226, 205, 0.3);
   }
 
-  /* ================================
-     Controls area (horizontal uniform buttons)
-     ================================ */
+  /* Controls area */
   .header-inner .controls_area {
     display: flex;
-    flex-direction: row;   /* ✅ horizontal row */
+    flex-direction: row;   /* ✅ row by default */
     align-items: center;
     justify-content: flex-end;
-    gap: 0.75rem;          /* spacing between buttons */
+    gap: 0.75rem;
     padding: 0.5rem;
   }
 
@@ -123,7 +122,6 @@
     transform: translateY(-2px);
   }
 
-  /* Icon inside each button */
   .header-inner .controls_area > .notification-btn > .icon,
   .header-inner .controls_area > .lights_toggle > .icon,
   .header-inner .controls_area > .logout_button > .icon {
@@ -131,7 +129,6 @@
     line-height: 1;
   }
 
-  /* Badge positioning for notification button */
   .notification-btn .badge {
     @apply absolute -top-1 -right-1 rounded-full text-xs px-1.5 py-0.5;
     background: var(--color-accent);
@@ -139,9 +136,7 @@
     font-weight: 600;
   }
 
-  /* ================================
-     Notifications dropdown
-     ================================ */
+  /* Notifications dropdown */
   .notification-box {
     @apply rounded-md overflow-hidden mt-2 shadow-lg;
     background: var(--color-panel);
@@ -214,6 +209,14 @@
     flex-direction: column;
     gap: 1rem;
     padding: 0.5rem;
+  }
+
+  /* ✅ Panels stack full width */
+  .floor-panel,
+  .message-panel {
+    flex: none;
+    width: 100%;
+    max-width: 100%;
   }
 
   header {
