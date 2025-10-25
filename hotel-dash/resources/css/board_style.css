@@ -57,11 +57,21 @@
     background-color: var(--color-bg-alt);
     border: 1px solid var(--color-border);
     color: var(--color-text);
+
+    /* ✅ give the message box a max height */
+    max-height: 200px;   /* adjust as needed */
+    overflow-y: auto;    /* scroll vertically if content is too long */
   }
+
   .message-text {
     @apply mb-2;
     font-size: 1.1rem;
+
+    /* optional: preserve line breaks and wrapping */
+    white-space: pre-wrap;
+    word-break: break-word;
   }
+
   .user-in-message {
     @apply font-bold;
     color: var(--color-accent-light);

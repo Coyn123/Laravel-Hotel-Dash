@@ -70,11 +70,6 @@
     width: 100%;
   }
 
-  .button:hover {
-    @apply scale-110;
-    color: var(--color-accent-dark);
-  }
-
   .header-inner .name-display {
     text-align: center;
     @apply text-2xl font-semibold;
@@ -159,6 +154,11 @@
     @apply block w-full px-3 py-2 text-sm text-left transition-colors cursor-pointer;
     background: var(--color-panel);
     color: var(--color-text);
+
+      /* ✅ Cap long text */
+    overflow: hidden;          /* hide overflow */
+    white-space: nowrap;       /* prevent wrapping */
+    text-overflow: ellipsis;   /* show "…" at the end */
   }
   .notification-item:hover {
     color: var(--color-accent-dark);

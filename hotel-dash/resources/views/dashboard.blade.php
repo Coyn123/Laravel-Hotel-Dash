@@ -18,10 +18,18 @@
             </div>
 
             <div class="controls_area">
-                @livewire('header.notification-box')
-                @livewire('header.toggle-lights')
-                @livewire('header.login-logout')
+                <div class="notification-btn">
+                    @livewire('header.notification-box')
+                </div>
+
+                <div class="lights_toggle">
+                    @livewire('header.toggle-lights')
+                </div>
+
+                <div class="logout_button">
+                    @livewire('header.login-logout')
             </div>
+
         </div>
         @else
         <div class="header-inner grid grid-cols-3 items-center">

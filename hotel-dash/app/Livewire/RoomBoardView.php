@@ -100,7 +100,7 @@ class RoomBoardView extends Component
             MessageNotification::upsert(
                 $rows->toArray(),
                 ['message_id', 'user_id'],
-                ['read_at']
+                ['read_at'],
             );
         }
     }

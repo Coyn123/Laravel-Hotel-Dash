@@ -19,14 +19,8 @@ class NotificationBox extends Component
             $this->notifications = MessageNotification::with(['message.user'])
             ->where('user_id', $user->id)
             ->orderBy('read_at', 'desc')
-            ->take(3)
-            ->get()
-            ->map(function ($note) {
-                $note->room_number = DashboardConfig::resolveRoomNumberbyID(
-                    $note->message->room_id,
-                );
-                return $note;
-            });
+            ->take(5)
+            ->get();
         }
     }
 
@@ -40,5 +34,13 @@ class NotificationBox extends Component
         return view('livewire.header.notification-box', [
             'notifications' => $this->notifications,
         ]);
+    }
+
+        public function redirectToNotif($note)
+    {
+        $prop = (int) $note['property_id'];
+        $floor = (int) $note['floor_id'];
+        $room = (int) $note['room_id'];
+        $this->dispatch('roomSelected', $prop, $floor, $room);
     }
 }
