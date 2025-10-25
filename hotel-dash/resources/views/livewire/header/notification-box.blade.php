@@ -8,13 +8,16 @@
             <h4 class="notification-title font-semibold p-2 border-b">Notifications</h4>
             <div class="notification-content divide-y divide-gray-200">
                 @forelse($notifications as $note)
-                    <div 
-                        class="notification-item p-3 hover:bg-gray-100 cursor-pointer transition"
-                        role="button"
-                        tabindex="0"
-                        {{-- wire:click="openNotification({{ $note['id'] ?? 'null' }})" --}}
-                    >
-                        <p class="text-sm text-black-800">{{ $note['message'] }}</p>
+                <p>
+    Debug: property={{ $note->message->property_id }},
+    floor={{ $note->message->floor_id }},
+    room_id={{ $note->message->room_id }}
+</p>
+
+                    <div class="notification-item p-3 hover:bg-gray-100 cursor-pointer transition">
+                        <p class="text-sm text-black-800">
+                            Room {{ $note->room_number ?? 'N/A' }}: {{ $note->message->message_text }}
+                        </p>
                     </div>
                 @empty
                     <div class="p-3 text-sm text-gray-500">No notifications</div>

@@ -98,11 +98,12 @@ return new class extends Migration
             ['id' => 4, 'flag_name' => 'Resolved'],
         ]);
 
-        Schema::create('room_board', function (Blueprint $table) {
+        Schema::create('messages_on_board', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('property_id');
-            $table->unsignedBigInteger('floor_id');
-            $table->unsignedBigInteger('room_id');
+            $table->unsignedBigInteger('floor_id')->nullable();
+            $table->unsignedBigInteger('room_id')->nullable();
+            $table->enum('board_type', ['property_board', 'room_board']);
             $table->foreignId('flag_id')->nullable()->constrained('message_flags')->nullOnDelete();
             $table->text('message_text');
             $table->foreignId('user_id')->constrained();
@@ -115,18 +116,16 @@ return new class extends Migration
             $table->index(['property_id', 'floor_id', 'room_id']);
         });
 
-        Schema::create('property_board', function (Blueprint $table) {
+        Schema::create('message_notifications', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('property_id');
-            $table->text('message_text');
-            $table->timestamps();
-            
-            $table->foreignId('flag_id')->nullable()->constrained('message_flags')->nullOnDelete();
-            $table->foreignId('user_id')->constrained();
-            $table->foreign('property_id')->references('id')->on('properties_config')->cascadeOnDelete();
-
-            $table->index(['property_id']);
+            $table->foreignId('message_id')->constrained('messages_on_board')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->timestamp('read_at')->nullable();
+        
+            $table->unique(['message_id', 'user_id']);
+            $table->index('user_id');
         });
+        
     }
 
     public function down(): void
@@ -141,5 +140,6 @@ return new class extends Migration
         Schema::dropIfExists('room_statuses');
         Schema::dropIfExists('floors_config');
         Schema::dropIfExists('properties_config');
+        Schema::dropIfExists('message_notifications');
     }
 };
