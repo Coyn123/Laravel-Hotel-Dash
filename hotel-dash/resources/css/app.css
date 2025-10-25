@@ -8,19 +8,21 @@
     --font-family: 'Inter', system-ui, sans-serif;
   
     /* Light Mode Defaults */
-    --color-bg: rgb(228, 228, 228);
-    --color-bg-alt: #e6e6e6;
-    --color-panel: #e4e4e4;
-    --color-border: #c0c2c5;
-    --color-text: #111827;
-    --color-text-muted: #4b5563;
+    --color-bg: #c7c2bc;
+    --color-bg-alt: #e7e5e2;
+    --color-panel: #adadaa;
+    --color-border: #f4f6f7;
+    --color-accent:    #3b82f6; /* bright blue for buttons/links */
+    --color-accent-bg: #dbeafe; /* pale accent background for hovers */
+    --color-text: #070707;
+    --color-text-muted: #131313;
   
-    --color-accent: #16a34a;   /* green-600 */
-    --color-accent-light: #4ade80;
-    --color-accent-dark: #166534;
+    --color-accent: #b6b6b6;
+    --color-accent-light: #133d25;
+    --color-accent-dark: #dddcdc;
   
-    --color-danger: #dc2626;
-    --color-warning: #ca8a04;
+    --color-danger: #551111;
+    --color-warning: #bd8102;
     --color-info: #2563eb;
   
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);

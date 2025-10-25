@@ -88,12 +88,12 @@
 
   /* Variants */
   .message-urgent {
-    background-color: var(--color-danger);
-    color: #fff;
+    border-color: var(--color-danger);
+    border-width: 5px;
   }
   .message-work {
-    background-color: var(--color-warning);
-    color: #fff;
+    border-color: var(--color-warning);
+    border-width: 5px;
   }
   .message-resolved {
     @apply opacity-50;

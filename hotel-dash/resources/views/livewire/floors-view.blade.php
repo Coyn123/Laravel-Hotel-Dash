@@ -6,12 +6,11 @@
                 <input type="text" wire:model.live="search" placeholder="Search..." />
             </div>
         </div>
-
         <div class="panel-body">
             @forelse($properties as $property)
                 <div class="property-block">
                     <button 
-                        class="property-title rounded px-2 py-1 text-left focus:outline-none mb-2 font-bold hover:bg-gray-700" 
+                        class="property-title px-2 py-1 text-left focus:outline-none mb-2 font-bold hover:bg-gray-700" 
                         style="width: fit-content;" 
                         wire:click="togglePropertyBoard('{{ $property['property_id'] }}')"
                     >
@@ -23,8 +22,11 @@
                             // Composite key: property_id-floor_num
                             $floorKey = $property['property_id'].'-'.$floor['floor_num'];
                         @endphp
-
-                        <div class="floor border rounded mb-2" id="floor-{{ $floorKey }}">
+                        <div 
+                        class="floor" 
+                        id="floor-{{ $floorKey }}" 
+                        style="background: var(--backgrounds); padding: 0.5rem; border-radius: 6px;"
+                        >
                             <div 
                                 class="floor-header cursor-pointer flex justify-between items-center p-2"
                                 wire:click="toggleFloor('{{ $floorKey }}')"
