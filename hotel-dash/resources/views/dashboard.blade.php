@@ -41,7 +41,7 @@
     </header>
 
     @if (auth()->check())   
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-0">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
         <div>
             @livewire('floors-view')
         </div>

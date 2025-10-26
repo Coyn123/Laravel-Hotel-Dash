@@ -12,10 +12,10 @@
     --color-bg-alt: #e7e5e2;
     --color-panel: #acacac;
     --color-border: #f4f6f7;
-    --color-accent:    #3b82f6; /* bright blue for buttons/links */
     --color-accent-bg: #dbeafe; /* pale accent background for hovers */
     --color-text: #070707;
     --color-text-muted: #131313;
+    --color-input-bg: #f9f9f9; /* light mode input background */
   
     --color-accent: #bbbaba;
     --color-accent-light: #133d25;
@@ -36,8 +36,9 @@
     --color-bg-alt: #101422;
     --color-panel: #151826;
     --color-border: #2f4f3f;
-    --color-text: #e0e0e0;
+    --color-text: #cac9c9;
     --color-text-muted: #9ca3af;
+    --color-input-bg: #000000; /* dark mode input background */
   
     --color-accent: #4ade80;
     --color-accent-light: #86efac;

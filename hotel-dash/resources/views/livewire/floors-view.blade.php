@@ -2,8 +2,8 @@
     <section class="panel" aria-labelledby="rooms-title">
         <div class="panel-header flex justify-between">
             <h2 id="rooms-title" class="panel-title">Properties</h2>
-            <div class="search gap-2">
-                <input type="text" wire:model.live="search" placeholder="Search..." />
+            <div class="search gap-3">
+            <input type="text" class="search" wire:model.live="search" placeholder="Search..." />
             </div>
         </div>
         <div class="panel-body">

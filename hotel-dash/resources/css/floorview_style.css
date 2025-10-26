@@ -45,6 +45,21 @@
     color: var(--color-accent-light);
     transform: translateY(-2px);
   }
+  .search {
+    @apply max-w-sm rounded-md border px-4 py-2 text-sm focus:outline-none focus:ring-2 text-[var(--color-text)];
+    background: var(--color-input-bg);
+    border-color: var(--color-border);
+    font-family: var(--font-family);
+    appearance: none; /* reset browser default */
+    -webkit-appearance: none;
+  }
+  .search::placeholder {
+    color: var(--color-text); /* fallback if no var */
+  }
+  .search:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-accent-light);
+  }
 
   @media (max-width: 640px) {
     .rooms {
