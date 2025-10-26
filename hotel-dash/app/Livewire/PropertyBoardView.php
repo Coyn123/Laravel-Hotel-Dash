@@ -10,13 +10,13 @@ use App\Services\DashboardConfig;
 use Livewire\Attributes\On;
 
 class PropertyBoardView extends Component
-{
-    public $config;
+{ 
     public $user;
     public $messages;
     public $property;
     public $propertyName;
     public $newMessage = '';
+    public $config;
 
     public function mount() 
     {

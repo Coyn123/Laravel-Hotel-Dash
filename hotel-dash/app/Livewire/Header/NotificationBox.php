@@ -13,12 +13,16 @@ class NotificationBox extends Component
 
     public function mount()
     {
+        $this->loadNotifs();
+    }
+    public function loadNotifs() 
+    {
         $user = auth()->user();
 
         if ($user) {
             $this->notifications = MessageNotification::with(['message.user'])
             ->where('user_id', $user->id)
-            ->orderBy('read_at', 'desc')
+            ->whereNull('read_at')
             ->take(5)
             ->get();
         }
@@ -41,6 +45,9 @@ class NotificationBox extends Component
         $prop = (int) $note['property_id'];
         $floor = (int) $note['floor_id'];
         $room = (int) $note['room_id'];
+        if(!$prop || ! $floor || ! $room) {
+            return;
+        }
         $this->dispatch('roomSelected', $prop, $floor, $room);
     }
 }

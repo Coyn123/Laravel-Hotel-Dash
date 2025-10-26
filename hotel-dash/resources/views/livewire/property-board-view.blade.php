@@ -1,10 +1,20 @@
 <div class="panel">
     <div class="panel-header flex justify-between items-center">
         <h2 class="panel-title">{{ $propertyName }}'s General Property Board</h2>
+        {{--- Simple workaround for not showing toggle unneccessarily ---}}
+        @php
+            $config = \App\Services\DashboardConfig::get();
+        @endphp
+        @if(count($config['properties']) > 1)
         <button wire:click="toggleCurrentPropertyBoard('{{ $property }}')"
             class="btn btn-secondary text-xl">
             🔄
+        </button>
+        @endif
     </div>
+
+
+    
     <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>
         @forelse($messages as $message)
             <div @class([
@@ -21,6 +31,8 @@
             <p class="text-gray-500">No messages yet.</p>
         @endforelse
     </div>
+
+
 
     {{-- Wrap footer in a form --}}
     <form wire:submit.prevent="postMessage" class="panel-footer mt-4 space-y-2">
