@@ -18,7 +18,7 @@
             @forelse($notifications as $note)
             <div class="notification-item p-3 hover:bg-gray-100 cursor-pointer transition">
                 <button wire:click="redirectToNotif(@js($note->message))"
-                class="text-sm text-black-800 w-full h-full flex items-center justify-center p-2 
+                class="text-sm text-black-800 w-full h-full flex text-center justify-left p-2 
                 text-center truncate">
                     {{ $note->message->message_text }}
                 </button>

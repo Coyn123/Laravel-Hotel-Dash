@@ -39,13 +39,14 @@
                 @endforeach
             </select>
         </div>
-
-        {{-- Message Input --}}
-        <input type="text"
-               wire:model.defer="newMessage"
-               placeholder="Type a message..."
-               class="border p-2 w-full bg-gray-900 text-gray-100" />
-
+            {{-- Message Input --}}
+            <textarea
+                wire:ignore
+                wire:model.defer="newMessage"
+                placeholder="Type a message..."
+                rows="1"
+                class="inputText border p-2"> 
+            </textarea>
         <button type="submit" class="btn btn-primary mt-2">
             Send
         </button>

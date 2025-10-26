@@ -36,12 +36,13 @@
 
     {{-- Wrap footer in a form --}}
     <form wire:submit.prevent="postMessage" class="panel-footer mt-4 space-y-2">
-
         {{-- Message Input --}}
-        <input type="text"
-               wire:model.defer="newMessage"
-               placeholder="Type a message..."
-               class="border p-2 w-full bg-gray-900 text-gray-100" />
+        <textarea
+            wire:ignore
+            wire:model.defer="newMessage"
+            placeholder="Type a message..."
+            class="inputText border p-2"> 
+        </textarea>
 
         <button type="submit" class="btn btn-primary mt-2">
             Send

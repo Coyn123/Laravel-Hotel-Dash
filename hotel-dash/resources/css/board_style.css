@@ -95,6 +95,10 @@
     color: var(--color-accent-light);
     font-size: 0.9rem;
   }
+  .inputText {
+    color: var(--color-text);
+    background-color: var(--color-bg);
+  }
 
   /* Variants */
   .message-urgent {
