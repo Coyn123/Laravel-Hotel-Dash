@@ -142,7 +142,7 @@
   .notification-title {
     @apply font-semibold p-2 border-b;
     background: var(--color-panel);
-    color: var(--color-accent);
+    color: var(--color-text);
     border-color: var(--color-border);
   }
   .notification-content {
