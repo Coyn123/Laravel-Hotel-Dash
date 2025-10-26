@@ -1,5 +1,5 @@
-<div class="notification-wrapper relative" wire:poll.5s="loadNotifs">
-    <button class="notification-btn relative" wire:click="toggleOpen">
+<div class="notification-wrapper relative" wire:poll.5s="loadNotifs" wire:click="toggleOpen">
+    <button class="notification-btn relative w-full h-full flex items-center justify-center p-2" >
         <span class="icon">🔔</span>
 
         @if(count($notifications) > 0)
@@ -16,12 +16,13 @@
         <h4 class="notification-title font-semibold p-2 border-b">Notifications</h4>
         <div class="notification-content divide-y divide-gray-200">
             @forelse($notifications as $note)
-                <div class="notification-item p-3 hover:bg-gray-100 cursor-pointer transition">
-                    <button wire:click="redirectToNotif(@js($note->message))"
-                            class="text-sm text-black-800">
-                        {{ $note->message->message_text }}
-                    </button>
-                </div>
+            <div class="notification-item p-3 hover:bg-gray-100 cursor-pointer transition">
+                <button wire:click="redirectToNotif(@js($note->message))"
+                class="text-sm text-black-800 w-full h-full flex items-center justify-center p-2 
+                text-center truncate">
+                    {{ $note->message->message_text }}
+                </button>
+            </div>
             @empty
                 <div class="p-3 text-sm text-gray-500">No notifications</div>
             @endforelse
