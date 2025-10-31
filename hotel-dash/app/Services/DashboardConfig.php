@@ -5,8 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 /*
-
 EXAMPLE OUTPUT FOR CONFIG:
+
 [
     'properties' => [
         [
@@ -30,14 +30,52 @@ EXAMPLE OUTPUT FOR CONFIG:
                             'room_type'   => 2,
                             'room_status' => 1,
                         ],
-                        // ...
+                        [
+                            'id'          => 1002,
+                            'property_id' => 1,
+                            'floor'       => 10,
+                            'room'        => 102,
+                            'room_type'   => 1,
+                            'room_status' => 2,
+                        ],
+                        // more rooms...
                     ],
                     'total_rooms'   => 20,
                 ],
-                // more floors...
+                [
+                    'id'            => 11,
+                    'property_id'   => 1,
+                    'floor_num'     => 2,
+                    'name'          => 'Floor 2',
+                    'start'         => 201,
+                    'end'           => 220,
+                    'property_name' => 'Property A',
+                    'rooms'         => [
+                        // rooms for floor 2...
+                    ],
+                    'total_rooms'   => 20,
+                ],
             ],
         ],
-        // more properties...
+        [
+            'property_id'   => 2,
+            'property_name' => 'Property B',
+            'floors' => [
+                [
+                    'id'            => 20,
+                    'property_id'   => 2,
+                    'floor_num'     => 1,
+                    'name'          => 'Floor 1',
+                    'start'         => 101,
+                    'end'           => 110,
+                    'property_name' => 'Property B',
+                    'rooms'         => [
+                        // rooms for Property B, Floor 1...
+                    ],
+                    'total_rooms'   => 10,
+                ],
+            ],
+        ],
     ]
 ];
 */
