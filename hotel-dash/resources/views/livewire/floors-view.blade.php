@@ -6,7 +6,7 @@
             <input type="text" class="search" wire:model.live="search" placeholder="Search..." />
             </div>
         </div>
-        <div class="panel-body">
+        <div class="panel-body scroll-mt-24" id="notif-target">
             @forelse($properties as $property)
                 <div class="property-block">
                     <button 

@@ -3,240 +3,262 @@
 /* ================================
    Base Theme Application
    ================================ */
-@layer base {
-  body {
-    font-family: var(--font-family, 'Inter', sans-serif);
-    background: var(--color-bg);
-    color: var(--color-text);
+   @layer base {
+    body {
+      font-family: var(--font-family, 'Inter', sans-serif);
+      background: var(--color-bg);
+      color: var(--color-text);
+    }
+  
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
   }
-
-  *, *::before, *::after {
-    box-sizing: border-box;
+  
+  /* ================================
+     Components
+     ================================ */
+  @layer components {
+    /* Dashboard Layout */
+    .dashboard {
+      @apply flex gap-4 mx-auto;
+      max-width: 3500px;
+    }
+  
+    /* ✅ Panels side-by-side by default */
+    .floor-panel,
+    .message-panel {
+      flex: 1;
+      min-width: 0;
+    }
+  
+    .name-display {
+      @apply text-2xl font-semibold;
+      color: var(--color-text);
+    }
+  
+    /* Wrapper */
+    .dashboard-wrapper {
+      @apply min-h-screen p-6;
+      background: var(--color-bg);
+    }
+  
+    /* Header */
+    header {
+      @apply rounded-lg px-6 py-4 shadow-md flex items-center justify-between;
+      background: var(--color-panel);
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-lg);
+    }
+  
+    /* Brand / Logo */
+    .header-inner .logo {
+      color: var(--color-text);
+      text-shadow: 0 0 6px var(--color-accent-light);
+    }
+  
+    .header-inner .title {
+      @apply text-lg font-medium;
+      color: var(--color-accent-light);
+      opacity: 0.9;
+    }
+  
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+  
+    .header-inner .name-display {
+      text-align: center;
+      @apply text-2xl font-semibold;
+      color: var(--color-text);
+      text-shadow: 0 0 4px rgba(193, 226, 205, 0.3);
+    }
+  
+    /* Controls area */
+    .header-inner .controls_area {
+      display: flex;
+      flex-direction: row; 
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      padding: 0.5rem;
+    }
+  
+    .header-inner .controls_area > .notification-btn,
+    .header-inner .controls_area > .lights_toggle,
+    .header-inner .controls_area > .logout_button {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      width: 52px;
+      height: 52px;
+      border-radius: 0.75rem;
+  
+      background: var(--color-bg-alt);
+      border: 2px solid var(--color-border);
+      box-shadow: var(--shadow-sm);
+  
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+  
+    .header-inner .controls_area > .notification-btn:hover,
+    .header-inner .controls_area > .lights_toggle:hover,
+    .header-inner .controls_area > .logout_button:hover {
+      background: var(--color-accent);
+      color: var(--color-bg);
+      border-color: var(--color-accent);
+      box-shadow: 0 0 8px var(--color-accent-light);
+      transform: translateY(-2px);
+    }
+  
+    .header-inner .controls_area > .notification-btn > .icon,
+    .header-inner .controls_area > .lights_toggle > .icon,
+    .header-inner .controls_area > .logout_button > .icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+  
+    .notification-btn .badge {
+      @apply absolute -top-1 -right-1 rounded-full text-xs px-1.5 py-0.5;
+      background: var(--color-accent);
+      color: var(--color-bg);
+      font-weight: 600;
+    }
+  
+    /* Notifications dropdown */
+    .notification-box {
+      @apply rounded-md overflow-hidden mt-2 shadow-lg;
+      background: var(--color-panel);
+      border: 1px solid var(--color-border);
+      width: 16rem;
+      color: var(--color-text);
+    }
+    .notification-title {
+      @apply font-semibold p-2 border-b;
+      background: var(--color-panel);
+      color: var(--color-accent);
+      border-color: var(--color-border);
+    }
+    .notification-content {
+      @apply divide-y;
+      divide-color: var(--color-border);
+    }
+  
+    .notification-item {
+      @apply block w-full px-3 py-2 text-sm text-left transition-colors cursor-pointer;
+      background: var(--color-panel);
+      color: var(--color-text);
+  
+        /* ✅ Cap long text */
+      overflow: hidden;          /* hide overflow */
+      white-space: nowrap;       /* prevent wrapping */
+      text-overflow: ellipsis;   /* show "…" at the end */
+    }
+    .notification-item:hover {
+      color: var(--color-accent-dark);
+      background: var(--color-bg-alt);
+    }
+    .notification-item.unread {
+      @apply font-semibold;
+      background: var(--color-bg-alt);
+    }
+    .notification-item .timestamp {
+      @apply text-xs mt-1 block;
+      color: var(--color-text-muted);
+    }
+  
+    /* Dropdown Menus */
+    select,
+    .dropdown-menu {
+      @apply rounded px-2 py-1 text-sm;
+      background: var(--color-bg-alt);
+      color: var(--color-text);
+      border: 1px solid var(--color-border);
+      min-width: 140px;
+    }
+    select:focus,
+    .dropdown-menu:focus {
+      @apply outline-none;
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 2px var(--color-accent-light);
+    }
+    .dropdown-menu option:hover {
+      background: var(--color-accent-dark);
+      color: #fff;
+    }
   }
-}
-
-/* ================================
-   Components
-   ================================ */
-@layer components {
-  /* Dashboard Layout */
-  .dashboard {
-    @apply flex gap-4 mx-auto;
-    max-width: 3500px;
-  }
-
-  /* ✅ Panels side-by-side by default */
-  .floor-panel,
-  .message-panel {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .name-display {
-    @apply text-2xl font-semibold;
-    color: var(--color-text);
-  }
-
-  /* Wrapper */
-  .dashboard-wrapper {
-    @apply min-h-screen p-6;
-    background: var(--color-bg);
-  }
-
-  /* Header */
-  header {
-    @apply rounded-lg px-6 py-4 shadow-md flex items-center justify-between;
-    background: var(--color-panel);
-    border: 1px solid var(--color-border);
-    box-shadow: var(--shadow-lg);
-  }
-
-  /* Brand / Logo */
-  .header-inner .logo {
-    color: var(--color-accent);
-    text-shadow: 0 0 6px var(--color-accent-light);
-  }
-
-  .header-inner .title {
-    @apply text-lg font-medium;
-    color: var(--color-accent-light);
-    opacity: 0.9;
-  }
-
-  .header-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-  }
-
-  .header-inner .name-display {
-    text-align: center;
-    @apply text-2xl font-semibold;
-    color: var(--color-text);
-    text-shadow: 0 0 4px rgba(193, 226, 205, 0.3);
-  }
-
-  /* Controls area */
-  .header-inner .controls_area {
-    display: flex;
-    flex-direction: row; 
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    padding: 0.5rem;
-  }
-
-  .header-inner .controls_area > .notification-btn,
-  .header-inner .controls_area > .lights_toggle,
-  .header-inner .controls_area > .logout_button {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 52px;
-    height: 52px;
-    border-radius: 0.75rem;
-
-    background: var(--color-bg-alt);
-    border: 2px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
-
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .header-inner .controls_area > .notification-btn:hover,
-  .header-inner .controls_area > .lights_toggle:hover,
-  .header-inner .controls_area > .logout_button:hover {
-    background: var(--color-accent);
-    color: var(--color-bg);
-    border-color: var(--color-accent);
-    box-shadow: 0 0 8px var(--color-accent-light);
-    transform: translateY(-2px);
-  }
-
-  .header-inner .controls_area > .notification-btn > .icon,
-  .header-inner .controls_area > .lights_toggle > .icon,
-  .header-inner .controls_area > .logout_button > .icon {
-    font-size: 1.5rem;
-    line-height: 1;
-  }
-
-  .notification-btn .badge {
-    @apply absolute -top-1 -right-1 rounded-full text-xs px-1.5 py-0.5;
-    background: var(--color-accent);
-    color: var(--color-bg);
-    font-weight: 600;
-  }
-
-  /* Notifications dropdown */
-  .notification-box {
-    @apply rounded-md overflow-hidden mt-2 shadow-lg;
-    background: var(--color-panel);
-    border: 1px solid var(--color-border);
-    width: 16rem;
-    color: var(--color-text);
-  }
-  .notification-title {
-    @apply font-semibold p-2 border-b;
-    background: var(--color-panel);
-    color: var(--color-text);
-    border-color: var(--color-border);
-  }
-  .notification-content {
-    @apply divide-y;
-    divide-color: var(--color-border);
-  }
-
-  .notification-item {
-    @apply block w-full px-3 py-2 text-sm text-left transition-colors cursor-pointer;
-    background: var(--color-panel);
-    color: var(--color-text);
-
-      /* ✅ Cap long text */
-    overflow: hidden;          /* hide overflow */
-    white-space: nowrap;       /* prevent wrapping */
-    text-overflow: ellipsis;   /* show "…" at the end */
-  }
-  .notification-item:hover {
-    color: var(--color-accent-dark);
-    background: var(--color-bg-alt);
-  }
-  .notification-item.unread {
-    @apply font-semibold;
-    background: var(--color-bg-alt);
-  }
-  .notification-item .timestamp {
-    @apply text-xs mt-1 block;
-    color: var(--color-text-muted);
-  }
-
-  /* Dropdown Menus */
-  select,
-  .dropdown-menu {
-    @apply rounded px-2 py-1 text-sm;
-    background: var(--color-bg-alt);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-    min-width: 140px;
-  }
-  select:focus,
-  .dropdown-menu:focus {
-    @apply outline-none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px var(--color-accent-light);
-  }
-  .dropdown-menu option:hover {
-    background: var(--color-accent-dark);
-    color: #fff;
-  }
-}
-
+  
 /* ================================
    Mobile Overrides
    ================================ */
-@media (max-width: 640px) {
-  .dashboard {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 0.5rem;
+   @media (max-width: 640px) {
+    .dashboard {
+      flex-direction: column;
+      gap: 1rem;
+      padding: 0.5rem;
+    }
+  
+    /* ✅ Panels stack full width */
+    .floor-panel,
+    .message-panel {
+      flex: none;
+      width: 100%;
+      max-width: 100%;
+    }
+  
+    /* Notification box: anchored, not fixed */
+    .notification-box {
+      position: absolute;        
+      right: 50%;                
+      transform: translateX(50%);
+      width: 90%;
+      max-width: 20rem;
+      margin-top: 0.5rem;        
+      box-sizing: border-box;
+      z-index: 1000;             
+    }
+  
+    /* Header compressed row */
+    .header-inner {
+      display: flex;
+      justify-content: space-between; /* name left, controls right */
+      align-items: center;
+      gap: 0.5rem;
+    }
+  
+    /* 🚫 Hide title on mobile */
+    .header-inner .title {
+      display: none;
+    }
+  
+    .header-inner .name-display {
+      font-size: 0.5rem;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: wrap;
+    }
+  
+    .header-inner .controls_area {
+      display: flex;
+      margin-left: auto;      /* 🔑 pushes controls flush to the right */
+    }
+  
+    header {
+      padding: 0.5rem 0.75rem;
+    }
+  
+    select,
+    .dropdown-menu {
+      width: 100%;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+    }
   }
-
-  /* ✅ Panels stack full width */
-  .floor-panel,
-  .message-panel {
-    flex: none;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-
-  .header-inner {
-    flex-direction: column;
-    text-align: left;
-  }
-
-  .header-inner .name-display {
-    font-size: 1.25rem;
-  }
-
-  .notification-box {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  select,
-  .dropdown-menu {
-    width: 100%;
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-}
+  
+  

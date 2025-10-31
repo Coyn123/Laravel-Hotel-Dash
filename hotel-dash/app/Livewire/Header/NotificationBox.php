@@ -49,5 +49,22 @@ class NotificationBox extends Component
             return;
         }
         $this->dispatch('roomSelected', $prop, $floor, $room);
+
+        $this->js("
+        const el = document.querySelector('#notif-target');
+        if (el) {
+            const isMobile = window.innerWidth <= 640; // breakpoint for tablets/phones
+            const ratio = isMobile ? 0.95 : -1; // deeper scroll on mobile
+            const target = el.offsetTop + el.offsetHeight * ratio;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            window.scrollTo({
+                top: Math.min(target, maxScroll),
+                behavior: 'smooth'
+            });
+        }
+    ");
+    
+    
+
     }
 }

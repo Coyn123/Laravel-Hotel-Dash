@@ -14,7 +14,7 @@
 
 
             <div class="name-display text-center font-medium">
-                {{ auth()->user()->name }}'s Dashboard
+                {{ auth()->user()->name }}
             </div>
 
             <div class="controls_area">
@@ -54,7 +54,7 @@
 
         <div class="flex flex-col gap-4">
             <div>
-                @livewire('property-board-view')
+            <livewire:property-board-view id="notif-target" />
             </div>
 
         </div>

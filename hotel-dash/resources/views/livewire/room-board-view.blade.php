@@ -3,7 +3,7 @@
         <h2 class="panel-title">{{ $propertyName }}'s Room {{ $room_num }} Board </h2>
     </div>
 
-    <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>
+    <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.3s="loadMessages">
         @forelse($messages as $message)
             <div @class([
                 'message', // always apply base structure
