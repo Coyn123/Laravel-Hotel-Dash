@@ -11,7 +11,7 @@
 
                 // Get the property entry for the current board
                 $currentProperty = collect($config['properties'])
-                    ->firstWhere('property_id', $propertyId ?? null);
+                    ->firstWhere('property_id');
 
                 // Pull its auxiliary properties
                 $auxList = collect($currentProperty['aux_properties'] ?? []);
