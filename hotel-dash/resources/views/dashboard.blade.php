@@ -52,14 +52,13 @@
             </div>
         </div>
 
-        <div class="flex flex-col gap-4">
-            <div>
+    <div class="flex flex-col gap-4">
+        <div>
             <livewire:property-board-view id="notif-target" />
-            </div>
-
         </div>
     </div>
-    
+
+
     @else
         @livewire('auth.login')
     @endif

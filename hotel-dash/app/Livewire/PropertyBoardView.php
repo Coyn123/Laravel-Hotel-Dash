@@ -17,6 +17,8 @@ class PropertyBoardView extends Component
     public $propertyName;
     public $newMessage = '';
     public $config;
+    public $currentView = 'property-board-view'; // default
+    public $targetType = 'pool';
 
     public function mount() 
     {
@@ -33,6 +35,7 @@ class PropertyBoardView extends Component
     #[On('togglePropertyBoardView')]
     public function togglePropertyBoard($propertyId): void
     {
+        $this->currentView = 'property-board-view';
         $config = DashboardConfig::get();
         $property = collect($config['properties'])->firstWhere('property_id', $propertyId);
 
@@ -68,12 +71,20 @@ class PropertyBoardView extends Component
             $this->togglePropertyBoard($nextPropertyId);
         }
     }
-    public function switchBoard($target)
+
+    #[On('switchAuxView')]
+    public function switchAuxView($auxName)
     {
-        // Handle switching logic here, e.g.:
-        //$this->currentBoard = $target;
-        // Optionally refresh messages or context for that aux property
+        $this->targetType = strtolower($auxName);
+
+        if (in_array($this->targetType, ['pool', 'spa'])) {
+            $this->currentView = 'calender-view-' . $auxName;
+        } else {
+            $this->currentView = 'property-board-view';
+        }
     }
+
+
 
 
     public function loadMessages(): void

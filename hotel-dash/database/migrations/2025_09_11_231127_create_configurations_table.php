@@ -89,7 +89,14 @@ return new class extends Migration
             $table->unique(['message_id', 'user_id']);
             $table->index('user_id');
         });
-        
+
+
+        Schema::create('aux_property_logs', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('aux_id')->constrained('aux_property_config');
+            $table->json('aux_log');
+            $table->timestamps();
+        });  
     }
 
     public function down(): void
@@ -101,5 +108,6 @@ return new class extends Migration
         Schema::dropIfExists('floors_config');
         Schema::dropIfExists('properties_config');
         Schema::dropIfExists('message_notifications');
+        Schema::dropIfExists('aux_property_logs');
     }
 };

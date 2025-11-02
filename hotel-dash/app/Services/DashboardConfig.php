@@ -130,7 +130,7 @@ protected static function getFloorsWithRooms()
 
     // Aux Properties (always have property_id foreign key)
     $auxProperties = DB::table('aux_property_config')
-        ->select('id', 'property_id', 'aux_name')
+        ->select('id', 'property_id', 'aux_name', 'aux_type')
         ->get()
         ->map(fn($row) => (array) $row)
         ->all();
