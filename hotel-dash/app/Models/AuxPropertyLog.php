@@ -14,10 +14,12 @@ class AuxPropertyLog extends Model
     protected $fillable = [
         'aux_id',
         'aux_log',
+        'log_date',
     ];
 
     protected $casts = [
         'aux_log' => 'array', // Automatically cast JSON to PHP array
+        'log_date' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -90,11 +90,11 @@ return new class extends Migration
             $table->index('user_id');
         });
 
-
         Schema::create('aux_property_logs', function (Blueprint $table) {
             $table->id();
             $table->foreignId('aux_id')->constrained('aux_property_config');
             $table->json('aux_log');
+            $table->date('log_date');
             $table->timestamps();
         });  
     }

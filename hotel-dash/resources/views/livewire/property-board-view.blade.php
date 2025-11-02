@@ -2,52 +2,33 @@
     <div class="panel-header flex justify-between items-center flex-wrap gap-2">
         <div class="flex items-center gap-3">
             <h2 class="panel-title text-lg font-semibold">
-                <button
-                wire:click="togglePropertyBoard('{{ $property }}')">
-                {{ $propertyName }}'s Property Board
+                <button wire:click="togglePropertyBoard('{{ $property['property_id'] }}')">
+                    {{ $propertyName }}'s Property Board
                 </button>
             </h2>
 
-            {{-- 🔘 Dynamic auxiliary property tabs --}}
-            @php
-                $config = \App\Services\DashboardConfig::get();
-
-                // Get the property entry for the current board
-                $currentProperty = collect($config['properties'])
-                    ->firstWhere('property_id');
-
-                // Pull its auxiliary properties
-                $auxList = collect($currentProperty['aux_properties'] ?? []);
-            @endphp
-
             <div class="flex flex-wrap gap-2">
-                @forelse($auxList as $aux)
-                <button
-                    wire:click="switchAuxView('{{ strtolower($aux['aux_name']) }}')"
-                    class="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 transition">
-                    {{ $aux['aux_name'] ?? ($aux['aux_type'] ?? 'Auxiliary') }}
-                </button>
+                @forelse($property['auxList'] as $aux)
+                    <button
+                        wire:click="switchAuxView('{{ strtolower($aux['aux_type']) }}')"
+                        class="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 transition">
+                        {{ $aux['aux_name'] ?? ($aux['aux_type'] ?? 'Auxiliary') }}
+                    </button>
                 @empty
-                    {{-- Optional placeholder if no aux entries exist --}}
-                    <span class="text-gray-400 text-sm italic">
+                    <span class="text-sm italic">
                         No auxiliary properties
                     </span>
                 @endforelse
             </div>
         </div>
 
-        {{-- 🔄 Property switch button (existing logic) --}}
-        @if(count($config['properties']) > 1)
-            <button
-                wire:click="toggleCurrentPropertyBoard('{{ $property }}')"
-                class="btn btn-secondary text-xl">
-                🔄
-            </button>
-        @endif
+        <button
+            wire:click="toggleCurrentPropertyBoard('{{ $property['property_id'] }}')"
+            class="btn btn-secondary text-xl">
+            🔄
+        </button>
     </div>
 
-
-    {{-- 🔄 Conditional content based on current view --}}
     <div class="panel-body space-y-4 mt-4 max-h-96 overflow-y-auto" wire:poll.5s>
         @if($currentView === 'property-board-view')
             @forelse($messages as $message)
@@ -62,23 +43,19 @@
                 <p class="text-gray-500">No messages yet.</p>
             @endforelse
 
-                {{-- Input Area --}}
-                <form wire:submit.prevent="postMessage" class="panel-footer mt-4 space-y-2">
-                    {{-- Message Input --}}
-                    <textarea
-                        wire:ignore
-                        wire:model.defer="newMessage"
-                        placeholder="Type a message..."
-                        class="inputText border p-2"> 
-                    </textarea>
+            <form wire:submit.prevent="postMessage" class="panel-footer mt-4 space-y-2">
+                <textarea
+                    wire:ignore
+                    wire:model.defer="newMessage"
+                    placeholder="Type a message..."
+                    class="inputText border p-2">
+                </textarea>
 
-                    <button type="submit" class="btn btn-primary mt-2">
-                        Send
-                    </button>
-                </form>
-
-        {{-- Calender View Area --}}
-        @elseif($currentView === 'calender-view-spa' || $currentView === 'calender-view-pool')
+                <button type="submit" class="btn btn-primary mt-2">
+                    Send
+                </button>
+            </form>
+        @elseif(in_array($currentView, ['calender-view-spa', 'calender-view-pool']))
             <livewire:calender-view 
                 :target-type="$targetType" 
                 :key="'calender-view-' . $targetType" />

@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Services\DashboardConfig;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\Models\AuxPropertyLog;
-use Livewire\Attributes\On;
 
 class CalenderView extends Component
 {
@@ -14,7 +14,16 @@ class CalenderView extends Component
     public $targetType;
     public $days = [];
     public $selectedDate = null;
-    public $logs = [];
+    public $logs;
+    public $config;
+    public $auxID;
+    public $poolLog = [
+            'ph' => null,
+            'free_chlorine' => null,
+            'combined_chlorine' => null,
+            'calcium' => null,
+            'cya' => null,
+        ];
 
     public function mount($targetType)
     {
@@ -22,7 +31,57 @@ class CalenderView extends Component
         $this->currentMonth = now()->month;
         $this->currentYear = now()->year;
         $this->generateDays();
+        $this->logs = collect();
+
+        $this->config = DashboardConfig::get();
+
+        foreach ($this->config['properties'] as $property) {
+            foreach ($property['aux_properties'] as $aux) {
+                if (strtolower($aux['aux_type']) === $this->targetType) {
+                    $this->auxID = $aux['id'];
+                    break 2; // found the first matching aux property
+                }
+            }
+        }
+
     }
+
+public function savePoolLog()
+{
+    $auxID = $this->auxID;
+    $this->validate([
+        'poolLog.ph' => 'nullable|numeric|min:0',
+        'poolLog.free_chlorine' => 'nullable|numeric|min:0',
+        'poolLog.combined_chlorine' => 'nullable|numeric|min:0',
+        'poolLog.calcium' => 'nullable|numeric|min:0',
+        'poolLog.cya' => 'nullable|numeric|min:0',
+    ]);
+
+    if (!$auxID) {
+        $this->addError('poolLog', 'Aux property ID not found for this target type.');
+        return;
+    }
+
+    AuxPropertyLog::create([
+        'aux_id' => $auxID,
+        'aux_log' => $this->poolLog,
+        'log_date' => Carbon::parse($this->selectedDate)->toDateString(),
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    $this->poolLog = [
+        'ph' => null,
+        'free_chlorine' => null,
+        'combined_chlorine' => null,
+        'calcium' => null,
+        'cya' => null,
+    ];
+
+    $this->selectDay($this->selectedDate);
+    $this->generateDays();
+}
+
 
     public function generateDays()
     {
@@ -33,7 +92,7 @@ class CalenderView extends Component
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($this->currentYear, $this->currentMonth, $day)->toDateString();
-            $hasLogs = AuxPropertyLog::whereDate('created_at', $date)->exists();
+            $hasLogs = AuxPropertyLog::whereDate('log_date', $date)->exists();
 
             $this->days[] = [
                 'day' => $day,
@@ -45,9 +104,21 @@ class CalenderView extends Component
 
     public function selectDay($date)
     {
+        $auxID = $this->auxID;
+
         $this->selectedDate = $date;
-        $this->logs = AuxPropertyLog::whereDate('created_at', $date)->get();
+        $this->logs = AuxPropertyLog::where('aux_id', $auxID)
+                        ->whereDate('log_date', $date)
+                        ->get();
+
+        // Ensure $logs is always a Collection
+        if (!$this->logs) {
+            $this->logs = collect();
+        }
     }
+
+
+
 
     public function previousMonth()
     {

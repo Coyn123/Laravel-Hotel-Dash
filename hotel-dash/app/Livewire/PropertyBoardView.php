@@ -19,16 +19,33 @@ class PropertyBoardView extends Component
     public $config;
     public $currentView = 'property-board-view'; // default
     public $targetType = 'pool';
+    public $poolLog = [
+    'ph' => null,
+    'free_chlorine' => null,
+    'combined_chlorine' => null,
+    'calcium' => null,
+    'cya' => null,
+    ];
 
-    public function mount() 
+
+    public function mount()
     {
         $config = DashboardConfig::get();
         $this->user = auth()->user();
 
-        $firstProperty = collect($config['properties'])->sortBy('property_id')->first();
-        $this->property = $firstProperty['property_id'] ?? null;
-        $this->propertyName = $firstProperty['property_name'] ?? 'Property Board';
+        $firstProperty = collect($config['properties'] ?? [])
+                            ->sortBy('property_id')
+                            ->first();
 
+        $this->property = [
+            'property_id' => $firstProperty['property_id'] ?? null,
+            'property_name' => $firstProperty['property_name'] ?? 'Property Board',
+            'auxList' => collect($firstProperty['aux_properties'] ?? [])
+                            ->where('property_id', $firstProperty['property_id'] ?? null)
+                            ->values()
+        ];
+
+        $this->propertyName = $this->property['property_name'];
         $this->loadMessages();
     }
 
@@ -38,9 +55,16 @@ class PropertyBoardView extends Component
         $this->currentView = 'property-board-view';
         $config = DashboardConfig::get();
         $property = collect($config['properties'])->firstWhere('property_id', $propertyId);
-
+        $this->property = [
+            'property_id' => $property['property_id'] ?? null,
+            'property_name' => $property['property_name'] ?? 'Property Board',
+            'auxList' => collect($property['aux_properties'] ?? [])
+                            ->where('property_id', $property['property_id'] ?? null)
+                            ->values()
+        ];
+        
         if ($property) {
-            $this->property = $propertyId;
+            $this->property['property_id'] = $propertyId;
             $this->propertyName = $property['property_name'] ?? 'Property Board';
             $this->loadMessages();
         }

@@ -1,4 +1,5 @@
 <div class="p-6">
+
     <h2 class="text-2xl font-bold mb-4 capitalize">{{ $targetType }} Log Calendar</h2>
 
     <div class="flex justify-between mb-3">
@@ -28,32 +29,81 @@
         {{-- Actual days --}}
         @foreach ($days as $day)
             <div 
-                class="border rounded p-2 hover:bg-blue-100 cursor-pointer {{ $day['hasLogs'] ? 'bg-blue-50 border-blue-300' : '' }}"
+                class="border rounded p-2 hover:bg-blue-100 cursor-pointer"
                 wire:click="selectDay('{{ $day['date'] }}')"
             >
-                <div class="font-semibold">{{ $day['day'] }}</div>
+                <div class="font-semibold flex items-center justify-center space-x-1">
+                    <span>{{ $day['day'] }}</span>
                 @if ($day['hasLogs'])
-                    <div class="text-sm text-blue-600">●</div>
+                    <div class="text-sm font-bold">🟢</div>
+                @else
+                    <span class="text-sm font-bold" title="Alert">🔴</span>
                 @endif
+                </div>
             </div>
         @endforeach
     </div>
 
-    @if($selectedDate)
-        <div class="mt-6 border-t pt-4">
-            <h3 class="text-xl font-semibold">Logs for {{ $selectedDate }}</h3>
+    {{-- Logs and input area --}}
+    <div class="mt-6 p-6 border rounded bg-gray-50">
+        @if($selectedDate)
+            <h3 class="text-xl font-semibold mb-3">Logs for {{ $selectedDate }}</h3>
 
-            @if($logs->count())
-                <ul class="mt-2">
+            {{-- Existing Logs Display --}}
+            @if($logs && $logs->count())
+                <div class="space-y-2">
                     @foreach($logs as $log)
-                        <li class="border p-2 rounded mb-1 bg-gray-50">
-                            <pre class="text-sm">{{ json_encode($log->aux_log, JSON_PRETTY_PRINT) }}</pre>
-                        </li>
+                        <div class="message border p-3 rounded bg-white flex justify-between items-start">
+                            <div>
+                                <pre class="text-sm">{{ json_encode($log->aux_log, JSON_PRETTY_PRINT) }}</pre>
+                                <div class="text-xs text-gray-400 mt-1">
+                                    Logged at: {{ \Carbon\Carbon::parse($log->created_at)->format('m-d-Y H:i') }}
+                                </div>
+                            </div>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             @else
                 <p class="text-gray-500 mt-2">No logs found for this date.</p>
             @endif
-        </div>
-    @endif
+
+            {{-- Pool Log Input --}}
+            <div class="mt-4">
+                <h4 class="font-semibold mb-2">Add Pool Log</h4>
+                <div class="message border rounded p-4 bg-blue-50">
+                    <form wire:submit.prevent="savePoolLog" class="space-y-2">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-sm font-medium">pH</label>
+                                <input type="number" step="0.01" min="0" wire:model.defer="poolLog.ph" class="w-full border rounded px-2 py-1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Free Chlorine</label>
+                                <input type="number" step="0.01" min="0" wire:model.defer="poolLog.free_chlorine" class="w-full border rounded px-2 py-1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Combined Chlorine</label>
+                                <input type="number" step="0.01" min="0" wire:model.defer="poolLog.combined_chlorine" class="w-full border rounded px-2 py-1">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium">Calcium</label>
+                                <input type="number" step="0.01" min="0" wire:model.defer="poolLog.calcium" class="w-full border rounded px-2 py-1">
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium">CYA (Stabilizer)</label>
+                                <input type="number" step="0.01" min="0" wire:model.defer="poolLog.cya" class="w-full border rounded px-2 py-1">
+                            </div>
+                        </div>
+                        <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                            Save Log
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        @else
+            <p class="text-gray-500 mb-2">Select a date to view or add logs.</p>
+        @endif
+    </div>
+
 </div>
