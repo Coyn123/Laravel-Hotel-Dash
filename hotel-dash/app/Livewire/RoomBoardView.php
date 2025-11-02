@@ -100,7 +100,7 @@ class RoomBoardView extends Component
             MessageNotification::upsert(
                 $rows->toArray(),
                 ['message_id', 'user_id'],
-                ['read_at'],
+                ['read_at'], ['flag_id'], 
             );
         }
     }
@@ -129,6 +129,7 @@ class RoomBoardView extends Component
             'message_id' => $newMessage->id,
             'user_id'    => $id,
             'read_at'    => $id === auth()->id() ? now() : null,
+            'flag_id' => $this->selectedFlag ?: 1,
         ]);
 
         MessageNotification::insert($rows->toArray());
@@ -150,7 +151,6 @@ class RoomBoardView extends Component
             'floors'     => $this->FullConfig,
             'room_num'   => $this->room_num,
             'flags'      => $this->flags,
-            'roomStatus' => $this->roomStatus,
         ])->layout('layouts.app');
     }
 }

@@ -93,57 +93,63 @@ class DashboardConfig
     return Session::get('dashboard_config');
 }
 
-    protected static function getFloorsWithRooms()
-    {
-        // Properties
-        $properties = DB::table('properties_config')
-        ->select('id','property_name')
+protected static function getFloorsWithRooms()
+{
+    // Main properties
+    $properties = DB::table('properties_config')
+        ->select('id', 'property_name')
         ->get()
         ->map(fn($row) => (array) $row)
         ->all();
 
-        // Floors
-        $floors = DB::table('floors_config')
-            ->select(
-                'id',
-                'property_id',
-                'floor_number as floor_num',
-                DB::raw("CONCAT('Floor ', floor_number) as name"),
-                'range_start as start',
-                'range_end as end'
-            )
-            ->get()
-            ->map(fn($row) => (array) $row)
-            ->all();
+    // Floors
+    $floors = DB::table('floors_config')
+        ->select(
+            'id',
+            'property_id',
+            'floor_number as floor_num',
+            DB::raw("CONCAT('Floor ', floor_number) as name"),
+            'range_start as start',
+            'range_end as end'
+        )
+        ->get()
+        ->map(fn($row) => (array) $row)
+        ->all();
 
-        // Rooms
-        $rooms = DB::table('rooms_config')
-            ->select(
-                'id',
-                'property_id',
-                'floor_id as floor',
-                'room_number as room',
-                'room_type_id as room_type',
-                'room_status_id as room_status'
-            )
-            ->get()
-            ->map(fn($row) => (array) $row)
-            ->all();
-        //Lookup map
-        $propertyLookup = collect($properties)->keyBy('id');
+    // Rooms
+    $rooms = DB::table('rooms_config')
+        ->select(
+            'id',
+            'property_id',
+            'floor_id as floor',
+            'room_number as room'
+        )
+        ->get()
+        ->map(fn($row) => (array) $row)
+        ->all();
 
-        //Group rooms by floor
-        $roomsByFloor = collect($rooms)->groupBy('floor');
+    // Aux Properties (always have property_id foreign key)
+    $auxProperties = DB::table('aux_properties_config')
+        ->select('id', 'property_id', 'property_name')
+        ->get()
+        ->map(fn($row) => (array) $row)
+        ->all();
 
-        foreach ($floors as $i => $floor) {
-            $floors[$i]['property_name'] = $propertyLookup[$floor['property_id']]['property_name'] ?? null;
-            $floorRooms = $roomsByFloor->get($floor['id'], collect());
-            $floors[$i]['rooms'] = $floorRooms->all();
-            $floors[$i]['total_rooms'] = $floorRooms->count();
-        }
+    // Lookup tables
+    $propertyLookup = collect($properties)->keyBy('id');
+    $roomsByFloor = collect($rooms)->groupBy('floor');
+    $auxByParent = collect($auxProperties)->groupBy('property_id');
 
-        //Group by property
-        $grouped = collect($properties)->map(function ($property) use ($floors, $roomsByFloor) {
+    // Populate floors with room data
+    foreach ($floors as $i => $floor) {
+        $floors[$i]['property_name'] = $propertyLookup[$floor['property_id']]['property_name'] ?? null;
+        $floorRooms = $roomsByFloor->get($floor['id'], collect());
+        $floors[$i]['rooms'] = $floorRooms->all();
+        $floors[$i]['total_rooms'] = $floorRooms->count();
+    }
+
+    // Group properties, attach floors and aux properties
+    $grouped = collect($properties)->map(function ($property) use ($floors, $roomsByFloor, $auxByParent) {
         $propertyFloors = collect($floors)
             ->where('property_id', $property['id'])
             ->map(function ($floor) use ($roomsByFloor, $property) {
@@ -155,13 +161,17 @@ class DashboardConfig
             })
             ->values()
             ->all();
-            
-            return [
-                'property_id'   => $property['id'],
-                'property_name' => $property['property_name'],
-                'floors'        => $propertyFloors, // always present, even if empty
-            ];
-        });
-        return $grouped->values()->all();
-    }
+
+        return [
+            'property_id'    => $property['id'],
+            'property_name'  => $property['property_name'],
+            'floors'         => $propertyFloors,
+            'aux_properties' => $auxByParent->get($property['id'], collect())->values()->all(), // attach aux props by foreign key
+        ];
+    });
+
+    return $grouped->values()->all();
 }
+
+}
+

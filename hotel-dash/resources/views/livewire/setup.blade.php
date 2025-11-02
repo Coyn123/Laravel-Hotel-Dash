@@ -16,21 +16,21 @@
             @if($stepIndex === 0)
                 @foreach($properties as $propIndex => $prop)
                     <div class="mb-4 p-4 border rounded bg-gray-50">
-                        <input 
-                            wire:model="properties.{{ $propIndex }}.name" 
-                            placeholder="Property Name" 
-                            class="block w-full mb-2 border rounded p-2"
-                        >
-                        <input 
-                            wire:model="properties.{{ $propIndex }}.address" 
-                            placeholder="Address" 
-                            class="block w-full mb-2 border rounded p-2"
-                        >
+                        <input
+                            wire:model="properties.{{ $propIndex }}.name"
+                            placeholder="Property Name"
+                            class="block w-full mb-2 border rounded p-2">
+                        <input
+                            wire:model="properties.{{ $propIndex }}.address"
+                            placeholder="Address"
+                            class="block w-full mb-2 border rounded p-2">
                     </div>
                 @endforeach
+
                 <button type="button" wire:click="addProperty" class="btn-secondary">
                     Add Property
                 </button>
+
                 @if(count($properties) > 1)
                     <button type="button" wire:click="deleteProperty" class="btn-danger ml-2">
                         Delete Property
@@ -45,12 +45,11 @@
                         <label class="block font-semibold mb-2">
                             Number of floors for: {{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}
                         </label>
-                        <input 
-                            type="number" 
+                        <input
+                            type="number"
                             wire:model="floors.{{ $propIndex }}"
-                            placeholder="Total Floors" 
-                            class="block w-full border rounded p-2"
-                        >
+                            placeholder="Total Floors"
+                            class="block w-full border rounded p-2">
                     </div>
                 @endforeach
             @endif
@@ -69,18 +68,16 @@
                                             Floor Range for Floor: {{ (int) str_replace('floor_specs_floor', '', $key) }}
                                         </strong>
                                         <div class="flex gap-2 mt-2">
-                                            <input 
-                                                type="number" 
-                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom" 
+                                            <input
+                                                type="number"
+                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.bottom"
                                                 placeholder="Start Room"
-                                                class="flex-1 border rounded p-2"
-                                            >
-                                            <input 
-                                                type="number" 
-                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.top" 
+                                                class="flex-1 border rounded p-2">
+                                            <input
+                                                type="number"
+                                                wire:model="properties.{{ $propIndex }}.{{ $key }}.top"
                                                 placeholder="End Room"
-                                                class="flex-1 border rounded p-2"
-                                            >
+                                                class="flex-1 border rounded p-2">
                                         </div>
                                     </div>
                                 @endif
@@ -89,10 +86,9 @@
 
                         <div>
                             <strong>Incrementation</strong>
-                            <select 
+                            <select
                                 wire:model="properties.{{ $propIndex }}.increment"
-                                class="block w-full border rounded p-2 mt-1"
-                            >
+                                class="block w-full border rounded p-2 mt-1">
                                 <option value="1">1</option>
                                 <option value="10">10</option>
                                 <option value="50">50</option>
@@ -101,6 +97,51 @@
                     </div>
                 @endforeach
             @endif
+
+            {{-- Step 3: Auxiliary Details --}}
+            @if($stepIndex === 3)
+                @foreach($properties as $propIndex => $prop)
+                    <div class="mb-6 p-4 border rounded bg-gray-100">
+                        <h3 class="font-semibold text-black mb-3">
+                            Additional Details for {{ $prop['name'] ?: 'Property ' . ($propIndex + 1) }}
+                        </h3>
+
+                        {{-- Auxiliary Section --}}
+                        <div class="mb-4 p-4 border rounded bg-gray-200 shadow-sm">
+                            <label class="block mb-2 font-semibold text-gray-800">
+                                Any Auxiliary Properties?
+                            </label>
+
+                            @foreach ($prop['aux'] ?? [] as $auxIndex => $aux)
+                                <div class="p-3 mb-3 border border-gray-300 rounded bg-gray-50">
+                                    <input
+                                        type="text"
+                                        wire:model="properties.{{ $propIndex }}.aux.{{ $auxIndex }}.name"
+                                        placeholder="Auxiliary Name"
+                                        class="block w-full mb-2 border rounded p-2 bg-white">
+
+                                    <select
+                                        wire:model="properties.{{ $propIndex }}.aux.{{ $auxIndex }}.aux_type"
+                                        class="block w-full border rounded p-2">
+                                        <option value="0">Select Type</option>
+                                        <option value="Pool">Pool</option>
+                                        <option value="Spa">Spa</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            @endforeach
+
+                            <button
+                                type="button"
+                                wire:click="addAuxiliary({{ $propIndex }})"
+                                class="px-4 py-2 rounded bg-gray-300 text-gray-800 hover:bg-gray-400 transition">
+                                + Add Auxiliary
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
         </div>
 
         <button type="submit" class="btn-primary mt-4">

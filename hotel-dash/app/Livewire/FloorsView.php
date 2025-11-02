@@ -14,14 +14,28 @@ class FloorsView extends Component
     
     public function selectRoom($propertyId, $floorId, $roomId)
     {
-    // Emit event to MessageBoard
-    $this->dispatch('roomSelected', $propertyId, $floorId, $roomId);
+        // Emit event to MessageBoard
+        $this->dispatch('roomSelected', $propertyId, $floorId, $roomId);
+        $this->js("
+        const el = document.querySelector('#notif-target');
+            if (el) {
+            const isMobile = window.innerWidth <= 640; // breakpoint for tablets/phones
+            const ratio = isMobile ? 0.95 : -1; // deeper scroll on mobile
+            const target = el.offsetTop + el.offsetHeight * ratio;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            window.scrollTo({
+                top: Math.min(target, maxScroll),
+                behavior: 'smooth'
+                });
+            }
+        ");
     }
 
     public function toggleFloor($key)
     {
         if (in_array($key, $this->openFloors)) {
             $this->openFloors = array_diff($this->openFloors, [$key]);
+
         } else {
             $this->openFloors[] = $key;
         }

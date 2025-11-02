@@ -68,6 +68,13 @@ class PropertyBoardView extends Component
             $this->togglePropertyBoard($nextPropertyId);
         }
     }
+    public function switchBoard($target)
+    {
+        // Handle switching logic here, e.g.:
+        //$this->currentBoard = $target;
+        // Optionally refresh messages or context for that aux property
+    }
+
 
     public function loadMessages(): void
     {

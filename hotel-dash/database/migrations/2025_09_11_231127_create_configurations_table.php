@@ -27,42 +27,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // --- Room Status Lookup ---
-        Schema::create('room_statuses', function (Blueprint $table) {
-            $table->id();
-            $table->string('status_name', 50);
-        });
-
-        DB::table('room_statuses')->insert([
-            ['id' => 1, 'status_name' => 'Available'],
-            ['id' => 2, 'status_name' => 'Occupied'],
-            ['id' => 3, 'status_name' => 'Maintenance'],
-            ['id' => 4, 'status_name' => 'Out Of Order'],
-        ]);
-
-        // --- Room Types Lookup ---
-        Schema::create('room_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('type_name', 50);
-        });
-
-        DB::table('room_types')->insert([
-            ['id' => 1, 'type_name' => 'Standard'],
-            ['id' => 2, 'type_name' => 'Suite'],
-        ]);
-
-        // --- Room Flags Lookup ---
-        Schema::create('room_flags', function (Blueprint $table) {
-            $table->id();
-            $table->string('flag_name', 50);
-        });
-
-        DB::table('room_flags')->insert([
-            ['id' => 1, 'flag_name' => 'Out Of Order'],
-            ['id' => 2, 'flag_name' => 'Vacant / Available'],
-            ['id' => 3, 'flag_name' => 'Vacant / Dirty'],
-            ['id' => 4, 'flag_name' => 'Occupied'],
-        ]);
 
         // --- Rooms ---
         Schema::create('rooms_config', function (Blueprint $table) {
@@ -70,8 +34,6 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained('properties_config')->cascadeOnDelete();
             $table->foreignId('floor_id')->constrained('floors_config')->cascadeOnDelete();
             $table->unsignedInteger('room_number');
-            $table->foreignId('room_type_id')->constrained('room_types');
-            $table->foreignId('room_status_id')->constrained('room_flags');
             $table->timestamps();
         });
 
@@ -81,7 +43,7 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained('properties_config')->cascadeOnDelete();
             $table->string('aux_name', 100);
             $table->string('aux_type', 50);
-            $table->string('aux_status', 50);
+            $table->string('aux_status', 50)->nullable();
             $table->timestamps();
         });
 
@@ -105,6 +67,7 @@ return new class extends Migration
             $table->unsignedBigInteger('room_id')->nullable();
             $table->enum('board_type', ['property_board', 'room_board']);
             $table->foreignId('flag_id')->nullable()->constrained('message_flags')->nullOnDelete();
+            $table->boolean('completed')->nullable();
             $table->text('message_text');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
@@ -119,8 +82,9 @@ return new class extends Migration
         Schema::create('message_notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('message_id')->constrained('messages_on_board')->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->timestamp('read_at')->nullable();
+            $table->foreignId('flag_id')->nullable()->constrained('message_flags')->nullOnDelete();
         
             $table->unique(['message_id', 'user_id']);
             $table->index('user_id');
@@ -130,14 +94,10 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('property_board');
-        Schema::dropIfExists('room_board');
+        Schema::dropIfExists('messages_on_board');
         Schema::dropIfExists('message_flags');
         Schema::dropIfExists('aux_property_config');
         Schema::dropIfExists('rooms_config');
-        Schema::dropIfExists('room_types');
-        Schema::dropIfExists('room_flags');
-        Schema::dropIfExists('room_statuses');
         Schema::dropIfExists('floors_config');
         Schema::dropIfExists('properties_config');
         Schema::dropIfExists('message_notifications');

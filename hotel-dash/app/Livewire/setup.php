@@ -10,9 +10,9 @@ class Setup extends Component
     public $properties = [];
     public $floors = [];
     public $floorDetails = [];
-    public $stepIndex = 0; // 0 = property info, 1 = floors, 2 = floor details
+    public $stepIndex = 0; // 0 = property info, 1 = floors, 2 = floor details, 3 = aux property
     public $currentPropertyIndex = 0;
-    public $totalSteps = 3;
+    public $totalSteps = 4;
 
     public function mount()
     {
@@ -35,7 +35,7 @@ class Setup extends Component
         $index = count($this->properties);
         $this->properties[$index] = ['name' => '', 'address' => ''];
         $this->floors[$index] = null;
-        $this->floorDetails[$index] = [];
+        $this->floorDetails[$index] = [];       
     }
 
     public function generateFloorDetails()
@@ -70,7 +70,11 @@ class Setup extends Component
             session()->flash('message', 'You must have at least one property.');
         }
     }
-    
+    public function addAuxiliary($propertyIndex)
+    {
+        $this->properties[$propertyIndex]['aux'][] = ['name' => '', 'aux_type' => ''];
+    }
+
 
     public function nextStep ()
     {
@@ -98,6 +102,16 @@ class Setup extends Component
                     ]);
                 }
                 break;
+            case 3:
+                foreach ($this->properties as $propertyIndex => $property) {
+                    foreach ($property['aux'] ?? [] as $auxIndex => $aux) {
+                        $this->validate([
+                            "properties.$propertyIndex.aux.$auxIndex.name" => 'required|string|max:255',
+                            "properties.$propertyIndex.aux.$auxIndex.aux_type" => 'required|string|max:255',
+                        ]);
+                    }
+                }
+                break;            
         }
 
         if ($this->stepIndex < $this->totalSteps - 1) {
@@ -133,7 +147,7 @@ class Setup extends Component
         unset($propArrays);
 
 
-        // Insert properties, floors, rooms
+        // Insert properties, floors, rooms, aux
         foreach ($this->properties as $propertyIndex => $arrays) {
             $propertyId = DB::table('properties_config')->insertGetId([
                 'property_name'   => $arrays['name'],
@@ -161,15 +175,21 @@ class Setup extends Component
                             'property_id'    => $propertyId,
                             'floor_id'       => $floorId,
                             'room_number'    => $i,
-                            'room_type_id'   => 1,
-                            'room_status_id' => 1,
                             'created_at'     => now(),
                             'updated_at'     => now(),
                         ]);
-
-
                     }
                 }
+            }
+            // Insert auxiliaries
+            foreach ($arrays['aux'] ?? [] as $aux) {
+                DB::table('aux_property_config')->insert([
+                    'property_id' => $propertyId,
+                    'aux_name'    => $aux['name'],
+                    'aux_type'    => $aux['aux_type'],
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
+                ]);
             }
         }
 

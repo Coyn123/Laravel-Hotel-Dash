@@ -1,15 +1,45 @@
 <div class="panel">
-    <div class="panel-header flex justify-between items-center">
-        <h2 class="panel-title">{{ $propertyName }}'s General Property Board</h2>
-        {{--- Simple workaround for not showing toggle unneccessarily ---}}
-        @php
-            $config = \App\Services\DashboardConfig::get();
-        @endphp
+    <div class="panel-header flex justify-between items-center flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+            <h2 class="panel-title text-lg font-semibold">
+                {{ $propertyName }}'s Property Board
+            </h2>
+
+            {{-- 🔘 Dynamic auxiliary property tabs --}}
+            @php
+                $config = \App\Services\DashboardConfig::get();
+
+                // Get the property entry for the current board
+                $currentProperty = collect($config['properties'])
+                    ->firstWhere('property_id', $propertyId ?? null);
+
+                // Pull its auxiliary properties
+                $auxList = collect($currentProperty['aux_properties'] ?? []);
+            @endphp
+
+            <div class="flex flex-wrap gap-2">
+                @forelse($auxList as $aux)
+                    <button
+                        wire:click="switchBoard('{{ $aux['aux_name'] ?? 'Unnamed' }}')"
+                        class="px-3 py-1 text-sm bg-gray-700 text-white rounded hover:bg-gray-600 transition">
+                        {{ $aux['aux_name'] ?? ($aux['aux_type'] ?? 'Auxiliary') }}
+                    </button>
+                @empty
+                    {{-- Optional placeholder if no aux entries exist --}}
+                    <span class="text-gray-400 text-sm italic">
+                        No auxiliary properties
+                    </span>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- 🔄 Property switch button (existing logic) --}}
         @if(count($config['properties']) > 1)
-        <button wire:click="toggleCurrentPropertyBoard('{{ $property }}')"
-            class="btn btn-secondary text-xl">
-            🔄
-        </button>
+            <button
+                wire:click="toggleCurrentPropertyBoard('{{ $property }}')"
+                class="btn btn-secondary text-xl">
+                🔄
+            </button>
         @endif
     </div>
 
