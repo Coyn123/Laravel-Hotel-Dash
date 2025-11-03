@@ -28,17 +28,13 @@
 
         {{-- Actual days --}}
         @foreach ($days as $day)
-            <div 
-                class="border rounded p-2 hover:bg-blue-100 cursor-pointer"
+        <div 
+                class="rounded p-2 hover:bg-blue-100 cursor-pointer 
+                    @if ($day['hasLogs']) border border-green-300 bg-green-50 @else border border-red-300 bg-red-50 @endif"
                 wire:click="selectDay('{{ $day['date'] }}')"
             >
                 <div class="font-semibold flex items-center justify-center space-x-1">
                     <span>{{ $day['day'] }}</span>
-                @if ($day['hasLogs'])
-                    <div class="text-sm font-bold">🟢</div>
-                @else
-                    <span class="text-sm font-bold" title="Alert">🔴</span>
-                @endif
                 </div>
             </div>
         @endforeach
