@@ -19,9 +19,10 @@ class CalenderView extends Component
     public $auxID;
     public $poolLog = [
             'ph' => null,
-            'free_chlorine' => null,
-            'combined_chlorine' => null,
-            'calcium' => null,
+            'fChlor' => null,
+            'cChlor' => null,
+            'calc' => null,
+            'Alk' => null,
             'cya' => null,
         ];
 
@@ -51,9 +52,10 @@ public function savePoolLog()
     $auxID = $this->auxID;
     $this->validate([
         'poolLog.ph' => 'nullable|numeric|min:0',
-        'poolLog.free_chlorine' => 'nullable|numeric|min:0',
-        'poolLog.combined_chlorine' => 'nullable|numeric|min:0',
-        'poolLog.calcium' => 'nullable|numeric|min:0',
+        'poolLog.fChlor' => 'nullable|numeric|min:0',
+        'poolLog.cChlor' => 'nullable|numeric|min:0',
+        'poolLog.calc' => 'nullable|numeric|min:0',
+        'poolLog.alk' => 'nullable|numeric|min:0',
         'poolLog.cya' => 'nullable|numeric|min:0',
     ]);
 
@@ -72,9 +74,10 @@ public function savePoolLog()
 
     $this->poolLog = [
         'ph' => null,
-        'free_chlorine' => null,
-        'combined_chlorine' => null,
-        'calcium' => null,
+        'fChlor' => null,
+        'cChlor' => null,
+        'calc' => null,
+        'Alk' => null,
         'cya' => null,
     ];
 

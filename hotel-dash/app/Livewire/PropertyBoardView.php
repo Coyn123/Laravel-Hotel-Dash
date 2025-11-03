@@ -16,14 +16,16 @@ class PropertyBoardView extends Component
     public $property;
     public $propertyName;
     public $newMessage = '';
+    public $propertyCount;
     public $config;
     public $currentView = 'property-board-view'; // default
     public $targetType = 'pool';
     public $poolLog = [
     'ph' => null,
-    'free_chlorine' => null,
-    'combined_chlorine' => null,
-    'calcium' => null,
+    'fChlor' => null,
+    'cChlor' => null,
+    'calc' => null,
+    'Alk' => null,
     'cya' => null,
     ];
 
@@ -36,6 +38,7 @@ class PropertyBoardView extends Component
         $firstProperty = collect($config['properties'] ?? [])
                             ->sortBy('property_id')
                             ->first();
+        $this->propertyCount = isset($config['properties']) ? count($config['properties']) : 0;
 
         $this->property = [
             'property_id' => $firstProperty['property_id'] ?? null,
@@ -97,12 +100,12 @@ class PropertyBoardView extends Component
     }
 
     #[On('switchAuxView')]
-    public function switchAuxView($auxName)
+    public function switchAuxView($auxType)
     {
-        $this->targetType = strtolower($auxName);
+        $this->targetType = strtolower($auxType);
 
         if (in_array($this->targetType, ['pool', 'spa'])) {
-            $this->currentView = 'calender-view-' . $auxName;
+            $this->currentView = 'calender-view-' . $auxType;
         } else {
             $this->currentView = 'property-board-view';
         }
@@ -143,7 +146,7 @@ class PropertyBoardView extends Component
 
         $newMessage = MessagesOnBoard::createPropertyBoard([
             'user_id'     => auth()->id(),
-            'property_id' => $this->property,
+            'property_id' => $this->property['property_id'],
             'message_text'=> $this->newMessage,
         ]);
 

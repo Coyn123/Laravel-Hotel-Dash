@@ -1,4 +1,4 @@
-/* resources/css/board_style.css */
+/*/* resources/css/board_style.css */
 @layer components {
   /* 🌑 Panel Base */
   .panel {
@@ -19,7 +19,7 @@
     color: var(--color-accent-dark);
   }
 
-  /* Room Status Dropdown + Flag Selector */
+  /* Dropdowns */
   #roomStatus,
   #flag {
     @apply inline-block text-sm px-3 py-2 rounded-md cursor-pointer mb-3;
@@ -41,33 +41,20 @@
     border-color: var(--color-accent);
     box-shadow: 0 0 0 2px var(--color-accent-light);
   }
-  #roomStatus::after,
-  #flag::after {
-    content: "▾";
-    @apply absolute right-3 text-xs;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none;
-    color: var(--color-accent-light);
-  }
 
-  /* Messages - Base */
+  /* Messages */
   .message {
     @apply rounded-md p-3 mb-2 transition-colors;
     background-color: var(--color-bg-alt);
     border: 1px solid var(--color-border);
     color: var(--color-text);
-
-    /* ✅ give the message box a max height */
-    max-height: 200px;   /* adjust as needed */
-    overflow-y: auto;    /* scroll vertically if content is too long */
+    max-height: 200px;
+    overflow-y: auto;
   }
 
   .message-text {
     @apply mb-2;
     font-size: 1.1rem;
-
-    /* optional: preserve line breaks and wrapping */
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -77,12 +64,12 @@
     color: var(--color-accent-light);
     font-size: 1rem;
   }
+
   .message:hover {
     background-color: var(--color-accent-dark);
     color: var(--color-bg);
   }
 
-  /* Meta info (flag + time) */
   .message-meta {
     @apply flex justify-between text-xs;
     color: var(--color-text-muted);
@@ -90,28 +77,11 @@
   .message-meta .flag {
     color: var(--color-accent-light);
   }
-  .message-meta time {
-    @apply italic;
-    color: var(--color-accent-light);
-    font-size: 0.9rem;
-  }
-  .inputText {
-    color: var(--color-text);
-    background-color: var(--color-bg-alt);
-  }
 
   /* Variants */
-  .message-urgent {
-    border-color: var(--color-danger);
-    border-width: 5px;
-  }
-  .message-work {
-    border-color: var(--color-warning);
-    border-width: 5px;
-  }
-  .message-resolved {
-    @apply opacity-50;
-  }
+  .message-urgent { border-color: var(--color-danger); border-width: 5px; }
+  .message-work { border-color: var(--color-warning); border-width: 5px; }
+  .message-resolved { @apply opacity-50; }
 
   /* Footer */
   .panel-footer {
@@ -123,9 +93,6 @@
     background-color: var(--color-bg-alt);
     border: 1px solid var(--color-border);
     color: var(--color-text);
-  }
-  .panel-footer input[type="text"]::placeholder {
-    color: var(--color-text-muted);
   }
   .panel-footer input[type="text"]:focus {
     @apply outline-none;
@@ -144,10 +111,135 @@
     color: var(--color-bg);
     transform: translateY(-1px);
   }
+
+  /* ================================
+     📅 Calendar Integration
+     ================================ */
+  .calendar-container {
+    @apply w-full;
+  }
+
+  .calendar-nav {
+    @apply flex justify-between items-center mb-3;
+  }
+
+  .calendar-grid-header {
+    @apply grid grid-cols-7 gap-1 text-center font-semibold rounded p-2;
+    background-color: var(--color-bg-alt);
+    color: var(--color-text);
+  }
+
+  .calendar-grid-days {
+    @apply grid grid-cols-7 gap-1 mt-2;
+    color: var(--color-text);
+  }
+
+  .calendar-day {
+    @apply rounded p-2 cursor-pointer text-sm text-center transition;
+    border: 1px solid var(--color-border);
+  }
+
+  .calendar-day:hover {
+    background-color: var(--color-accent-light);
+    color: var(--color-accent-dark);
+  }
+
+  .calendar-day.has-logs {
+    background-color: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.6);
+  }
+
+  .calendar-day.no-logs {
+    background-color: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.6);
+  }
+
+  /* ================================
+     📋 Log Section & Tables
+     ================================ */
+  .calendar-log-section {
+    @apply mt-6 p-4 rounded border;
+    background-color: var(--color-bg);
+    border-color: var(--color-border);
+    color: var(--color-text);
+    min-height: 300px;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .calendar-log-section h3 {
+    @apply text-lg font-semibold mb-3;
+    color: var(--color-text);
+  }
+
+  .calendar-log-entry {
+    @apply mb-4 p-3 rounded-md border;
+    border-color: var(--color-border);
+    background-color: var(--color-bg-alt);
+  }
+
+  .log-json-table {
+    @apply w-full text-sm border mt-2 rounded-md;
+    border-collapse: collapse;
+    table-layout: auto;
+  }
+
+  .log-json-table tr:nth-child(odd) {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .log-json-table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .log-json-table td {
+    @apply px-3 py-2 align-top;
+    
+  }
+
+  .log-key {
+    @apply font-semibold w-1/3;
+    background-color: var(--color-bg-alt);
+  }
+
+  .log-value {
+    @apply break-words;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  /* ================================
+     🧾 Input Form (Add Log)
+     ================================ */
+  .calendar-input-form {
+    @apply mt-5;
+  }
+
+  .calendar-input-form form {
+    @apply space-y-3;
+  }
+
+  .calendar-input-form input {
+    @apply border rounded px-3 py-2 w-full;
+    background-color: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .calendar-input-form button {
+    @apply mt-2 px-4 py-2 rounded font-semibold transition;
+    background-color: var(--color-accent-dark);
+    color: #fff;
+  }
+
+  .calendar-input-form button:hover {
+    background-color: var(--color-accent);
+    transform: translateY(-1px);
+  }
 }
 
 /* ================================
-   Mobile Overrides
+   📱 Mobile Overrides
    ================================ */
 @media (max-width: 640px) {
   .panel {
@@ -177,29 +269,13 @@
     font-size: 0.9rem;
     padding: 0.75rem;
   }
-  .message-text {
-    font-size: 1rem;
-  }
-  .user-in-message {
-    font-size: 0.95rem;
-  }
-  .message-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
+
+  .calendar-log-section {
+    @apply p-3;
+    overflow-x: auto;
   }
 
-  .panel-footer {
-    gap: 0.75rem;
-  }
-  .panel-footer input[type="text"] {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-
-  .btn-primary {
-    width: 100%;
-    text-align: center;
-    padding: 0.75rem;
+  .log-json-table td {
+    @apply text-xs px-2 py-1;
   }
 }
