@@ -30,7 +30,6 @@ class CalenderView extends Component
         $this->targetType = strtolower($targetType);
         $this->currentMonth = now()->month;
         $this->currentYear = now()->year;
-        $this->generateDays();
         $this->logs = collect();
 
         $this->config = DashboardConfig::get();
@@ -43,6 +42,7 @@ class CalenderView extends Component
                 }
             }
         }
+        $this->generateDays();
 
     }
 
@@ -88,19 +88,29 @@ public function savePoolLog()
         $start = Carbon::create($this->currentYear, $this->currentMonth, 1);
         $daysInMonth = $start->daysInMonth;
 
+        // Pull all log dates for this aux in one query
+        $datesWithLogs = AuxPropertyLog::query()
+            ->where('aux_id', $this->auxID)
+            ->whereMonth('log_date', $this->currentMonth)
+            ->whereYear('log_date', $this->currentYear)
+            ->pluck('log_date')
+            ->map(fn($d) => Carbon::parse($d)->toDateString())
+            ->unique()
+            ->flip();
+
         $this->days = [];
 
         for ($day = 1; $day <= $daysInMonth; $day++) {
             $date = Carbon::create($this->currentYear, $this->currentMonth, $day)->toDateString();
-            $hasLogs = AuxPropertyLog::whereDate('log_date', $date)->exists();
 
             $this->days[] = [
                 'day' => $day,
                 'date' => $date,
-                'hasLogs' => $hasLogs,
+                'hasLogs' => isset($datesWithLogs[$date]),
             ];
         }
     }
+
 
     public function selectDay($date)
     {
