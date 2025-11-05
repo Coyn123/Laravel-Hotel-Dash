@@ -41,7 +41,7 @@
 
 <div class="calendar-log-section">
     @if($selectedDate)
-    <h3>Logs for {{ $selectedDate }}</h3>
+    <h3>Logs for {{ $selectedDate }} {{ $targetType }}</h3>
 
     @if($logs && $logs->count())
     @foreach($logs as $log)
@@ -65,10 +65,49 @@
                     @foreach($fieldLabels as $key => $label)
                     @php
                     $value = $log->aux_log[$key] ?? '—';
+                        $thresholds = [
+                        'ph' => [
+                            'optimal' => ['min' => 7.3, 'max' => 7.6],
+                            'allowed' => ['min' => 7.0, 'max' => 8.0],
+                        ],
+                        'fChlor' => [
+                            'optimal' => ['min' => 3.0, 'max' => 5.0],
+                            'allowed' => ['min' => 2.0, 'max' => 6.0],
+                        ],
+                        'cChlor' => [
+                            'optimal' => ['min' => 0, 'max' => 1.9],
+                            'allowed' => ['min' => 0, 'max' => 2.0],
+                        ],
+                        'calc' => [
+                            'optimal' => ['min' => 100, 'max' => 300],
+                            'allowed' => ['min' => 0, 'max' => 300],
+                        ],
+                        'cya' => [
+                            'optimal' => ['min' => 50, 'max' => 70],
+                            'allowed' => ['min' => 50, 'max' => 90],
+                        ],
+                        'Alk' => [
+                            'optimal' => ['min' => 80, 'max' => 150],
+                            'allowed' => ['min' => 50, 'max' => 200], // outside this is bad
+                        ],
+                    ];
+                    $statusClass = '';
+                    if (is_numeric($value) && isset($thresholds[$key])) {
+                        $opt = $thresholds[$key]['optimal'];
+                        $allow = $thresholds[$key]['allowed'];
+
+                        if ($value >= $opt['min'] && $value <= $opt['max']) {
+                            $statusClass = 'status-green';
+                        } elseif ($value >= $allow['min'] && $value <= $allow['max']) {
+                            $statusClass = 'status-orange';
+                        } else {
+                            $statusClass = 'status-red';
+                        }
+                    }
                     @endphp
                     <tr>
                         <td class="log-key">{{ $label }}</td>
-                        <td class="log-value">
+                        <td class="log-value {{ $statusClass }}">
                             @if(is_array($value))
                             {{ json_encode($value, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}
                             @else

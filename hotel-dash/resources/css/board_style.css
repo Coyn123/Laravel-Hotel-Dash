@@ -236,6 +236,19 @@
     background-color: var(--color-accent);
     transform: translateY(-1px);
   }
+    .status-green {
+      color: #2e7d32; /* dark green */
+      font-weight: bold;
+  }
+  .status-orange {
+      color: #ef6c00; /* orange */
+      font-weight: bold;
+  }
+  .status-red {
+      color: #c62828; /* red */
+      font-weight: bold;
+  }
+
 }
 
 /* ================================
